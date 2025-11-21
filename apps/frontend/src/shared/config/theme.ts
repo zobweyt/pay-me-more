@@ -50,14 +50,25 @@ export const theme = createTheme({
         withArrow: true,
       },
     }),
+    InputWrapper: Input.Wrapper.extend({
+      defaultProps: {
+        inputWrapperOrder: ["label", "input", "error", "description"],
+      },
+    }),
     InputLabel: Input.Label.extend({
       defaultProps: {
         mb: 4,
       },
     }),
+    InputDescription: Input.Description.extend({
+      defaultProps: {
+        fz: "sm",
+      },
+    }),
     InputError: Input.Error.extend({
       defaultProps: {
         mt: 4,
+        mb: 4,
         fz: "sm",
       },
     }),

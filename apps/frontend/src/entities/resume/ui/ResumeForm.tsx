@@ -1,66 +1,68 @@
 import { Button, NumberInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { zod4Resolver } from "mantine-form-zod-resolver";
-import { LuPlus } from "react-icons/lu";
+import { LuSparkles } from "react-icons/lu";
 
+import { getExperienceSuffix } from "../lib/getExperienceSuffix";
 import { ResumeFormSchema, type ResumeFormValues } from "../model/resume";
+import { ResumeFormSkills } from "./ResumeFormSkills";
 
 export const ResumeForm: React.FC = () => {
   const form = useForm<ResumeFormValues>({
-    validate: zod4Resolver(ResumeFormSchema),
     initialValues: {
       role: "",
-      skills: [""],
       experience: 0,
       location: "",
+      skills: [],
     },
+    validate: zod4Resolver(ResumeFormSchema),
+    validateInputOnChange: true,
+  });
+
+  const submit = form.onSubmit((values) => {
+    // TODO: onSubmit prop
+    console.log(values);
   });
 
   return (
-    <form onSubmit={form.onSubmit((values) => console.log(values))}>
+    <form onSubmit={submit}>
       <Stack>
         <TextInput
           {...form.getInputProps("role")}
           label="Роль"
           placeholder="Frontend-разработчик"
+          description="Укажите свою профессию или роль (например, «аналитик», «разработчик» или «дизайнер»)."
         />
-
-        {form.getValues().skills.map((_skill, index) => (
-          <TextInput
-            key={form.key(`skills.${index}`)}
-            {...form.getInputProps(`skills.${index}`)}
-            label="Навык"
-            placeholder="React"
-            // TODO: удаление навыка
-          />
-        ))}
-
-        <Button
-          variant="light"
-          leftSection={<LuPlus size={20} />}
-          onClick={() => form.insertListItem("skills", "wdwqw")}
-          // TODO: focus new field on add
-        >
-          Добавить навык
-        </Button>
 
         <NumberInput
           {...form.getInputProps("experience")}
           label="Опыт"
           placeholder="3 года"
-          description=""
-          defaultValue={0}
-          // TODO: форматирование suffix с помощью Intl (года, лет)
-          suffix=" лет"
+          description="Укажите сколько лет опыта вы имеете."
+          suffix={` ${getExperienceSuffix(form.values.experience)}`}
+          min={0}
+          max={100}
+          stepHoldDelay={500}
+          stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
         />
 
         <TextInput
           {...form.getInputProps("location")}
           label="Город"
           placeholder="Москва"
+          description="Укажите в каком городе вы рассматриваете вакансии."
         />
 
-        <Button type="submit">Сохранить</Button>
+        <ResumeFormSkills form={form} />
+
+        <Button
+          type="submit"
+          variant="gradient"
+          gradient={{ from: "violet.6", to: "grape.6" }}
+          leftSection={<LuSparkles size={16} />}
+        >
+          Узнать свою стоимость
+        </Button>
       </Stack>
     </form>
   );

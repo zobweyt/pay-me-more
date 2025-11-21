@@ -1,0 +1,2 @@
+export const RESUME_SKILLS_MIN_COUNT = 1;
+export const RESUME_SKILLS_MAX_COUNT = 100;
