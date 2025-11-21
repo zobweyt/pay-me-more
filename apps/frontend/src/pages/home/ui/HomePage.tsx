@@ -1,54 +1,53 @@
-import { Stack, Title } from "@mantine/core";
-import { useCallback, useState } from "react";
-
-import type { Recommendation } from "@/entities/resume/model/recommendation";
-import { Recommendations } from "@/entities/resume/ui/Recommendations";
-
-const mock_recommendations: Recommendation[] = [
-  {
-    id: "708d16a9-472a-41bc-b6d7-35b50bb8c8d3",
-    title: "Добавьте больше навыков",
-    description:
-      "У вас указано только 2 навыка. Добавление 5-7 ключевых технологий может значительно повысить вашу конкурентоспособность.",
-    result: "Увеличение вилки на 15-25%",
-  },
-];
+import { Stack, Title, rem } from "@mantine/core";
+import { useState } from "react";
 
 import {
   ResumeForm,
-  type ResumeFormValues,
+  ResumeRecommendationsList,
   ResumeSalaryCard,
 } from "@/entities/resume";
-import { VacancyCard } from "@/entities/vacancy";
+import { VacanciesList } from "@/entities/vacancy";
+import type { ServiceResponse } from "@/shared/api";
 
-import { mockVacancies } from "../config/mockVacancies";
+import { HomePageLanding } from "./HomePageLanding";
 
 export const HomePage: React.FC = () => {
-  const [resume, setResume] = useState<ResumeFormValues | undefined>(undefined);
-  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+  const [response, setResponse] = useState<ServiceResponse | null>(null);
 
-  const onSubmit = useCallback(
-    (values: ResumeFormValues) => {
-      setResume(values);
-      setRecommendations(mock_recommendations);
-    },
-    [setResume],
-  );
+  const onSubmit = (values: ServiceResponse) => {
+    setResponse(values);
+    requestAnimationFrame(() => {
+      const responseElement = document.getElementById("home-page-response");
+      responseElement?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "nearest",
+      });
+    });
+  };
 
   return (
-    <Stack gap="xs">
-      <Title order={1} size="h2">
-        Главная
-      </Title>
+    <Stack gap="xl">
+      <HomePageLanding />
 
-      <Stack>
-        <ResumeForm initialValues={resume} onSubmit={onSubmit} />
-        <ResumeSalaryCard salary={{ from: 300000, to: 400000 }} />
-        <Recommendations recommendations={recommendations} />
-        {mockVacancies.map((vacancy) => (
-          <VacancyCard key={vacancy.id} vacancy={vacancy} />
-        ))}
-      </Stack>
+      <ResumeForm onSubmit={onSubmit} />
+
+      {!!response && (
+        <Stack
+          id="home-page-response"
+          gap="lg"
+          style={{ scrollMarginTop: rem(64) }}
+        >
+          <Title size="h3" order={4}>
+            Оценка от ИИ
+          </Title>
+          <ResumeSalaryCard salary={response.salary} />
+          <ResumeRecommendationsList
+            recommendations={response.recommendations}
+          />
+          <VacanciesList vacancies={response.recommend_vacancies} />
+        </Stack>
+      )}
     </Stack>
   );
 };

@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import type { UseFormReturnType } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { LuPlus, LuX } from "react-icons/lu";
 
 import { RESUME_SKILLS_MAX_COUNT } from "../config/skills";
@@ -21,7 +21,8 @@ export type ResumeFormSkillsProps = {
 };
 
 export const ResumeFormSkills = ({ form }: ResumeFormSkillsProps) => {
-  const [addingSkill, setAddingSkill] = useState("");
+  const [newSkillInputValue, setNewSkillInputValue] = useState("");
+  const newSkillInputRef = useRef<HTMLInputElement>(null);
 
   const uniqueSkills = new Set(form.values.skills);
   const hasSkills = !!form.values.skills.length;
@@ -42,9 +43,9 @@ export const ResumeFormSkills = ({ form }: ResumeFormSkillsProps) => {
       return;
     }
 
-    form.insertListItem("skills", skill);
+    form.insertListItem("skills", skill.trim());
     form.validateField("skills");
-    setAddingSkill("");
+    setNewSkillInputValue("");
   };
 
   return (
@@ -53,6 +54,10 @@ export const ResumeFormSkills = ({ form }: ResumeFormSkillsProps) => {
         Навыки{" "}
         {hasSkills &&
           `(${form.values.skills.length}/${RESUME_SKILLS_MAX_COUNT})`}
+        <Text span c="var(--mantine-color-error)">
+          {" "}
+          *
+        </Text>
       </Text>
 
       {hasSkills && (
@@ -74,38 +79,40 @@ export const ResumeFormSkills = ({ form }: ResumeFormSkillsProps) => {
 
       <Group gap="xs">
         <TextInput
+          ref={newSkillInputRef}
           flex={1}
-          value={addingSkill}
-          onChange={(event) => setAddingSkill(event.currentTarget.value)}
-          placeholder="Добавить навык"
+          error={form.errors.skills}
+          value={newSkillInputValue}
+          disabled={skillsLimitExeeded}
+          onChange={(event) => setNewSkillInputValue(event.currentTarget.value)}
+          placeholder="React"
+          description="Введите навык в поле выше и нажмите на появившийся «+», чтобы добавить его в своё резюме."
           onKeyDown={(event) => {
             if (event.code === "Enter") {
               event.preventDefault();
-              addSkill(addingSkill);
+              addSkill(newSkillInputValue);
             }
           }}
-          disabled={skillsLimitExeeded}
+          rightSection={
+            newSkillInputValue &&
+            !skillsLimitExeeded && (
+              <ActionIcon
+                variant={"subtle"}
+                color="gray"
+                radius="xl"
+                onClick={() => {
+                  addSkill(newSkillInputValue);
+                  newSkillInputRef.current?.focus();
+                }}
+              >
+                <LuPlus size={20} />
+              </ActionIcon>
+            )
+          }
         />
-
-        <ActionIcon
-          size="input-sm"
-          variant="light"
-          disabled={!addingSkill || skillsLimitExeeded}
-          onClick={() => {
-            addSkill(addingSkill);
-          }}
-        >
-          <LuPlus size={24} />
-        </ActionIcon>
       </Group>
 
       {/* TODO: тут можно добавить предложения навыков */}
-
-      {!!form.errors.skills && (
-        <Text c="var(--mantine-color-error)" size="sm" mt={4}>
-          {form.errors.skills}
-        </Text>
-      )}
     </Stack>
   );
 };
