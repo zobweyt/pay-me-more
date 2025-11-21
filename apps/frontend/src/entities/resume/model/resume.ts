@@ -13,7 +13,7 @@ export const ResumeFormSchema = z.object({
   role: ResumeRoleSchema,
   skills: z
     .array(ResumeSkillSchema)
-    .min(RESUME_SKILLS_MIN_COUNT, `Добавьте хотя бы один навык`)
+    .min(RESUME_SKILLS_MIN_COUNT, `Добавьте хотя бы один навык!`)
     .max(
       RESUME_SKILLS_MAX_COUNT,
       `Максимальное количество навыков в резюме – ${RESUME_SKILLS_MAX_COUNT}.`,

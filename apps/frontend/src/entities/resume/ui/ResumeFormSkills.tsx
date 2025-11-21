@@ -102,7 +102,7 @@ export const ResumeFormSkills = ({ form }: ResumeFormSkillsProps) => {
       {/* TODO: тут можно добавить предложения навыков */}
 
       {!!form.errors.skills && (
-        <Text c="red" size="sm" mt={4}>
+        <Text c="var(--mantine-color-error)" size="sm" mt={4}>
           {form.errors.skills}
         </Text>
       )}
