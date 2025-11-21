@@ -7,7 +7,7 @@
       - apps/frontend/node_modules/
   script:
     - cd apps/frontend
-    - npm ci --ignore-scripts --no-audit --no-fund --omit=dev
+    - npm ci --ignore-scripts --no-audit --no-fund
     - npm run check
     - npm run tsc
   rules:
