@@ -24,3 +24,12 @@
   rules:
     - if: '$CI_COMMIT_REF_NAME == "main"'
       when: on_success
+    - changes:
+      - apps/backend/**/*
+      when: never
+    - changes:
+      - apps/frontend/**/*
+      when: always
+    - changes:
+      - compose.yml
+      when: always

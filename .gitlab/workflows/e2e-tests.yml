@@ -25,3 +25,12 @@
       when: always
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
+    - changes:
+      - compose.yml
+      when: always
+    - changes:
+      - apps/backend/**/*
+      when: always
+    - changes:
+      - apps/frontend/**/*
+      when: never
