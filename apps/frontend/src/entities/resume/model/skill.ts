@@ -1,3 +1,3 @@
 import { z } from "zod/v4";
 
-export const ResumeSkillSchema = z.string();
+export const ResumeSkillSchema = z.string().trim();

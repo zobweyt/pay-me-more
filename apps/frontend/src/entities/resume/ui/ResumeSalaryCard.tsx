@@ -8,10 +8,10 @@ import {
 } from "@mantine/core";
 import { LuTrendingUp } from "react-icons/lu";
 
-import type { ResumeSalary } from "../model/salary";
+import type { Salary } from "@/shared/api";
 
 export type ResumeSalaryCardProps = {
-  salary: ResumeSalary;
+  salary: Salary;
 };
 
 export const ResumeSalaryCard: React.FC<ResumeSalaryCardProps> = ({

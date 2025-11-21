@@ -19,6 +19,7 @@ export const routes = route({
       children: {
         home: route({
           path: "",
+          hash: string(),
         }),
         history: route({
           path: "history",
