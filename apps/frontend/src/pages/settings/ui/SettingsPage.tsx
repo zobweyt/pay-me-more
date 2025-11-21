@@ -1,11 +1,8 @@
-import { ActionIcon, Group, Stack, Title, Tooltip } from "@mantine/core";
+import { Group, Stack, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { LuEye } from "react-icons/lu";
-import { Link } from "react-router";
 
 import { currentUserQueries } from "@/entities/current-user";
 import { UserCreatedAtCard, UserIdCard, UserSection } from "@/entities/user";
-import { routes } from "@/shared/config/routes";
 
 import { CurrentUserPasswordCard } from "./CurrentUserPasswordCard";
 import { CurrentUserUsernameCard } from "./CurrentUserUsernameCard";
@@ -24,7 +21,7 @@ export const SettingsPage: React.FC = () => {
           Настройки
         </Title>
 
-        <Tooltip label="Посмотреть профиль" position="bottom">
+        {/* <Tooltip label="Посмотреть профиль" position="bottom">
           <ActionIcon
             component={Link}
             to={routes.shell.user.$buildPath({
@@ -39,7 +36,7 @@ export const SettingsPage: React.FC = () => {
           >
             <LuEye size={24} />
           </ActionIcon>
-        </Tooltip>
+        </Tooltip> */}
       </Group>
 
       <Stack gap="xl">

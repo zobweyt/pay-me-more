@@ -1,5 +1,5 @@
 import type { IconType } from "react-icons/lib";
-import { LuHouse, LuSettings, LuUsers } from "react-icons/lu";
+import { LuHistory, LuSettings, LuSparkles, LuStar } from "react-icons/lu";
 
 import { routes } from "@/shared/config/routes";
 
@@ -11,14 +11,19 @@ export type AppSection = {
 
 export const APP_SECTIONS: AppSection[] = [
   {
-    icon: LuHouse,
+    icon: LuSparkles,
     label: "Главная",
     pathname: routes.shell.home.$path(),
   },
   {
-    icon: LuUsers,
-    label: "Пользователи",
-    pathname: routes.shell.users.$path(),
+    icon: LuHistory,
+    label: "История",
+    pathname: routes.shell.history.$path(),
+  },
+  {
+    icon: LuStar,
+    label: "Избранное",
+    pathname: routes.shell.favorites.$path(),
   },
   {
     icon: LuSettings,

@@ -6,18 +6,20 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router";
 
-import { AuthLayout } from "@/app/layouts/auth/AuthLayout";
-import { ShellLayout } from "@/app/layouts/shell/ShellLayout";
+import { FavoritesPage } from "@/pages/favorites";
+import { HistoryPage } from "@/pages/history";
 import { HomePage } from "@/pages/home";
 import { LoginPage } from "@/pages/login";
 import { NotFoundPage } from "@/pages/not-found";
 import { RegisterPage } from "@/pages/register";
 import { SettingsPage } from "@/pages/settings";
-import { UserPage } from "@/pages/user";
-import { UsersPage } from "@/pages/users";
 import { queryClient } from "@/shared/api";
 import { routes } from "@/shared/config/routes";
 import { defaultColorScheme, theme } from "@/shared/config/theme";
+
+import { AuthLayout } from "./layouts/auth/AuthLayout";
+import { ProtectedLayout } from "./layouts/protected/ProtectedLayout";
+import { ShellLayout } from "./layouts/shell/ShellLayout";
 
 import "./styles/index.css";
 
@@ -45,15 +47,20 @@ root.render(
             </Route>
             <Route element={<ShellLayout />}>
               <Route element={<HomePage />} path={routes.shell.home.$path()} />
-              <Route
-                element={<UsersPage />}
-                path={routes.shell.users.$path()}
-              />
-              <Route element={<UserPage />} path={routes.shell.user.$path()} />
-              <Route
-                element={<SettingsPage />}
-                path={routes.shell.settings.$path()}
-              />
+              <Route element={<ProtectedLayout />}>
+                <Route
+                  element={<HistoryPage />}
+                  path={routes.shell.history.$path()}
+                />
+                <Route
+                  element={<FavoritesPage />}
+                  path={routes.shell.favorites.$path()}
+                />
+                <Route
+                  element={<SettingsPage />}
+                  path={routes.shell.settings.$path()}
+                />
+              </Route>
             </Route>
             <Route element={<NotFoundPage />} path="*" />
           </Routes>

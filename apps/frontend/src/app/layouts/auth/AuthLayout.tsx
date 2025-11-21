@@ -1,6 +1,8 @@
 import {
+  Button,
   Center,
   Flex,
+  Group,
   Loader,
   SegmentedControl,
   type SegmentedControlItem,
@@ -9,11 +11,13 @@ import {
   Title,
 } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { Navigate, Outlet, useLocation, useNavigate } from "react-router";
+import { LuArrowLeft } from "react-icons/lu";
+import { Link, Navigate, Outlet, useLocation, useNavigate } from "react-router";
 import { useTypedSearchParams } from "react-router-typesafe-routes";
 
 import { currentUserQueries } from "@/entities/current-user";
 import { routes } from "@/shared/config/routes";
+import { ColorSchemeSegmentedControl } from "@/shared/ui/ColorSchemeSegmentedControl";
 
 const authSegmentedControlItems = [
   { label: "Вход", value: "login" },
@@ -22,7 +26,7 @@ const authSegmentedControlItems = [
 
 type AuthType = (typeof authSegmentedControlItems)[number]["value"];
 
-export const AuthLayout = () => {
+export const AuthLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [{ redirect }] = useTypedSearchParams(routes.auth);
@@ -52,6 +56,17 @@ export const AuthLayout = () => {
       justify="center"
       direction="column"
     >
+      <Button
+        component={Link}
+        to={routes.shell.home.$path()}
+        me="auto"
+        radius="xl"
+        variant="subtle"
+        leftSection={<LuArrowLeft size={16} />}
+      >
+        На главную
+      </Button>
+
       <Stack maw="24rem" w="100%" my="auto">
         <Center>
           <img
@@ -86,6 +101,22 @@ export const AuthLayout = () => {
 
         <Outlet />
       </Stack>
+
+      <Group w="100%" justify="space-between" mx="auto">
+        <Group gap="xs">
+          <img
+            src="/favicon.svg"
+            alt="Логотип"
+            width={24}
+            height={24}
+            draggable={false}
+          />
+          <Text fw={500} size="sm">
+            PayMeMore
+          </Text>
+        </Group>
+        <ColorSchemeSegmentedControl />
+      </Group>
     </Flex>
   );
 };

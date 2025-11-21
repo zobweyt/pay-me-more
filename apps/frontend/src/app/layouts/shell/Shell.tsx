@@ -9,7 +9,7 @@ import { ShellFooter } from "./ShellFooter";
 import { ShellHeader } from "./ShellHeader";
 
 export type ShellProps = React.PropsWithChildren<{
-  currentUser: CurrentUserResponse;
+  currentUser: CurrentUserResponse | null;
 }>;
 
 export const Shell: React.FC<ShellProps> = ({ currentUser, children }) => {
