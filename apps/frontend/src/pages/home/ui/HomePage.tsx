@@ -1,4 +1,4 @@
-import { Flex, Stack, Title } from "@mantine/core";
+import { Stack, Title } from "@mantine/core";
 import { useCallback, useState } from "react";
 
 import type { Recommendation } from "@/entities/resume/model/recommendation";
@@ -41,14 +41,14 @@ export const HomePage: React.FC = () => {
         Главная
       </Title>
 
-      <Flex direction="column" gap={40}>
+      <Stack>
         <ResumeForm initialValues={resume} onSubmit={onSubmit} />
         <ResumeSalaryCard salary={{ from: 300000, to: 400000 }} />
         <Recommendations recommendations={recommendations} />
         {mockVacancies.map((vacancy) => (
           <VacancyCard key={vacancy.id} vacancy={vacancy} />
         ))}
-      </Flex>
+      </Stack>
     </Stack>
   );
 };

@@ -20,6 +20,12 @@ export const routes = route({
         home: route({
           path: "",
         }),
+        history: route({
+          path: "history",
+        }),
+        favorites: route({
+          path: "favorites",
+        }),
         settings: route({
           path: "settings",
         }),

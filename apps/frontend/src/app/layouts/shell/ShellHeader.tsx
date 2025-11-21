@@ -7,7 +7,7 @@ import { routes } from "@/shared/config/routes";
 import { CurrentUserMenu } from "@/widgets/current-user-menu";
 
 export type ShellHeaderProps = {
-  currentUser: CurrentUserResponse;
+  currentUser: CurrentUserResponse | null;
 };
 
 export const ShellHeader: React.FC<ShellHeaderProps> = ({ currentUser }) => {
@@ -19,7 +19,7 @@ export const ShellHeader: React.FC<ShellHeaderProps> = ({ currentUser }) => {
         h="100%"
         mx="auto"
         px="md"
-        gap="lg"
+        gap={0}
         maw="52rem"
         justify="space-between"
       >
@@ -43,7 +43,7 @@ export const ShellHeader: React.FC<ShellHeaderProps> = ({ currentUser }) => {
           PayMeMore
         </Button>
 
-        <Group mx="auto" gap={6} visibleFrom="sm">
+        <Group mx="auto" gap={8} visibleFrom="sm">
           {APP_SECTIONS.map((section) => (
             <Button
               component={Link}
@@ -53,6 +53,7 @@ export const ShellHeader: React.FC<ShellHeaderProps> = ({ currentUser }) => {
               p="xs"
               c="var(--mantine-body-color)"
               color="gray"
+              radius="xl"
               variant={pathname === section.pathname ? "light" : "subtle"}
               leftSection={<section.icon size={22} />}
             >
@@ -61,7 +62,19 @@ export const ShellHeader: React.FC<ShellHeaderProps> = ({ currentUser }) => {
           ))}
         </Group>
 
-        <CurrentUserMenu currentUser={currentUser} />
+        {currentUser ? (
+          <CurrentUserMenu currentUser={currentUser} />
+        ) : (
+          <Button
+            component={Link}
+            to={routes.auth.login.$path()}
+            h={36}
+            px="md"
+            radius="xl"
+          >
+            Войти
+          </Button>
+        )}
       </Group>
     </AppShell.Header>
   );

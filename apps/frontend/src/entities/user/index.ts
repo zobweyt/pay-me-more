@@ -3,7 +3,6 @@ export { getUsers } from "./api/getUsers";
 export { userQueries } from "./lib/userQueries";
 export { UserPasswordSchema } from "./model/password";
 export { UserUsernameSchema } from "./model/username";
-export { UserCard, type UserCardProps } from "./ui/UserCard";
 export {
   UserCreatedAtCard,
   type UserCreatedAtCardProps,
@@ -13,10 +12,6 @@ export {
   UserPasswordCard,
   type UserPasswordCardProps,
 } from "./ui/UserPasswordCard";
-export {
-  UserProfileLinkCopyButton,
-  type UserProfileLinkCopyButtonProps,
-} from "./ui/UserProfileLinkCopyButton";
 export {
   UserSection,
   type UserSectionProps,

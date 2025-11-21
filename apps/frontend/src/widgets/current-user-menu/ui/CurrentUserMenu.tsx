@@ -9,13 +9,7 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import {
-  LuCheck,
-  LuLogOut,
-  LuPalette,
-  LuSettings,
-  LuUser,
-} from "react-icons/lu";
+import { LuCheck, LuLogOut, LuPalette, LuSettings } from "react-icons/lu";
 import { Link } from "react-router";
 
 import { useLogoutMutation } from "@/features/logout";
@@ -65,7 +59,7 @@ export const CurrentUserMenu: React.FC<CurrentUserMenuProps> = ({
             </Text>
           </Stack>
         </Flex>
-        <Menu.Item
+        {/* <Menu.Item
           component={Link}
           to={routes.shell.user.$buildPath({
             params: { username: currentUser.username },
@@ -73,7 +67,7 @@ export const CurrentUserMenu: React.FC<CurrentUserMenuProps> = ({
           leftSection={<LuUser size={18} />}
         >
           Профиль
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Divider />
         <Group ps="sm" pe={4} py={4} gap="xs">
           <LuPalette size={18} />

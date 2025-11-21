@@ -1,5 +1,5 @@
 import { Button, Center, Stack, Text, ThemeIcon, Title } from "@mantine/core";
-import { LuArrowLeft, LuBird } from "react-icons/lu";
+import { LuArrowLeft, LuSignpost } from "react-icons/lu";
 import { Link } from "react-router";
 
 import { routes } from "@/shared/config/routes";
@@ -8,8 +8,8 @@ export const NotFoundPage: React.FC = () => {
   return (
     <Center w="100dvw" h="100dvh" my="auto">
       <Stack align="center">
-        <ThemeIcon size={64} color="red" radius="xl" variant="filled">
-          <LuBird size={36} />
+        <ThemeIcon size={64} color="red" radius="lg" variant="light">
+          <LuSignpost size={36} />
         </ThemeIcon>
 
         <Stack component="hgroup" gap="xs">
@@ -23,7 +23,8 @@ export const NotFoundPage: React.FC = () => {
         <Button
           component={Link}
           to={routes.shell.home.$path()}
-          leftSection={<LuArrowLeft size={24} />}
+          radius="xl"
+          leftSection={<LuArrowLeft size={16} />}
         >
           На главную
         </Button>
