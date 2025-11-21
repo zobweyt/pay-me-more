@@ -19,6 +19,9 @@ import {
   type ResumeFormValues,
   ResumeSalaryCard,
 } from "@/entities/resume";
+import { VacancyCard } from "@/entities/vacancy";
+
+import { mockVacancies } from "../config/mockVacancies";
 
 export const HomePage: React.FC = () => {
   const [resume, setResume] = useState<ResumeFormValues | undefined>(undefined);
@@ -42,6 +45,9 @@ export const HomePage: React.FC = () => {
         <ResumeForm initialValues={resume} onSubmit={onSubmit} />
         <ResumeSalaryCard salary={{ from: 300000, to: 400000 }} />
         <Recommendations recommendations={recommendations} />
+        {mockVacancies.map((vacancy) => (
+          <VacancyCard key={vacancy.id} vacancy={vacancy} />
+        ))}
       </Flex>
     </Stack>
   );
