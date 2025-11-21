@@ -22,13 +22,10 @@
     - docker compose --profile test-unit down -v
   rules:
     - if: '$CI_COMMIT_REF_NAME == "main"'
-      when: always
-    - changes:
-      - compose.yml
-      when: always
-    - changes:
-      - apps/backend/**/*
-      when: always
-    - changes:
-      - apps/frontend/**/*
-      when: never
+      when: on_success
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - apps/backend/**/*
+        - compose.yml
+      when: on_success
+    - when: never

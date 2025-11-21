@@ -23,12 +23,9 @@
   rules:
     - if: '$CI_COMMIT_REF_NAME == "main"'
       when: on_success
-    - changes:
-      - compose.yml
-      when: always
-    - changes:
-      - apps/backend/**/*
-      when: always
-    - changes:
-      - apps/frontend/**/*
-      when: never
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - apps/backend/**/*
+        - compose.yml
+      when: on_success
+    - when: never
