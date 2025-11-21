@@ -39,14 +39,16 @@ export const ResumeForm: React.FC = () => {
           variant="light"
           leftSection={<LuPlus size={20} />}
           onClick={() => form.insertListItem("skills", "wdwqw")}
+          // TODO: focus new field on add
         >
           Добавить навык
         </Button>
 
         <NumberInput
           {...form.getInputProps("experience")}
-          label="Опыт работы"
+          label="Опыт"
           placeholder="3 года"
+          description=""
           defaultValue={0}
           // TODO: форматирование suffix с помощью Intl (года, лет)
           suffix=" лет"
@@ -54,7 +56,7 @@ export const ResumeForm: React.FC = () => {
 
         <TextInput
           {...form.getInputProps("location")}
-          label="Локация"
+          label="Город"
           placeholder="Москва"
         />
 
