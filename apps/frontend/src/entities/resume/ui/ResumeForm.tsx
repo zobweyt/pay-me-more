@@ -7,21 +7,28 @@ import { getExperienceSuffix } from "../lib/getExperienceSuffix";
 import { ResumeFormSchema, type ResumeFormValues } from "../model/resume";
 import { ResumeFormSkills } from "./ResumeFormSkills";
 
-export const ResumeForm: React.FC = () => {
+export type ResumeFormProps = {
+  initialValues?: ResumeFormValues;
+  onSubmit?: (values: ResumeFormValues) => void;
+};
+
+export const ResumeForm: React.FC<ResumeFormProps> = ({
+  initialValues = {
+    role: "",
+    experience: 0,
+    location: "",
+    skills: [],
+  },
+  onSubmit,
+}) => {
   const form = useForm<ResumeFormValues>({
-    initialValues: {
-      role: "",
-      experience: 0,
-      location: "",
-      skills: [],
-    },
+    initialValues,
     validate: zod4Resolver(ResumeFormSchema),
     validateInputOnChange: true,
   });
 
   const submit = form.onSubmit((values) => {
-    // TODO: onSubmit prop
-    console.log(values);
+    onSubmit?.(values);
   });
 
   return (
@@ -61,7 +68,7 @@ export const ResumeForm: React.FC = () => {
           gradient={{ from: "violet.6", to: "grape.6" }}
           leftSection={<LuSparkles size={16} />}
         >
-          Узнать свою стоимость
+          Оценить резюме
         </Button>
       </Stack>
     </form>
