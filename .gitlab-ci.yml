@@ -32,6 +32,7 @@ e2e-tests:
 build-backend:
   extends: .build-backend-template
   needs:
+    - lint-backend
     - unit-tests
     - e2e-tests
 
