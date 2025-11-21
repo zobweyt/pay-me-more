@@ -123,6 +123,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/resumes": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Load Resume */
+    post: operations["load_resume_resumes_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -189,6 +206,13 @@ export interface components {
        */
       updated_at: string;
     };
+    /** Experience */
+    Experience: {
+      /** From */
+      from: number;
+      /** To */
+      to: number;
+    };
     /** HTTPValidationError */
     HTTPValidationError: {
       /** Detail */
@@ -212,6 +236,41 @@ export interface components {
       next_page: number | null;
       /** Prev Page */
       prev_page: number | null;
+    };
+    /** Recommendation */
+    Recommendation: {
+      /** Title */
+      title: string;
+      /** Subtitle */
+      subtitle: string;
+      /** Result */
+      result: string;
+    };
+    /** Resumes */
+    Resumes: {
+      /** Role */
+      role: string;
+      /** Skills */
+      skills: string[];
+      /** Experience */
+      experience: number;
+      /** Location */
+      location: string;
+    };
+    /** Salary */
+    Salary: {
+      /** From */
+      from: number;
+      /** To */
+      to: number;
+    };
+    /** ServiceResponse */
+    ServiceResponse: {
+      salary: components["schemas"]["Salary"];
+      /** Recommend Vacancies */
+      recommend_vacancies: components["schemas"]["Vacancies"][];
+      /** Recommendations */
+      recommendations: components["schemas"]["Recommendation"][];
     };
     /**
      * UserRegistrationRequest
@@ -291,6 +350,27 @@ export interface components {
       users: components["schemas"]["UserResponse"][];
       pagination: components["schemas"]["PaginationResponse"];
     };
+    /** Vacancies */
+    Vacancies: {
+      /** Id */
+      id: string;
+      /** Company Name */
+      company_name: string;
+      /** Vacancy Name */
+      vacancy_name: string;
+      experience: components["schemas"]["Experience"];
+      /** Schedule */
+      schedule: string;
+      /** Work Hours */
+      work_hours: number;
+      salary: components["schemas"]["Salary"];
+      /** Location */
+      location: string;
+      /** Description */
+      description: string;
+      /** Skills */
+      skills: string[];
+    };
     /** ValidationError */
     ValidationError: {
       /** Location */
@@ -311,8 +391,13 @@ export type AccessTokenResponse = components["schemas"]["AccessTokenResponse"];
 export type BodyLoginAuthLoginPost =
   components["schemas"]["Body_login_auth_login_post"];
 export type CurrentUserResponse = components["schemas"]["CurrentUserResponse"];
+export type Experience = components["schemas"]["Experience"];
 export type HttpValidationError = components["schemas"]["HTTPValidationError"];
 export type PaginationResponse = components["schemas"]["PaginationResponse"];
+export type Recommendation = components["schemas"]["Recommendation"];
+export type Resumes = components["schemas"]["Resumes"];
+export type Salary = components["schemas"]["Salary"];
+export type ServiceResponse = components["schemas"]["ServiceResponse"];
 export type UserRegistrationRequest =
   components["schemas"]["UserRegistrationRequest"];
 export type UserResponse = components["schemas"]["UserResponse"];
@@ -321,6 +406,7 @@ export type UserUpdatePasswordRequest =
 export type UserUsernameRequest = components["schemas"]["UserUsernameRequest"];
 export type UsersPaginationResponse =
   components["schemas"]["UsersPaginationResponse"];
+export type Vacancies = components["schemas"]["Vacancies"];
 export type ValidationError = components["schemas"]["ValidationError"];
 export type $defs = Record<string, never>;
 export interface operations {
@@ -603,6 +689,39 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  load_resume_resumes_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Resumes"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ServiceResponse"];
+        };
       };
       /** @description Validation Error */
       422: {
