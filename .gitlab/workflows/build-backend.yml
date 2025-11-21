@@ -8,18 +8,19 @@
     DOCKER_TLS_VERIFY: "1"
     DOCKER_TLS_CERTDIR: "/certs"
     DOCKER_CERT_PATH: "/certs/client"
+    DOCKER_REGISTRY: "registry.gitlab.prodcontest.com:443"
+    DOCKER_REPO: "team-36/pay-me-more"
     DOCKER_IMAGE_TAG: $CI_COMMIT_SHA
     DOCKER_IMAGE_LATEST: "latest"
-  before_script:
-    - echo "Logging in to Docker Hub..."
-    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
   script:
     - cd apps/backend
-    - docker build -f Dockerfile.prod -t $IMAGE_NAME-backend:$DOCKER_IMAGE_TAG .
-    - docker tag $IMAGE_NAME-backend:$DOCKER_IMAGE_TAG $DOCKER_USERNAME/$IMAGE_NAME-backend:$DOCKER_IMAGE_LATEST
-    - docker tag $IMAGE_NAME-backend:$DOCKER_IMAGE_TAG $DOCKER_USERNAME/$IMAGE_NAME-backend:$DOCKER_IMAGE_TAG
-    - docker push $DOCKER_USERNAME/$IMAGE_NAME-backend:$DOCKER_IMAGE_LATEST
-    - docker push $DOCKER_USERNAME/$IMAGE_NAME-backend:$DOCKER_IMAGE_TAG
+    - docker build -f Dockerfile.prod -t backend:$DOCKER_IMAGE_TAG .
+    - docker tag backend:$DOCKER_IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_REPO/backend:$DOCKER_IMAGE_LATEST
+    - docker tag backend:$DOCKER_IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_REPO/backend:$DOCKER_IMAGE_TAG
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $DOCKER_REGISTRY
+    - docker push $DOCKER_REGISTRY/$DOCKER_REPO/backend:$DOCKER_IMAGE_LATEST
+    - docker push $DOCKER_REGISTRY/$DOCKER_REPO/backend:$DOCKER_IMAGE_TAG
   rules:
     - if: '$CI_COMMIT_REF_NAME == "main"'
       when: on_success
+ы
