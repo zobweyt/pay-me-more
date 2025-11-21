@@ -1,0 +1,14 @@
+::selection {
+  color: var(--mantine-primary-color-contrast);
+  background-color: var(--mantine-primary-color-filled);
+}
+
+html {
+  cursor: default;
+  caret-color: var(--mantine-primary-color-filled);
+  accent-color: var(--mantine-primary-color-filled);
+  scrollbar-color: var(--mantine-color-dimmed) transparent;
+  touch-action: manipulation;
+  scroll-behavior: smooth;
+  overscroll-behavior: unset;
+}

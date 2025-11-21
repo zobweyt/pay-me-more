@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "noUncheckedIndexedAccess": true,
+    "strict": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "paths": {
+      "@/*": ["./src/*"],
+      "package.json": ["./package.json"]
+    },
+    "resolveJsonModule": true,
+    "types": ["@rsbuild/core/types"],
+    "jsx": "react-jsx",
+    "lib": ["DOM", "ES2022"],
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true
+  },
+  "include": ["src"],
+  "exclude": ["dist", "node_modules", "public"]
+}

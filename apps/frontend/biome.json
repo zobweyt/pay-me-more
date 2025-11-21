@@ -1,0 +1,100 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.3.4/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "includes": [
+      "**",
+      "!!**/dist",
+      "!!**/etc",
+      "!!**/node_modules",
+      "!!**/public",
+      "**/*.js",
+      "**/*.jsx",
+      "**/*.md",
+      "**/*.mdx",
+      "**/*.mjs",
+      "**/*.ts",
+      "**/*.tsx"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 80
+  },
+  "linter": {
+    "includes": ["**", "!!**/src/shared/api/types.ts"],
+    "enabled": true,
+    "domains": {
+      "project": "recommended",
+      "react": "all"
+    },
+    "rules": {
+      "recommended": true,
+      "correctness": {
+        "noUndeclaredVariables": {
+          "level": "on",
+          "options": {
+            "checkTypes": true
+          }
+        },
+        "noUnknownProperty": "error",
+        "noUnusedImports": {
+          "level": "on",
+          "fix": "safe",
+          "options": {}
+        },
+        "useExhaustiveDependencies": "off"
+      },
+      "complexity": {
+        "useArrowFunction": "error"
+      },
+      "a11y": "error",
+      "suspicious": {
+        "noArrayIndexKey": "off"
+      }
+    }
+  },
+  "css": {
+    "linter": {
+      "enabled": false
+    }
+  },
+  "javascript": {
+    "globals": ["React"],
+    "formatter": {
+      "jsxQuoteStyle": "double",
+      "quoteStyle": "double",
+      "semicolons": "always",
+      "trailingCommas": "all"
+    }
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "identifierOrder": "lexicographic",
+            "groups": [
+              ":NODE:",
+              ":BLANK_LINE:",
+              ":PACKAGE:",
+              ":BLANK_LINE:",
+              ":ALIAS:",
+              ":BLANK_LINE:",
+              ":PATH:"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

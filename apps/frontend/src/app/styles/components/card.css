@@ -1,0 +1,16 @@
+.mantine-Card-root[data-variant="action"] {
+  cursor: pointer;
+
+  @mixin hover {
+    background-color: var(--mantine-color-gray-light);
+  }
+
+  &:active {
+    transform: translateY(calc(0.0625rem * var(--mantine-scale)));
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-primary-color-filled);
+    outline-offset: calc(0.125rem * var(--mantine-scale));
+  }
+}

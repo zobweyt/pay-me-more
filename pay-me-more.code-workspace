@@ -1,0 +1,42 @@
+{
+  "folders": [
+    {
+      "name": "root",
+      "path": "."
+    },
+    {
+      "name": "backend",
+      "path": "./apps/backend"
+    },
+    {
+      "name": "frontend",
+      "path": "./apps/frontend"
+    }
+  ],
+  "settings": {
+    "editor.unicodeHighlight.allowedLocales": {
+      "ru": true
+    },
+    "[yaml]": {
+      "editor.defaultFormatter": "redhat.vscode-yaml",
+      "editor.formatOnSave": true
+    },
+    "[dockercompose]": {
+      "editor.defaultFormatter": "ms-azuretools.vscode-containers",
+      "editor.formatOnSave": true
+    },
+    "[json][jsonc][markdown]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "ahmadalli.vscode-nginx-conf",
+      "esbenp.prettier-vscode",
+      "ms-azuretools.vscode-containers",
+      "ms-azuretools.vscode-docker",
+      "redhat.vscode-yaml"
+    ]
+  }
+}

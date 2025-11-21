@@ -1,0 +1,27 @@
+.unit-tests-template:
+  stage: test
+  image: docker:latest
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_HOST: tcp://docker:2375
+  services:
+    - docker:dind
+  cache:
+    key: docker-compose-unit-cache
+    paths:
+      - .docker-cache/
+  before_script:
+    - cp .env.example .env
+    - echo "Waiting for Docker daemon to be available..."
+    - until docker info >/dev/null 2>&1; do sleep 2; done
+    - echo "Running unit-tests..."
+  script:
+    - docker compose --profile test-unit up --build --abort-on-container-exit
+    - if [ $? -eq 0 ]; then echo "Unit-tests passed successfully."; else echo "Unit-tests failed." && exit 1; fi
+  after_script:
+    - docker compose --profile test-unit down -v
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      when: always
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always

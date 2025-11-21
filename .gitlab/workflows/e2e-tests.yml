@@ -1,0 +1,27 @@
+.e2e-tests-template:
+  stage: test
+  image: docker:latest
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_HOST: tcp://docker:2375
+  services:
+    - docker:dind
+  cache:
+    key: docker-compose-e2e-cache
+    paths:
+      - .docker-cache/
+  before_script:
+    - cp .env.example .env
+    - echo "Waiting for Docker daemon to be available..."
+    - until docker info >/dev/null 2>&1; do sleep 2; done
+    - echo "Running e2e-tests..."
+  script:
+    - docker compose --profile test-e2e up --build --abort-on-container-exit
+    - if [ $? -eq 0 ]; then echo "E2e-tests passed successfully."; else echo "E2e-tests failed." && exit 1; fi
+  after_script:
+    - docker compose --profile test-e2e down -v
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      when: always
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always

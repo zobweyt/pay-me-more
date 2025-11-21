@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "biomejs.biome",
+    "csstools.postcss",
+    "fractalbrew.backticks",
+    "vunguyentuan.vscode-postcss"
+  ]
+}

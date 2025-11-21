@@ -1,0 +1,41 @@
+stages:
+  - lint
+  - test
+  - build
+
+include:
+  - local: /.gitlab/workflows/lint-backend.yml
+  - local: /.gitlab/workflows/lint-frontend.yml
+  - local: /.gitlab/workflows/unit-tests.yml
+  - local: /.gitlab/workflows/e2e-tests.yml
+  - local: /.gitlab/workflows/build-backend.yml
+  - local: /.gitlab/workflows/build-frontend.yml
+
+lint-backend:
+  extends: .lint-backend-template
+
+lint-frontend:
+  extends: .lint-frontend-template
+
+unit-tests:
+  extends: .unit-tests-template
+  needs:
+    - job: lint-backend
+      artifacts: false
+
+e2e-tests:
+  extends: .e2e-tests-template
+  needs:
+    - job: lint-backend
+      artifacts: false
+
+build-backend:
+  extends: .build-backend-template
+  needs:
+    - unit-tests
+    - e2e-tests
+
+build-frontend:
+  extends: .build-frontend-template
+  needs:
+    - lint-frontend

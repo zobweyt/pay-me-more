@@ -1,0 +1,68 @@
+import { AppShell, Button, Group } from "@mantine/core";
+import { Link, useLocation } from "react-router";
+
+import { APP_SECTIONS } from "@/app/config/sections";
+import type { CurrentUserResponse } from "@/shared/api";
+import { routes } from "@/shared/config/routes";
+import { CurrentUserMenu } from "@/widgets/current-user-menu";
+
+export type ShellHeaderProps = {
+  currentUser: CurrentUserResponse;
+};
+
+export const ShellHeader: React.FC<ShellHeaderProps> = ({ currentUser }) => {
+  const { pathname } = useLocation();
+
+  return (
+    <AppShell.Header bg="var(--mantine-color-surface)">
+      <Group
+        h="100%"
+        mx="auto"
+        px="md"
+        gap="lg"
+        maw="52rem"
+        justify="space-between"
+      >
+        <Button
+          component={Link}
+          to={routes.shell.home.$path()}
+          p={0}
+          c="var(--mantine-body-color)"
+          fz="md"
+          variant="transparent"
+          leftSection={
+            <img
+              src="/favicon.svg"
+              alt="Логотип"
+              width={32}
+              height={32}
+              draggable={false}
+            />
+          }
+        >
+          PayMeMore
+        </Button>
+
+        <Group mx="auto" gap={6} visibleFrom="sm">
+          {APP_SECTIONS.map((section) => (
+            <Button
+              component={Link}
+              key={section.pathname}
+              to={section.pathname}
+              h={36}
+              p="xs"
+              c="var(--mantine-body-color)"
+              color="gray"
+              variant={pathname === section.pathname ? "light" : "subtle"}
+              leftSection={<section.icon size={22} />}
+            >
+              {section.label}
+            </Button>
+          ))}
+        </Group>
+
+        <CurrentUserMenu currentUser={currentUser} />
+      </Group>
+    </AppShell.Header>
+  );
+};

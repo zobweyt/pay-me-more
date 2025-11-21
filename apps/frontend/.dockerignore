@@ -1,0 +1,12 @@
+.husky
+dist
+docs
+node_modules
+
+.dockerignore
+.gitignore
+Dockerfile.dev
+Dockerfile.prod
+README.md
+biome.json
+steiger.config.ts

@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "charliermarsh.ruff",
+    "matangover.mypy",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "noxiz.jinja-snippets",
+    "samuelcolvin.jinjahtml",
+    "tamasfe.even-better-toml"
+  ]
+}

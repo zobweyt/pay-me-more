@@ -1,0 +1,17 @@
+.lint-frontend-template:
+  stage: lint
+  image: node:24-alpine
+  cache:
+    key: frontend-deps
+    paths:
+      - apps/frontend/node_modules/
+  script:
+    - cd apps/frontend
+    - npm ci --ignore-scripts --no-audit --no-fund --omit=dev
+    - npm run check
+    - npm run tsc
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      when: always
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always

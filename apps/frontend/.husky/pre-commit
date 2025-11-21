@@ -1,0 +1,24 @@
+#!/bin/sh
+
+set -eu
+
+cd apps/frontend
+
+if git status --short | grep --quiet '^MM'; then
+  printf '%s\n' "ERROR: Some staged files have unstaged changes" >&2
+  exit 1;
+fi
+
+if git diff --name-only --cached | grep "apps/frontend" > /dev/null; then
+  if ! npm run check -- --write --staged --files-ignore-unknown=true --no-errors-on-unmatched; then
+    exit 1
+  fi
+fi
+
+if git diff --name-only --cached | grep "apps/frontend/src" > /dev/null; then
+  if ! npm run tsc; then
+    exit 1
+  fi
+fi
+
+git update-index --again

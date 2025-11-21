@@ -1,0 +1,65 @@
+import { MantineProvider } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter, Route, Routes } from "react-router";
+
+import { AuthLayout } from "@/app/layouts/auth/AuthLayout";
+import { ShellLayout } from "@/app/layouts/shell/ShellLayout";
+import { HomePage } from "@/pages/home";
+import { LoginPage } from "@/pages/login";
+import { NotFoundPage } from "@/pages/not-found";
+import { RegisterPage } from "@/pages/register";
+import { SettingsPage } from "@/pages/settings";
+import { UserPage } from "@/pages/user";
+import { UsersPage } from "@/pages/users";
+import { queryClient } from "@/shared/api";
+import { routes } from "@/shared/config/routes";
+import { defaultColorScheme, theme } from "@/shared/config/theme";
+
+import "./styles/index.css";
+
+const rootElement = document.getElementById("root");
+
+if (!rootElement) {
+  throw new Error("The root element not found.");
+}
+
+const root = createRoot(rootElement);
+
+root.render(
+  <StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <MantineProvider theme={theme} defaultColorScheme={defaultColorScheme}>
+        <Notifications />
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
+          <Routes>
+            <Route element={<AuthLayout />}>
+              <Route element={<LoginPage />} path={routes.auth.login.$path()} />
+              <Route
+                element={<RegisterPage />}
+                path={routes.auth.register.$path()}
+              />
+            </Route>
+            <Route element={<ShellLayout />}>
+              <Route element={<HomePage />} path={routes.shell.home.$path()} />
+              <Route
+                element={<UsersPage />}
+                path={routes.shell.users.$path()}
+              />
+              <Route element={<UserPage />} path={routes.shell.user.$path()} />
+              <Route
+                element={<SettingsPage />}
+                path={routes.shell.settings.$path()}
+              />
+            </Route>
+            <Route element={<NotFoundPage />} path="*" />
+          </Routes>
+        </BrowserRouter>
+      </MantineProvider>
+      <ReactQueryDevtools />
+    </QueryClientProvider>
+  </StrictMode>,
+);

@@ -1,0 +1,25 @@
+.build-backend-template:
+  stage: build
+  image: docker:20.10.24
+  services:
+    - docker:20.10.24-dind
+  variables:
+    DOCKER_HOST: tcp://docker:2376
+    DOCKER_TLS_VERIFY: "1"
+    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_CERT_PATH: "/certs/client"
+    DOCKER_IMAGE_TAG: $CI_COMMIT_SHA
+    DOCKER_IMAGE_LATEST: "latest"
+  before_script:
+    - echo "Logging in to Docker Hub..."
+    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  script:
+    - cd apps/backend
+    - docker build -f Dockerfile.prod -t $IMAGE_NAME-backend:$DOCKER_IMAGE_TAG .
+    - docker tag $IMAGE_NAME-backend:$DOCKER_IMAGE_TAG $DOCKER_USERNAME/$IMAGE_NAME-backend:$DOCKER_IMAGE_LATEST
+    - docker tag $IMAGE_NAME-backend:$DOCKER_IMAGE_TAG $DOCKER_USERNAME/$IMAGE_NAME-backend:$DOCKER_IMAGE_TAG
+    - docker push $DOCKER_USERNAME/$IMAGE_NAME-backend:$DOCKER_IMAGE_LATEST
+    - docker push $DOCKER_USERNAME/$IMAGE_NAME-backend:$DOCKER_IMAGE_TAG
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      when: on_success

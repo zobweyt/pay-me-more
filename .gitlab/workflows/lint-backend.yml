@@ -1,0 +1,15 @@
+.lint-backend-template:
+  stage: lint
+  image: python:3.13-alpine
+  script:
+    - cd apps/backend
+    - python -m pip install --upgrade pip
+    - pip install -r requirements/test.txt
+    - mypy src tests
+    - ruff check .
+    - ruff format --check
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      when: always
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always

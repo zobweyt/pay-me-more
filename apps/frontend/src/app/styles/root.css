@@ -1,0 +1,15 @@
+:root {
+  --font-sans: "Inter Variable", sans-serif;
+  --font-mono: "Fira Code Variable", monospace;
+  --ease-glide: cubic-bezier(0.32, 0.72, 0, 1);
+
+  @mixin light-root {
+    --mantine-color-body: var(--mantine-color-gray-0) !important;
+    --mantine-color-surface: var(--mantine-color-white) !important;
+  }
+
+  @mixin dark-root {
+    --mantine-color-body: var(--mantine-color-dark-7) !important;
+    --mantine-color-surface: var(--mantine-color-dark-6) !important;
+  }
+}
