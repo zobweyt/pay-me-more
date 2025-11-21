@@ -1,0 +1,399 @@
+{
+  "configuration" : { },
+  "description" : "Container diagram",
+  "documentation" : { },
+  "id" : 1,
+  "lastModifiedAgent" : "structurizr-ui",
+  "lastModifiedDate" : "2025-11-21T15:05:25Z",
+  "model" : {
+    "people" : [ {
+      "description" : "Хочет узнать свою стоимость на рынке труда.",
+      "id" : "1",
+      "name" : "Пользователь",
+      "properties" : {
+        "structurizr.dsl.identifier" : "user"
+      },
+      "relationships" : [ {
+        "description" : "Браузер (использует UI)",
+        "destinationId" : "3",
+        "id" : "12",
+        "sourceId" : "1",
+        "tags" : "Relationship"
+      }, {
+        "description" : "Браузер (использует UI)",
+        "destinationId" : "2",
+        "id" : "13",
+        "linkedRelationshipId" : "12",
+        "sourceId" : "1"
+      } ],
+      "tags" : "Element,Person"
+    } ],
+    "softwareSystems" : [ {
+      "containers" : [ {
+        "description" : "React",
+        "documentation" : { },
+        "id" : "3",
+        "name" : "Сайт",
+        "properties" : {
+          "structurizr.dsl.identifier" : "frontend"
+        },
+        "relationships" : [ {
+          "description" : "HTTP/JSON → Отправляет запросы к API",
+          "destinationId" : "4",
+          "id" : "14",
+          "sourceId" : "3",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container,WebBrowser",
+        "technology" : "Single-page приложение (UI)."
+      }, {
+        "description" : "Роутер / API Gateway бэкенда.",
+        "documentation" : { },
+        "id" : "4",
+        "name" : "Роутер",
+        "properties" : {
+          "structurizr.dsl.identifier" : "main_back"
+        },
+        "relationships" : [ {
+          "description" : "Запрашивает/сохраняет данные пользователя",
+          "destinationId" : "5",
+          "id" : "15",
+          "sourceId" : "4",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Запрашивает предсказание зарплаты",
+          "destinationId" : "6",
+          "id" : "16",
+          "sourceId" : "4",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Запрашивает советы по резюме",
+          "destinationId" : "7",
+          "id" : "17",
+          "sourceId" : "4",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Запрашивает вакансии",
+          "destinationId" : "8",
+          "id" : "18",
+          "sourceId" : "4",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container,Diamond"
+      }, {
+        "description" : "Аутентификация, сохранение резюме.",
+        "documentation" : { },
+        "id" : "5",
+        "name" : "Хранение данных пользователя",
+        "properties" : {
+          "structurizr.dsl.identifier" : "auth"
+        },
+        "relationships" : [ {
+          "description" : "Читает/пишет пользовательские данные",
+          "destinationId" : "9",
+          "id" : "21",
+          "sourceId" : "5",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container"
+      }, {
+        "description" : "ML-сервис, предсказывает зарплату по резюме.",
+        "documentation" : { },
+        "id" : "6",
+        "name" : "Предсказание зарплаты по резюме",
+        "properties" : {
+          "structurizr.dsl.identifier" : "wage"
+        },
+        "relationships" : [ {
+          "description" : "Использует данные при обучении",
+          "destinationId" : "10",
+          "id" : "19",
+          "sourceId" : "6",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Читает/пишет (если нужно хранить модели/метрики)",
+          "destinationId" : "9",
+          "id" : "22",
+          "sourceId" : "6",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container"
+      }, {
+        "description" : "LLM-сервис, даёт рекомендации по улучшению резюме.",
+        "documentation" : { },
+        "id" : "7",
+        "name" : "Советы по резюме",
+        "properties" : {
+          "structurizr.dsl.identifier" : "suggestions"
+        },
+        "relationships" : [ {
+          "description" : "Запускает LLM через Openrouter",
+          "destinationId" : "11",
+          "id" : "23",
+          "sourceId" : "7",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container"
+      }, {
+        "description" : "Поиск подходящих вакансий.",
+        "documentation" : { },
+        "id" : "8",
+        "name" : "Вакансии",
+        "properties" : {
+          "structurizr.dsl.identifier" : "jobs"
+        },
+        "relationships" : [ {
+          "description" : "Ищет подходящие вакансии",
+          "destinationId" : "10",
+          "id" : "20",
+          "sourceId" : "8",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container"
+      }, {
+        "description" : "Database",
+        "documentation" : { },
+        "id" : "9",
+        "name" : "База данных",
+        "properties" : {
+          "structurizr.dsl.identifier" : "db"
+        },
+        "tags" : "Element,Container,Database",
+        "technology" : "Хранение пользовательских данных и метаданных."
+      }, {
+        "description" : "Внешний датасет, используемый для обучения/предсказаний.",
+        "documentation" : { },
+        "id" : "10",
+        "name" : "Датасет",
+        "properties" : {
+          "structurizr.dsl.identifier" : "dataset"
+        },
+        "tags" : "Element,Container,Folder"
+      }, {
+        "description" : "Провайдер для запуска LLM/LLM-прокси.",
+        "documentation" : { },
+        "id" : "11",
+        "name" : "Openrouter",
+        "properties" : {
+          "structurizr.dsl.identifier" : "openrouter"
+        },
+        "tags" : "Element,Container,Component"
+      } ],
+      "description" : "Система для оценки ожидаемой зарплаты по резюме.",
+      "documentation" : { },
+      "id" : "2",
+      "name" : "Pay me more",
+      "properties" : {
+        "structurizr.dsl.identifier" : "paymemore"
+      },
+      "tags" : "Element,Software System"
+    } ]
+  },
+  "name" : "C3",
+  "properties" : {
+    "structurizr.inspection.info" : "0",
+    "structurizr.inspection.ignore" : "0",
+    "structurizr.inspection.error" : "34",
+    "structurizr.inspection.warning" : "0",
+    "structurizr.dsl" : "d29ya3NwYWNlIEMzICJDb250YWluZXIgZGlhZ3JhbSIgewoKICAgIG1vZGVsIHsKICAgICAgICB1c2VyID0gcGVyc29uICLQn9C+0LvRjNC30L7QstCw0YLQtdC70YwiICLQpdC+0YfQtdGCINGD0LfQvdCw0YLRjCDRgdCy0L7RjiDRgdGC0L7QuNC80L7RgdGC0Ywg0L3QsCDRgNGL0L3QutC1INGC0YDRg9C00LAuIgoKICAgICAgICBwYXltZW1vcmUgPSBzb2Z0d2FyZVN5c3RlbSAiUGF5IG1lIG1vcmUiICLQodC40YHRgtC10LzQsCDQtNC70Y8g0L7RhtC10L3QutC4INC+0LbQuNC00LDQtdC80L7QuSDQt9Cw0YDQv9C70LDRgtGLINC/0L4g0YDQtdC30Y7QvNC1LiIgewogICAgICAgICAgICBmcm9udGVuZCA9IGNvbnRhaW5lciAi0KHQsNC50YIiICJSZWFjdCIgIlNpbmdsZS1wYWdlINC/0YDQuNC70L7QttC10L3QuNC1IChVSSkuIiB7CiAgICAgICAgICAgICAgICB0YWdzICJXZWJCcm93c2VyIgogICAgICAgICAgICB9CiAgICAgICAgICAgIG1haW5fYmFjayA9IGNvbnRhaW5lciAi0KDQvtGD0YLQtdGAIiAi0KDQvtGD0YLQtdGAIC8gQVBJIEdhdGV3YXkg0LHRjdC60LXQvdC00LAuIiB7CiAgICAgICAgICAgICAgICB0YWdzICJEaWFtb25kIgogICAgICAgICAgICB9CiAgICAgICAgICAgIGF1dGggPSBjb250YWluZXIgItCl0YDQsNC90LXQvdC40LUg0LTQsNC90L3Ri9GFINC/0L7Qu9GM0LfQvtCy0LDRgtC10LvRjyIgItCQ0YPRgtC10L3RgtC40YTQuNC60LDRhtC40Y8sINGB0L7RhdGA0LDQvdC10L3QuNC1INGA0LXQt9GO0LzQtS4iCiAgICAgICAgICAgIHdhZ2UgPSBjb250YWluZXIgItCf0YDQtdC00YHQutCw0LfQsNC90LjQtSDQt9Cw0YDQv9C70LDRgtGLINC/0L4g0YDQtdC30Y7QvNC1IiAiTUwt0YHQtdGA0LLQuNGBLCDQv9GA0LXQtNGB0LrQsNC30YvQstCw0LXRgiDQt9Cw0YDQv9C70LDRgtGDINC/0L4g0YDQtdC30Y7QvNC1LiIKICAgICAgICAgICAgc3VnZ2VzdGlvbnMgPSBjb250YWluZXIgItCh0L7QstC10YLRiyDQv9C+INGA0LXQt9GO0LzQtSIgIkxMTS3RgdC10YDQstC40YEsINC00LDRkdGCINGA0LXQutC+0LzQtdC90LTQsNGG0LjQuCDQv9C+INGD0LvRg9GH0YjQtdC90LjRjiDRgNC10LfRjtC80LUuIgogICAgICAgICAgICBqb2JzID0gY29udGFpbmVyICLQktCw0LrQsNC90YHQuNC4IiAi0J/QvtC40YHQuiDQv9C+0LTRhdC+0LTRj9GJ0LjRhSDQstCw0LrQsNC90YHQuNC5LiIKICAgICAgICAgICAgZGIgPSBjb250YWluZXIgItCR0LDQt9CwINC00LDQvdC90YvRhSIgIkRhdGFiYXNlIiAi0KXRgNCw0L3QtdC90LjQtSDQv9C+0LvRjNC30L7QstCw0YLQtdC70YzRgdC60LjRhSDQtNCw0L3QvdGL0YUg0Lgg0LzQtdGC0LDQtNCw0L3QvdGL0YUuIiB7CiAgICAgICAgICAgICAgICB0YWdzICJEYXRhYmFzZSIKICAgICAgICAgICAgfQogICAgICAgICAgICAKICAgICAgICAgICAgZGF0YXNldCA9IGNvbnRhaW5lciAi0JTQsNGC0LDRgdC10YIiICLQktC90LXRiNC90LjQuSDQtNCw0YLQsNGB0LXRgiwg0LjRgdC/0L7Qu9GM0LfRg9C10LzRi9C5INC00LvRjyDQvtCx0YPRh9C10L3QuNGPL9C/0YDQtdC00YHQutCw0LfQsNC90LjQuS4iIHsKICAgICAgICAgICAgICAgIHRhZ3MgIkZvbGRlciIKICAgICAgICAgICAgfQogICAgICAgICAgICBvcGVucm91dGVyID0gY29udGFpbmVyICJPcGVucm91dGVyIiAi0J/RgNC+0LLQsNC50LTQtdGAINC00LvRjyDQt9Cw0L/Rg9GB0LrQsCBMTE0vTExNLdC/0YDQvtC60YHQuC4iIHsKICAgICAgICAgICAgICAgIHRhZ3MgIkNvbXBvbmVudCIKICAgICAgICAgICAgfQogICAgICAgIH0KCiAgICAgICAgIyDQntGC0L3QvtGI0LXQvdC40Y8KICAgICAgICB1c2VyIC0+IGZyb250ZW5kICLQkdGA0LDRg9C30LXRgCAo0LjRgdC/0L7Qu9GM0LfRg9C10YIgVUkpIgogICAgICAgIGZyb250ZW5kIC0+IG1haW5fYmFjayAiSFRUUC9KU09OIOKGkiDQntGC0L/RgNCw0LLQu9GP0LXRgiDQt9Cw0L/RgNC+0YHRiyDQuiBBUEkiCgogICAgICAgIG1haW5fYmFjayAtPiBhdXRoICLQl9Cw0L/RgNCw0YjQuNCy0LDQtdGCL9GB0L7RhdGA0LDQvdGP0LXRgiDQtNCw0L3QvdGL0LUg0L/QvtC70YzQt9C+0LLQsNGC0LXQu9GPIgogICAgICAgIG1haW5fYmFjayAtPiB3YWdlICLQl9Cw0L/RgNCw0YjQuNCy0LDQtdGCINC/0YDQtdC00YHQutCw0LfQsNC90LjQtSDQt9Cw0YDQv9C70LDRgtGLIgogICAgICAgIG1haW5fYmFjayAtPiBzdWdnZXN0aW9ucyAi0JfQsNC/0YDQsNGI0LjQstCw0LXRgiDRgdC+0LLQtdGC0Ysg0L/QviDRgNC10LfRjtC80LUiCiAgICAgICAgbWFpbl9iYWNrIC0+IGpvYnMgItCX0LDQv9GA0LDRiNC40LLQsNC10YIg0LLQsNC60LDQvdGB0LjQuCIKCiAgICAgICAgd2FnZSAtPiBkYXRhc2V0ICLQmNGB0L/QvtC70YzQt9GD0LXRgiDQtNCw0L3QvdGL0LUg0L/RgNC4INC+0LHRg9GH0LXQvdC40LgiCiAgICAgICAgam9icyAtPiBkYXRhc2V0ICLQmNGJ0LXRgiDQv9C+0LTRhdC+0LTRj9GJ0LjQtSDQstCw0LrQsNC90YHQuNC4IgoKICAgICAgICBhdXRoIC0+IGRiICLQp9C40YLQsNC10YIv0L/QuNGI0LXRgiDQv9C+0LvRjNC30L7QstCw0YLQtdC70YzRgdC60LjQtSDQtNCw0L3QvdGL0LUiCiAgICAgICAgd2FnZSAtPiBkYiAi0KfQuNGC0LDQtdGCL9C/0LjRiNC10YIgKNC10YHQu9C4INC90YPQttC90L4g0YXRgNCw0L3QuNGC0Ywg0LzQvtC00LXQu9C4L9C80LXRgtGA0LjQutC4KSIKICAgICAgICBzdWdnZXN0aW9ucyAtPiBvcGVucm91dGVyICLQl9Cw0L/Rg9GB0LrQsNC10YIgTExNINGH0LXRgNC10LcgT3BlbnJvdXRlciIKICAgIH0KCiAgICB2aWV3cyB7CiAgICAgICAgIyBzeXN0ZW1Db250ZXh0IHBheW1lbW9yZSB7CiAgICAgICAgIyAgICAgaW5jbHVkZSBwYXltZW1vcmUKICAgICAgICAjICAgICBpbmNsdWRlIHVzZXIKICAgICAgICAjICAgICBpbmNsdWRlIGZyb250ZW5kCiAgICAgICAgIyAgICAgaW5jbHVkZSBkYXRhc2V0CiAgICAgICAgIyAgICAgaW5jbHVkZSBvcGVucm91dGVyCiAgICAgICAgIyAgICAgaW5jbHVkZSBkYXRhc3BoZXJlCiAgICAgICAgIyAgICAgYXV0b2xheW91dCBscgogICAgICAgICMgICAgIHRpdGxlICJTeXN0ZW0gQ29udGV4dCDigJQgUGF5IG1lIG1vcmUiCiAgICAgICAgIyB9CgogICAgICAgICMgY29udGFpbmVyIHBheW1lbW9yZSB7CiAgICAgICAgIyAgICAgaW5jbHVkZSAqCiAgICAgICAgIyAgICAgaW5jbHVkZSBkYgogICAgICAgICMgICAgIGluY2x1ZGUgZGF0YXNldAogICAgICAgICMgICAgIGluY2x1ZGUgb3BlbnJvdXRlcgogICAgICAgICMgICAgIGluY2x1ZGUgZGF0YXNwaGVyZQogICAgICAgICMgICAgIGF1dG9sYXlvdXQgbHIgICMg0L/QvtC/0YvRgtC60LAg0LLRi9GB0YLRgNC+0LjRgtGMINGB0LvQtdCy0LDihpLRgdC/0YDQsNCy0LAsINGH0YLQvtCx0Ysg0JHQlCDQvtC60LDQt9Cw0LvQsNGB0Ywg0L/RgNCw0LLQtdC1INCx0Y3QutC10L3QtNCwCiAgICAgICAgIyAgICAgdGl0bGUgIkNvbnRhaW5lciBWaWV3IOKAlCBQYXkgbWUgbW9yZSIKICAgICAgICAjIH0KCiAgICAgICAgc3R5bGVzIHsKICAgICAgICAgICAgZWxlbWVudCAiUGVyc29uIiB7CiAgICAgICAgICAgICAgICBzaGFwZSBwZXJzb24KICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzZBQTg0RgogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIlNvZnR3YXJlIFN5c3RlbSIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjMTE2OGJkCiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmCiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiQ29udGFpbmVyIiB7CiAgICAgICAgICAgICAgICBzaGFwZSByb3VuZGVkYm94CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICNmZmZmZmYKICAgICAgICAgICAgICAgIHN0cm9rZSAjMkI3NUJCCiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiQ29udGFpbmVyLCBFeHRlcm5hbCIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjRTZFNkU2CiAgICAgICAgICAgICAgICBzdHJva2UgI0NDQ0NDQwogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkRhdGFiYXNlIiB7CiAgICAgICAgICAgICAgICBzaGFwZSBjeWxpbmRlcgogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjZmZmZmZmCiAgICAgICAgICAgICAgICBzdHJva2UgIzJCNzVCQgogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkV4dGVybmFsIiB7CiAgICAgICAgICAgICAgICBvcGFjaXR5IDMwCiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiV2ViQnJvd3NlciIgewogICAgICAgICAgICAgICAgc2hhcGUgV2ViQnJvd3NlcgogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkRpYW1vbmQiIHsKICAgICAgICAgICAgICAgIHNoYXBlIERpYW1vbmQKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJDb21wb25lbnQiIHsKICAgICAgICAgICAgICAgIHNoYXBlIENvbXBvbmVudAogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkZvbGRlciIgewogICAgICAgICAgICAgICAgc2hhcGUgRm9sZGVyCiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICB9Cn0="
+  },
+  "views" : {
+    "configuration" : {
+      "branding" : { },
+      "lastSavedView" : "Container-001",
+      "metadataSymbols" : "SquareBrackets",
+      "styles" : {
+        "elements" : [ {
+          "shape" : "Component",
+          "tag" : "Component"
+        }, {
+          "background" : "#ffffff",
+          "shape" : "RoundedBox",
+          "stroke" : "#2b75bb",
+          "tag" : "Container"
+        }, {
+          "background" : "#e6e6e6",
+          "stroke" : "#cccccc",
+          "tag" : "Container, External"
+        }, {
+          "background" : "#ffffff",
+          "shape" : "Cylinder",
+          "stroke" : "#2b75bb",
+          "tag" : "Database"
+        }, {
+          "shape" : "Diamond",
+          "tag" : "Diamond"
+        }, {
+          "opacity" : 30,
+          "tag" : "External"
+        }, {
+          "shape" : "Folder",
+          "tag" : "Folder"
+        }, {
+          "background" : "#6aa84f",
+          "color" : "#ffffff",
+          "shape" : "Person",
+          "tag" : "Person"
+        }, {
+          "background" : "#1168bd",
+          "color" : "#ffffff",
+          "tag" : "Software System"
+        }, {
+          "shape" : "WebBrowser",
+          "tag" : "WebBrowser"
+        } ]
+      },
+      "terminology" : { }
+    },
+    "containerViews" : [ {
+      "automaticLayout" : {
+        "applied" : true,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "dimensions" : {
+        "height" : 3299,
+        "width" : 3140
+      },
+      "elements" : [ {
+        "id" : "1",
+        "x" : 1370,
+        "y" : 159
+      }, {
+        "id" : "3",
+        "x" : 1345,
+        "y" : 859
+      }, {
+        "id" : "4",
+        "x" : 1345,
+        "y" : 1459
+      }, {
+        "id" : "5",
+        "x" : 970,
+        "y" : 2059
+      }, {
+        "id" : "6",
+        "x" : 1720,
+        "y" : 2059
+      }, {
+        "id" : "7",
+        "x" : 220,
+        "y" : 2059
+      }, {
+        "id" : "8",
+        "x" : 2470,
+        "y" : 2059
+      }, {
+        "id" : "9",
+        "x" : 1345,
+        "y" : 2659
+      }, {
+        "id" : "10",
+        "x" : 2282,
+        "y" : 2659
+      }, {
+        "id" : "11",
+        "x" : 220,
+        "y" : 2659
+      } ],
+      "externalSoftwareSystemBoundariesVisible" : false,
+      "generatedKey" : true,
+      "key" : "Container-001",
+      "name" : "Container View: Pay me more",
+      "order" : 3,
+      "relationships" : [ {
+        "id" : "12"
+      }, {
+        "id" : "14"
+      }, {
+        "id" : "15"
+      }, {
+        "id" : "16"
+      }, {
+        "id" : "17"
+      }, {
+        "id" : "18"
+      }, {
+        "id" : "19"
+      }, {
+        "id" : "20"
+      }, {
+        "id" : "21"
+      }, {
+        "id" : "22"
+      }, {
+        "id" : "23"
+      } ],
+      "softwareSystemId" : "2"
+    } ],
+    "systemContextViews" : [ {
+      "automaticLayout" : {
+        "applied" : true,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "dimensions" : {
+        "height" : 1400,
+        "width" : 850
+      },
+      "elements" : [ {
+        "id" : "1",
+        "x" : 224,
+        "y" : 159
+      }, {
+        "id" : "2",
+        "x" : 199,
+        "y" : 859
+      } ],
+      "enterpriseBoundaryVisible" : true,
+      "generatedKey" : true,
+      "key" : "SystemContext-001",
+      "name" : "System Context View: Pay me more",
+      "order" : 2,
+      "relationships" : [ {
+        "id" : "13"
+      } ],
+      "softwareSystemId" : "2"
+    } ],
+    "systemLandscapeViews" : [ {
+      "automaticLayout" : {
+        "applied" : true,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "dimensions" : {
+        "height" : 1400,
+        "width" : 850
+      },
+      "elements" : [ {
+        "id" : "1",
+        "x" : 225,
+        "y" : 160
+      }, {
+        "id" : "2",
+        "x" : 200,
+        "y" : 860
+      } ],
+      "enterpriseBoundaryVisible" : true,
+      "generatedKey" : true,
+      "key" : "SystemLandscape-001",
+      "name" : "System Landscape View",
+      "order" : 1,
+      "relationships" : [ {
+        "id" : "13"
+      } ]
+    } ]
+  }
+}
