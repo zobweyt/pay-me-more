@@ -1,7 +1,6 @@
 import { Stack, Title } from "@mantine/core";
 import { useCallback, useState } from "react";
 
-import { ResumeForm, type ResumeFormValues } from "@/entities/resume";
 import type { Recommendation } from "@/entities/resume/model/recommendation";
 import { Recommendations } from "@/entities/resume/ui/Recommendations";
 
@@ -14,6 +13,12 @@ const mock_recommendations: Recommendation[] = [
     result: "Увеличение вилки на 15-25%",
   },
 ];
+
+import {
+  ResumeForm,
+  type ResumeFormValues,
+  ResumeSalaryCard,
+} from "@/entities/resume";
 
 export const HomePage: React.FC = () => {
   const [resume, setResume] = useState<ResumeFormValues | undefined>(undefined);
@@ -34,9 +39,8 @@ export const HomePage: React.FC = () => {
       </Title>
 
       <ResumeForm initialValues={resume} onSubmit={onSubmit} />
+      <ResumeSalaryCard salary={{ from: 300000, to: 400000 }} />
       <Recommendations recommendations={recommendations} />
-
-      {JSON.stringify(resume)}
     </Stack>
   );
 };
