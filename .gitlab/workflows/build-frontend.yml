@@ -17,7 +17,7 @@
     - echo "Logging in to Docker Hub..."
     - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     - DOCKER_BUILDKIT=1
-  sscript:
+  script:
     - cd apps/backend
     - docker build -f Dockerfile.prod -t frontend:$DOCKER_IMAGE_TAG .
     - docker tag frontend:$DOCKER_IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_REPO/frontend:$DOCKER_IMAGE_LATEST
