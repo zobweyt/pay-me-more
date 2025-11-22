@@ -4,37 +4,30 @@ import {
   NumberFormatter,
   Stack,
   Text,
-  ThemeIcon,
+  Title,
 } from "@mantine/core";
-import { LuTrendingUp } from "react-icons/lu";
 
 import type { Salary } from "@/shared/api";
 
-export type ResumeSalaryCardProps = {
+export type ResumeSalaryForkCardProps = {
   salary: Salary;
 };
 
-export const ResumeSalaryCard: React.FC<ResumeSalaryCardProps> = ({
+export const ResumeSalaryForkCard: React.FC<ResumeSalaryForkCardProps> = ({
   salary,
 }) => {
   return (
     <Card>
       <Stack>
-        <Group>
-          <ThemeIcon
-            size="xl"
-            variant="gradient"
-            gradient={{ from: "blue.7", to: "blue.5" }}
-          >
-            <LuTrendingUp size={24} />
-          </ThemeIcon>
-          <Stack gap={0}>
-            <Text fw={600} size="lg">
-              Ваша рыночная стоимость
-            </Text>
-            <Text>На основе анализа актуальных вакансий</Text>
-          </Stack>
-        </Group>
+        <Stack component="hgroup" gap={4}>
+          <Title size="h4" order={5}>
+            Ваша рыночная стоимость
+          </Title>
+          <Text c="dimmed" size="sm" style={{ textWrap: "pretty" }}>
+            На основе анализа актуальных вакансий.
+          </Text>
+        </Stack>
+
         <Stack align="center" my={{ base: "sm", xs: "lg" }}>
           <Group fz="xl" gap="sm">
             <Stack align="center" gap={0}>
