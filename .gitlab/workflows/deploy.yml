@@ -24,7 +24,6 @@
     IMAGE_NAME: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
     DOCKER_REGISTRY: "registry.gitlab.prodcontest.com:443"
   script:
-    - AUTH_COMMAND='echo "$CI_REGISTRY_PASSWORD" | docker login $DOCKER_REGISTRY --username $CI_REGISTRY_USER --password-stdin'
-    - ssh $SSH_ADDRESS '$AUTH_COMMAND'
+    - ssh $SSH_ADDRESS 'echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $DOCKER_REGISTRY'
     - ssh $SSH_ADDRESS 'cd ~/pay-me-more && git pull'
     - ssh $SSH_ADDRESS "cd ~/pay-me-more && docker compose --profile prod pull && docker compose --profile prod up -d --force-recreate"
