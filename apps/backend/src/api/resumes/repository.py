@@ -20,37 +20,35 @@ class ResumeRepository:
         # Resume
         resume_id = uuid.uuid4()
         resume = Resume(
+            id=resume_id,
             user_id=user_id,
             role=data.role,
             experience=data.experience,
             location=data.location,
         )
-
         self.session.add(resume)
-        # await self.session.flush()
 
-        skills = []
-        for skill_name in data.skills:
-            skill = await self.session.scalar(select(Skill).where(Skill.name == skill_name))
-            if not skill:
-                skill = Skill(name=skill_name)
-                self.session.add(skill)
-                # await self.session.flush()
-
-            skills.append(skill)
-
-        resume.skills = skills
+        resume.skills = [Skill(name=skill_name) for skill_name in data.skills]
+        self.session.add_all(resume.skills)
 
         # Salary
-        salary = Salary(resume_id=resume_id, from_=data.salary.from_, to=data.salary.to)
+        salary = Salary(
+            resume_id=resume_id,
+            from_=data.salary.from_,
+            to=data.salary.to
+        )
         self.session.add(salary)
 
         # Recommendations
-        for rec in data.recommendations:
-            recommendation = Recommendation(
-                resume_id=resume_id, title=rec.title, subtitle=rec.subtitle, result=rec.result
-            )
-            self.session.add(recommendation)
+        recommendations = [
+            Recommendation(
+                resume_id=resume_id,
+                title=rec.title,
+                subtitle=rec.subtitle,
+                result=rec.result
+            ) for rec in data.recommendations
+        ]
+        self.session.add_all(recommendations)
 
         await self.session.commit()
         await self.session.refresh(resume)
