@@ -1,3 +1,4 @@
+import uuid
 from typing import Annotated
 from uuid import UUID
 
@@ -17,6 +18,7 @@ class ResumeRepository:
 
     async def create_resume(self, user_id: UUID, data: ResumeCreateDTO):
         # Resume
+        resume_id = uuid.uuid4()
         resume = Resume(
             user_id=user_id,
             role=data.role,
@@ -40,13 +42,13 @@ class ResumeRepository:
         resume.skills = skills
 
         # Salary
-        salary = Salary(resume_id=resume.id, from_=data.salary.from_, to=data.salary.to)
+        salary = Salary(resume_id=resume_id, from_=data.salary.from_, to=data.salary.to)
         self.session.add(salary)
 
         # Recommendations
         for rec in data.recommendations:
             recommendation = Recommendation(
-                resume_id=resume.id, title=rec.title, subtitle=rec.subtitle, result=rec.result
+                resume_id=resume_id, title=rec.title, subtitle=rec.subtitle, result=rec.result
             )
             self.session.add(recommendation)
 
