@@ -14,7 +14,7 @@
 
 .deploy:
   extends: .ssh
-  stage: deploy
+  stage: lint
   rules:
     - if: '$CI_COMMIT_REF_NAME == "main"'
       when: on_success
