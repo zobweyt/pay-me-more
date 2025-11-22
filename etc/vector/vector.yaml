@@ -25,25 +25,33 @@ transforms:
       # Попробуем несколько полей и форматов — docker_logs иногда использует
       # "time" или "timestamp", и формат может отличаться от ожидаемого.
       if !exists(."@timestamp") {
-        # 2.1 Попробовать .time с авто-распознаванием формата
-        ts, terr = parse_timestamp(.time)
+        # 2.1 Попробовать .time с известным строгим форматом (микросекунды + смещение)
+        ts, terr = parse_timestamp(.time, format: "%F %H:%M:%S%.6f%:z")
         if terr == null {
           ."@timestamp" = ts
         }
       }
 
       if !exists(."@timestamp") {
-        # 2.2 Попробовать .timestamp (часто встречается в событиях)
-        ts2, terr2 = parse_timestamp(.timestamp)
+        # 2.1b Фоллбек: попробовать общий RFC3339/ISO формат
+        tsb, terrb = parse_timestamp(.time, format: "%+")
+        if terrb == null {
+          ."@timestamp" = tsb
+        }
+      }
+
+      if !exists(."@timestamp") {
+        # 2.2 Попробовать .timestamp (часто встречается в событиях) в ISO/RFC3339
+        ts2, terr2 = parse_timestamp(.timestamp, format: "%+")
         if terr2 == null {
           ."@timestamp" = ts2
         }
       }
 
       if !exists(."@timestamp") {
-        # 2.3 Если есть объект .docker и в нём timestamp как строка
+        # 2.3 Если есть объект .docker и в нём timestamp как строка — попробовать RFC3339
         if is_object(.docker) && is_string(.docker.timestamp) {
-          ts3, terr3 = parse_timestamp(.docker.timestamp)
+          ts3, terr3 = parse_timestamp(.docker.timestamp, format: "%+")
           if terr3 == null {
             ."@timestamp" = ts3
           }
