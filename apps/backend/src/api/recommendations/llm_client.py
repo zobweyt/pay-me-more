@@ -4,7 +4,8 @@ from typing import Annotated, Any, Dict, List
 import aiohttp
 from fastapi import Depends, HTTPException
 
-from src.api.resumes.schemas import LLMResponse, Recommendation, Resumes
+from src.api.recommendations.schemas import LLMResponse, Recommendation
+from src.api.resumes.schemas import Resumes
 from src.settings import settings
 
 
