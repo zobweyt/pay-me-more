@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Literal
 
 from pydantic import BaseModel, Field
 
@@ -39,7 +39,13 @@ class Recommendation(BaseModel):
     result: str
 
 
+class LLMResponse(BaseModel):
+    recommendations: list[Recommendation]
+    quality: Literal["poor", "moderate", "good"]
+
+
 class ServiceResponse(BaseModel):
     salary: Salary
     recommend_vacancies: list[Vacancies] | None
+    quality: Literal["poor", "moderate", "good"]
     recommendations: list[Recommendation]

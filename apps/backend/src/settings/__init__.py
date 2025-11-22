@@ -7,6 +7,8 @@ __all__ = [
     "CORSSettings",
     "SecuritySettings",
     "SwaggerSettings",
+    "OpenRouterSettings",
+    "MLSettings",
 ]
 
 from pydantic import Field
@@ -16,6 +18,8 @@ from pydantic_settings_logging import LoggingSettings
 from src.settings.api import ApiSettings
 from src.settings.app import AppSettings
 from src.settings.cors import CORSSettings
+from src.settings.ml import MLSettings
+from src.settings.openrouter import OpenRouterSettings
 from src.settings.postgres import PostgresSettings
 from src.settings.security import SecuritySettings
 from src.settings.swagger import SwaggerSettings
@@ -38,6 +42,8 @@ class Settings(BaseSettings):
     postgres_test: PostgresSettings = Field(init=False)
     security: SecuritySettings = Field(init=False)
     swagger: SwaggerSettings = Field(init=False)
+    openrouter: OpenRouterSettings = Field(init=False)
+    ml: MLSettings = Field(init=False)
 
     logging = LoggingSettings()
 
