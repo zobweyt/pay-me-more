@@ -1,4 +1,5 @@
 from typing import Annotated
+from uuid import UUID
 
 from fastapi import Depends
 from sqlalchemy import select
@@ -15,7 +16,7 @@ class AnalyzerRepository:
     def __init__(self, session: SessionDepends):
         self.session = session
 
-    async def get_analyzed(self, user_id) -> list[ResumeAnalyzedResponse]:
+    async def get_analyzed(self, user_id: UUID) -> list[ResumeAnalyzedResponse]:
         query = (
             select(Resume)
             .where(Resume.user_id == user_id)
