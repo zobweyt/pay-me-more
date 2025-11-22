@@ -22,7 +22,7 @@ export type ResumeFormSkillsProps = {
 
 export const ResumeFormSkills = ({ form }: ResumeFormSkillsProps) => {
   const [newSkillInputValue, setNewSkillInputValue] = useState("");
-  const newSkillInputRef = useRef<HTMLInputElement>(null);
+  const newSkillInputRef = useRef<HTMLInputElement | null>(null);
 
   const uniqueSkills = new Set(form.values.skills);
   const hasSkills = !!form.values.skills.length;
