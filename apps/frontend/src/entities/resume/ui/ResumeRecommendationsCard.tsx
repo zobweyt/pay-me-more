@@ -27,6 +27,10 @@ export const ResumeRecommendationsCard: React.FC<
           </Text>
         </Stack>
         <ResumeRecommendationsAccordion recommendations={recommendations} />
+        <Text c="dimmed" size="sm" style={{ textWrap: "pretty" }}>
+          Попробуйте последовать одной из рекомендаций и посмотрите, как
+          изменится ваша вилка.
+        </Text>
       </Stack>
     </Card>
   );

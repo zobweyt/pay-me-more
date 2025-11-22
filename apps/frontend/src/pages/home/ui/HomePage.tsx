@@ -13,6 +13,7 @@ import { HomePageLanding } from "./HomePageLanding";
 import { HomePageResponseEmpty } from "./HomePageResponseEmpty";
 
 export const HomePage: React.FC = () => {
+  const resumeFormRef = useRef<HTMLFormElement | null>(null);
   const responseSectionRef = useRef<HTMLDivElement | null>(null);
   const [response, setResponse] = useState<ServiceResponse | undefined>(
     undefined,
@@ -33,11 +34,21 @@ export const HomePage: React.FC = () => {
     });
   };
 
+  const scrollIntoResumeForm = () => {
+    requestAnimationFrame(() => {
+      resumeFormRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "nearest",
+      });
+    });
+  };
+
   return (
     <Stack gap="xl">
-      <HomePageLanding />
+      <HomePageLanding onScrollIntoForm={scrollIntoResumeForm} />
 
-      <ResumeForm onSubmit={handleSubmit} />
+      <ResumeForm ref={resumeFormRef} onSubmit={handleSubmit} />
 
       <Stack ref={responseSectionRef} style={{ scrollMarginTop: rem(64) }}>
         <Title size="h3" order={4}>
@@ -53,7 +64,7 @@ export const HomePage: React.FC = () => {
             />
           </>
         ) : (
-          <HomePageResponseEmpty />
+          <HomePageResponseEmpty onScrollIntoForm={scrollIntoResumeForm} />
         )}
 
         {/* <VacanciesList vacancies={response.recommend_vacancies} /> */}
