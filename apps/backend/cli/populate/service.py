@@ -9,13 +9,13 @@ from src.security import get_password_hash
 
 users: list[dict[Any, Any]] = [
     dict(
-        username="vasya",
+        username="dima",
     ),
     dict(
-        username="petya",
+        username="igor",
     ),
     dict(
-        username="megazord",
+        username="vladimir",
     ),
 ]
 
