@@ -74,6 +74,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
           <ResumeFormPdfDropzone
             onDrop={(files) => console.log("accepted files", files)}
             onReject={(files) => console.log("rejected files", files)}
+            loading={form.submitting}
           />
 
           <Autocomplete
@@ -84,6 +85,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
             description="Укажите свою профессию или роль (например, «аналитик», «разработчик» или «дизайнер»)."
             data={POPULAR_ROLES}
             limit={3}
+            readOnly={form.submitting}
             selectFirstOptionOnChange={!isMobile}
             withAsterisk
           />
@@ -93,6 +95,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
             size="md"
             label="Опыт"
             placeholder="5 лет"
+            readOnly={form.submitting}
             description="Укажите сколько лет опыта вы имеете."
             suffix={` ${getExperienceSuffix(form.values.experience)}`}
             min={0}
@@ -106,6 +109,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
             {...form.getInputProps("location")}
             size="md"
             label="Город"
+            readOnly={form.submitting}
             placeholder="Москва"
             description="Укажите в каком городе вы рассматриваете вакансии."
             data={POPULAR_RUSSIAN_CITIES}

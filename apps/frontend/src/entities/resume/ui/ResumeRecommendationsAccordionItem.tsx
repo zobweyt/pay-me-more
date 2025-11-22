@@ -1,7 +1,7 @@
 import {
   Accordion,
   type AccordionItemProps,
-  Group,
+  Flex,
   Stack,
   Text,
   ThemeIcon,
@@ -59,12 +59,12 @@ export const ResumeRecommendationsAccordionItem: React.FC<
           <Text c="dimmed" size="sm" style={{ textWrap: "pretty" }}>
             {recommendation.subtitle}
           </Text>
-          <Group c="orange" gap="xs">
-            <LuZap size={16} />
+          <Flex c="orange" gap="xs" align="center">
+            <LuZap size={16} style={{ flexShrink: 0 }} />
             <Text fw={500} size="sm">
               {recommendation.result}
             </Text>
-          </Group>
+          </Flex>
         </Stack>
       </Accordion.Panel>
     </Accordion.Item>

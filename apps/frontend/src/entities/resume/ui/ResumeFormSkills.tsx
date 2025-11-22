@@ -95,6 +95,7 @@ export const ResumeFormSkills = ({ form }: ResumeFormSkillsProps) => {
           error={form.errors.skills}
           value={newSkillInputValue}
           disabled={skillsLimitExeeded}
+          readOnly={form.submitting}
           onChange={(event) => setNewSkillInputValue(event.currentTarget.value)}
           placeholder="React"
           description="Введите навык в поле выше и нажмите «Добавить», чтобы он появился в вашем резюме. Вы также можете выбрать из популярных навыков:"
