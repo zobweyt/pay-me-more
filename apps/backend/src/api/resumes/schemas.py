@@ -1,4 +1,6 @@
-from pydantic import BaseModel
+from typing import List, Literal, Optional
+
+from pydantic import BaseModel, Field
 
 
 class Resumes(BaseModel):
@@ -8,7 +10,12 @@ class Resumes(BaseModel):
     location: str
 
 
-"""    
+class OptionalResumes(BaseModel):
+    role: Optional[str]
+    skills: list[str]
+    experience: Optional[int]
+    location: Optional[str]
+
 
 class Experience(BaseModel):
     from_: int = Field(..., alias="from")
@@ -48,4 +55,4 @@ class ServiceResponse(BaseModel):
     salary: Salary
     recommend_vacancies: list[Vacancies] | None
     quality: Literal["poor", "moderate", "good"]
-    recommendations: list[Recommendation]"""
+    recommendations: list[Recommendation]

@@ -11,7 +11,7 @@ export const ResumeFormPdfDropzone: React.FC<DropzoneProps> = ({
   return (
     <Dropzone
       openRef={openRef}
-      maxSize={5 * 1024 ** 2}
+      maxSize={50 * 1024 ** 2}
       maxFiles={1}
       accept={PDF_MIME_TYPE}
       {...props}

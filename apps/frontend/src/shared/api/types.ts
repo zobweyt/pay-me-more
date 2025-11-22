@@ -140,6 +140,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/resumes/parse/pdf": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Parse Resume From Pdf */
+    post: operations["parse_resume_from_pdf_resumes_parse_pdf_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -180,6 +197,14 @@ export interface components {
       /** Client Secret */
       client_secret?: string | null;
     };
+    /** Body_parse_resume_from_pdf_resumes_parse_pdf_post */
+    Body_parse_resume_from_pdf_resumes_parse_pdf_post: {
+      /**
+       * File
+       * Format: binary
+       */
+      file: string;
+    };
     /**
      * CurrentUserResponse
      * @description Represents the private response data for a user.
@@ -217,6 +242,17 @@ export interface components {
     HTTPValidationError: {
       /** Detail */
       detail?: components["schemas"]["ValidationError"][];
+    };
+    /** OptionalResumes */
+    OptionalResumes: {
+      /** Role */
+      role: string | null;
+      /** Skills */
+      skills: string[];
+      /** Experience */
+      experience: number | null;
+      /** Location */
+      location: string | null;
     };
     /** PaginationResponse */
     PaginationResponse: {
@@ -395,9 +431,12 @@ export interface components {
 export type AccessTokenResponse = components["schemas"]["AccessTokenResponse"];
 export type BodyLoginAuthLoginPost =
   components["schemas"]["Body_login_auth_login_post"];
+export type BodyParseResumeFromPdfResumesParsePdfPost =
+  components["schemas"]["Body_parse_resume_from_pdf_resumes_parse_pdf_post"];
 export type CurrentUserResponse = components["schemas"]["CurrentUserResponse"];
 export type Experience = components["schemas"]["Experience"];
 export type HttpValidationError = components["schemas"]["HTTPValidationError"];
+export type OptionalResumes = components["schemas"]["OptionalResumes"];
 export type PaginationResponse = components["schemas"]["PaginationResponse"];
 export type Recommendation = components["schemas"]["Recommendation"];
 export type Resumes = components["schemas"]["Resumes"];
@@ -727,6 +766,60 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["ServiceResponse"];
         };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  parse_resume_from_pdf_resumes_parse_pdf_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["Body_parse_resume_from_pdf_resumes_parse_pdf_post"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OptionalResumes"];
+        };
+      };
+      /** @description Failed to parse resume */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description File size exceeded maximum resume size */
+      413: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description File type must be application/pdf */
+      415: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
       /** @description Validation Error */
       422: {

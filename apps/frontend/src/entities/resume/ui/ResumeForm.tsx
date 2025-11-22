@@ -8,15 +8,18 @@ import {
   Title,
   rem,
 } from "@mantine/core";
+import type { FileWithPath } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
 import { zod4Resolver } from "mantine-form-zod-resolver";
-import { type Ref, useState } from "react";
-import { LuSparkles } from "react-icons/lu";
+import { type Ref, useCallback, useState } from "react";
+import { LuSparkles, LuX } from "react-icons/lu";
 
 import type { ServiceResponse } from "@/shared/api";
 import { useIsMobile } from "@/shared/lib/breakpoints";
 
 import { loadResume } from "../api/loadResume";
+import { uploadPdf } from "../api/uploadPdf";
 import { POPULAR_RUSSIAN_CITIES } from "../config/cities";
 import { POPULAR_ROLES } from "../config/roles";
 import { getExperienceSuffix } from "../lib/getExperienceSuffix";
@@ -58,6 +61,25 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
     onSubmit?.(response);
   });
 
+  const [pdfLoading, setPdfLoading] = useState<boolean>(false);
+
+  const parsePdf = useCallback(async (files: FileWithPath[]) => {
+    if (!files[0]) return;
+    setPdfLoading(true);
+    try {
+      const result = await uploadPdf(files[0]);
+      form.setValues(result);
+    } catch (_) {
+      notifications.show({
+        icon: <LuX size={20} />,
+        color: "red",
+        message: "Не удалось разобрать ваше резюме, внесите данные вручную",
+      });
+    } finally {
+      setPdfLoading(false);
+    }
+  }, []);
+
   return (
     <form ref={ref} onSubmit={submit} style={{ scrollMarginTop: rem(74) }}>
       <Card>
@@ -72,9 +94,8 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
           </Stack>
 
           <ResumeFormPdfDropzone
-            onDrop={(files) => console.log("accepted files", files)}
-            onReject={(files) => console.log("rejected files", files)}
-            loading={form.submitting}
+            onDrop={parsePdf}
+            loading={form.submitting || pdfLoading}
           />
 
           <Autocomplete
