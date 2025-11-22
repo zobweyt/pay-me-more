@@ -43,3 +43,24 @@ class ServiceResponse(BaseModel):
     salary: Salary
     recommend_vacancies: list[Vacancies] | None
     recommendations: list[Recommendation]
+
+
+"""class SalaryCreate(BaseModel):
+    from_: int
+    to: int
+
+class RecommendationCreate(BaseModel):
+    title: str
+    subtitle: str
+    result: str
+"""
+
+
+class ResumeCreateDTO(BaseModel):
+    role: str
+    experience: int
+    location: str
+    skills: list[str]
+
+    salary: Salary
+    recommendations: list[Recommendation]
