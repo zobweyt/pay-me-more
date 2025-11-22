@@ -269,6 +269,11 @@ export interface components {
       salary: components["schemas"]["Salary"];
       /** Recommend Vacancies */
       recommend_vacancies: components["schemas"]["Vacancies"][] | null;
+      /**
+       * Quality
+       * @enum {string}
+       */
+      quality: "poor" | "moderate" | "good";
       /** Recommendations */
       recommendations: components["schemas"]["Recommendation"][];
     };

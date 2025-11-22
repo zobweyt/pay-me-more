@@ -1,4 +1,5 @@
 import { Stack, Title, rem } from "@mantine/core";
+import { usePrevious } from "@mantine/hooks";
 import { useRef, useState } from "react";
 
 import {
@@ -18,6 +19,7 @@ export const HomePage: React.FC = () => {
   const [response, setResponse] = useState<ServiceResponse | undefined>(
     undefined,
   );
+  const previousResponse = usePrevious(response);
 
   const handleSubmit = (values: ServiceResponse | undefined) => {
     setResponse(values);
@@ -57,9 +59,11 @@ export const HomePage: React.FC = () => {
 
         {response ? (
           <>
-            <ResumeSalaryForkCard salary={response.salary} />
-            {/* todo */}
-            <ResumeQualityProgressCard quality="moderate" />
+            <ResumeSalaryForkCard
+              salary={response.salary}
+              previousSalary={previousResponse?.salary}
+            />
+            <ResumeQualityProgressCard quality={response.quality} />
             <ResumeRecommendationsCard
               recommendations={response.recommendations}
             />
