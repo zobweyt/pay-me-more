@@ -1,4 +1,4 @@
-import { Stack, Title, rem } from "@mantine/core";
+import { Skeleton, Stack, Title, rem } from "@mantine/core";
 import { useRef, useState } from "react";
 
 import {
@@ -9,6 +9,7 @@ import {
 import type { LlmResponse, Salary } from "@/shared/api";
 
 import { HomePageLanding } from "./HomePageLanding";
+import { HomePageLoadingRecommendations } from "./HomePageLoadingRecommendations";
 import { HomePageResponseEmpty } from "./HomePageResponseEmpty";
 
 export const HomePage: React.FC = () => {
@@ -28,7 +29,6 @@ export const HomePage: React.FC = () => {
 
   const handleRecommendationsLoaded = (values: LlmResponse | undefined) => {
     setRecommendations(values);
-    scrollIntoResponseSection();
   };
 
   const handleSalaryForkLoaded = (values: Salary | undefined) => {
@@ -75,7 +75,7 @@ export const HomePage: React.FC = () => {
         </Title>
 
         {salaryForkLoading ? (
-          <>загрузка вилки</>
+          <Skeleton h={341} />
         ) : (
           salaryFork && (
             <ResumeSalaryForkCard
@@ -85,7 +85,7 @@ export const HomePage: React.FC = () => {
           )
         )}
         {recommendationsLoading ? (
-          <>загрузка реков</>
+          <HomePageLoadingRecommendations />
         ) : (
           recommendations && (
             <ResumeRecommendationsCard

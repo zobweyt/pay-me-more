@@ -74,6 +74,8 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
       recommendationsAbortController.abort();
     }
 
+    onRecommendationsLoadingChange?.(true);
+
     const newAbortController = new AbortController();
     setRecommendationsAbortController(newAbortController);
 
@@ -81,12 +83,16 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
       const newSalaryFork = await loadResumeSalaryFork(values);
       onSalaryForkLoaded?.(newSalaryFork);
     } catch {
+      notifications.show({
+        icon: <LuX size={20} />,
+        color: "red",
+        message: "Не удалось вилку зарплаты.",
+      });
     } finally {
       onSalaryForkLoadingChange?.(false);
       setSalaryForkLoading(false);
     }
 
-    onRecommendationsLoadingChange?.(true);
     try {
       const newRecommendations = await loadResumeRecommendations(
         values,
@@ -95,10 +101,16 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
       onRecommendationsLoaded?.(newRecommendations);
     } catch (error) {
       if ((error as { name: string }).name !== "AbortError") {
-        // Process if the error is not due to the abort
+        notifications.show({
+          icon: <LuX size={20} />,
+          color: "red",
+          message: "Не удалось загрузить рекомендации к резюме.",
+        });
       }
     } finally {
-      onRecommendationsLoadingChange?.(false);
+      if (!newAbortController.signal.aborted) {
+        onRecommendationsLoadingChange?.(false);
+      }
     }
 
     incrementSubmitCount();
@@ -116,7 +128,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
       notifications.show({
         icon: <LuX size={20} />,
         color: "red",
-        message: "Не удалось разобрать ваше резюме, внесите данные вручную",
+        message: "Не удалось разобрать ваше резюме, внесите данные вручную.",
       });
     } finally {
       setPdfLoading(false);
@@ -161,11 +173,13 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
             placeholder="5 лет"
             readOnly={pdfLoading || salaryForkLoading}
             description="Укажите сколько лет опыта вы имеете."
-            suffix={` ${getExperienceSuffix(form.values.experience)}`}
+            suffix={` ${getExperienceSuffix(form.values.experience)}${form.values.experience === 0 ? " (без опыта)" : form.values.experience === 100 ? " (крутой дядька)" : ""}`}
             min={0}
             max={100}
             stepHoldDelay={500}
             stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
+            allowDecimal={false}
+            clampBehavior="strict"
             withAsterisk
           />
 

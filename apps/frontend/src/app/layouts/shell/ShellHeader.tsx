@@ -21,6 +21,7 @@ export const ShellHeader: React.FC<ShellHeaderProps> = ({ currentUser }) => {
         px="md"
         gap={0}
         maw="52rem"
+        pos="relative"
         justify="space-between"
       >
         <Button
@@ -43,7 +44,15 @@ export const ShellHeader: React.FC<ShellHeaderProps> = ({ currentUser }) => {
           PayMeMore
         </Button>
 
-        <Group mx="auto" gap={8} visibleFrom="sm">
+        <Group
+          mx="auto"
+          gap={8}
+          visibleFrom="sm"
+          pos="absolute"
+          left={0}
+          right={0}
+          style={{ top: "50%", transform: "translate(36%, -50%)" }}
+        >
           {APP_SECTIONS.map((section) => (
             <Button
               component={Link}

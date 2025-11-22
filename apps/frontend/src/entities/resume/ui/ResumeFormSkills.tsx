@@ -87,7 +87,7 @@ export const ResumeFormSkills: React.FC<ResumeFormSkillsProps> = ({
                 ? ` (${form.values.skills.length}/${RESUME_SKILLS_MAX_COUNT})`
                 : ""
             }`}
-            description="Введите навыки выше или выберите из предложенных:"
+            description="Введите навыки или выберите из предложенных:"
             error={form.errors.skills}
             onClick={() => combobox.openDropdown()}
             withAsterisk
@@ -109,7 +109,10 @@ export const ResumeFormSkills: React.FC<ResumeFormSkillsProps> = ({
                   value={search}
                   readOnly={pdfLoading || salaryForkLoading}
                   onBlur={() => combobox.closeDropdown()}
-                  onFocus={() => combobox.openDropdown()}
+                  onFocus={() => {
+                    combobox.openDropdown();
+                    combobox.updateSelectedOptionIndex();
+                  }}
                   onChange={(event) => {
                     combobox.updateSelectedOptionIndex();
                     setSearch(event.currentTarget.value);

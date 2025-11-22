@@ -23,7 +23,7 @@ export const ResumeRecommendationsCard: React.FC<
           <Text c="dimmed" size="sm" style={{ textWrap: "pretty" }}>
             {recommendations.length}{" "}
             {getRecommendationsSuffix(recommendations.length)} для увеличения
-            вашей вилки.
+            вашей вилки зарплаты.
           </Text>
         </Stack>
         <ResumeRecommendationsAccordion recommendations={recommendations} />
