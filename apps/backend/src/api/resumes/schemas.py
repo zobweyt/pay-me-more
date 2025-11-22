@@ -41,5 +41,5 @@ class Recommendation(BaseModel):
 
 class ServiceResponse(BaseModel):
     salary: Salary
-    recommend_vacancies: list[Vacancies]
+    recommend_vacancies: list[Vacancies] | None
     recommendations: list[Recommendation]
