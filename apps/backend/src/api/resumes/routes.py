@@ -19,5 +19,7 @@ async def load_resume(
     recommendations_service: RecommendationsServiceDepends,
 ) -> ServiceResponse:
     salary = await salary_fork_service.calculate_salary(resume)
-    recommendations = await recommendations_service.get_recommendations(resume)
-    return ServiceResponse(salary=salary, recommendations=recommendations, recommend_vacancies=None)
+    res = await recommendations_service.get_recommendations(resume)
+    recommendations = res.recommendations
+    quality = res.quality
+    return ServiceResponse(salary=salary, recommendations=recommendations, recommend_vacancies=None, quality=quality)
