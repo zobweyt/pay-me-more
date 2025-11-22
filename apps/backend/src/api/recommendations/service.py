@@ -1,5 +1,6 @@
 from src.api.recommendations.llm_client import LLMClientDepends
-from src.api.resumes.schemas import LLMResponse, Resumes
+from src.api.recommendations.schemas import LLMResponse
+from src.api.resumes.schemas import Resumes
 
 
 class RecommendationsService:

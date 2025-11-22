@@ -3,7 +3,8 @@ from typing import Annotated
 import aiohttp
 from fastapi import Depends
 
-from src.api.resumes.schemas import Resumes, Salary
+from src.api.resumes.schemas import Resumes
+from src.api.salary_fork.schemas import Salary
 from src.settings import settings
 
 

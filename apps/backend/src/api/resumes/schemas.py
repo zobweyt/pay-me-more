@@ -1,6 +1,4 @@
-from typing import List, Literal
-
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class Resumes(BaseModel):
@@ -9,6 +7,8 @@ class Resumes(BaseModel):
     experience: int
     location: str
 
+
+"""    
 
 class Experience(BaseModel):
     from_: int = Field(..., alias="from")
@@ -48,4 +48,4 @@ class ServiceResponse(BaseModel):
     salary: Salary
     recommend_vacancies: list[Vacancies] | None
     quality: Literal["poor", "moderate", "good"]
-    recommendations: list[Recommendation]
+    recommendations: list[Recommendation]"""

@@ -1,5 +1,6 @@
-from src.api.resumes.schemas import Resumes, Salary
+from src.api.resumes.schemas import Resumes
 from src.api.salary_fork.ml_client import MLClientDepends
+from src.api.salary_fork.schemas import Salary
 
 
 class SalaryForkService:
