@@ -67,7 +67,7 @@ export const ShellHeader: React.FC<ShellHeaderProps> = ({ currentUser }) => {
         ) : (
           <Button
             component={Link}
-            to={routes.auth.login.$path()}
+            to={routes.auth.fastlogin.$path()}
             h={36}
             px="md"
             radius="xl"
