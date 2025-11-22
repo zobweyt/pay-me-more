@@ -22,7 +22,7 @@ export const ProtectedLayout: React.FC = () => {
   if (!currentUser) {
     return (
       <Navigate
-        to={routes.auth.login.$buildPath({
+        to={routes.auth.fastlogin.$buildPath({
           searchParams: { redirect: pathname + search },
         })}
         replace

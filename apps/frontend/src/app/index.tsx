@@ -23,6 +23,8 @@ import { ShellLayout } from "./layouts/shell/ShellLayout";
 
 import "./styles/index.css";
 
+import { FastLoginPage } from "@/pages/fastlogin";
+
 const rootElement = document.getElementById("root");
 
 if (!rootElement) {
@@ -39,6 +41,10 @@ root.render(
         <BrowserRouter basename={import.meta.env.BASE_URL}>
           <Routes>
             <Route element={<AuthLayout />}>
+              <Route
+                element={<FastLoginPage />}
+                path={routes.auth.fastlogin.$path()}
+              />
               <Route element={<LoginPage />} path={routes.auth.login.$path()} />
               <Route
                 element={<RegisterPage />}

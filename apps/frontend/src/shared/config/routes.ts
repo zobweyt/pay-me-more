@@ -7,6 +7,9 @@ export const routes = route({
         redirect: string(),
       },
       children: {
+        fastlogin: route({
+          path: "fastlogin",
+        }),
         login: route({
           path: "login",
         }),
