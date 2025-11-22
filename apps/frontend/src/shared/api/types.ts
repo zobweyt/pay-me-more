@@ -123,7 +123,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/resumes": {
+  "/resumes/analyze": {
     parameters: {
       query?: never;
       header?: never;
@@ -133,7 +133,7 @@ export interface paths {
     get?: never;
     put?: never;
     /** Load Resume */
-    post: operations["load_resume_resumes_post"];
+    post: operations["load_resume_resumes_analyze_post"];
     delete?: never;
     options?: never;
     head?: never;
@@ -268,7 +268,7 @@ export interface components {
     ServiceResponse: {
       salary: components["schemas"]["Salary"];
       /** Recommend Vacancies */
-      recommend_vacancies: components["schemas"]["Vacancies"][];
+      recommend_vacancies: components["schemas"]["Vacancies"][] | null;
       /** Recommendations */
       recommendations: components["schemas"]["Recommendation"][];
     };
@@ -701,7 +701,7 @@ export interface operations {
       };
     };
   };
-  load_resume_resumes_post: {
+  load_resume_resumes_analyze_post: {
     parameters: {
       query?: never;
       header?: never;

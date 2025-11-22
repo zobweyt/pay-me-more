@@ -14,9 +14,11 @@ import { HomePageResponseEmpty } from "./HomePageResponseEmpty";
 
 export const HomePage: React.FC = () => {
   const responseSectionRef = useRef<HTMLDivElement | null>(null);
-  const [response, setResponse] = useState<ServiceResponse | null>(null);
+  const [response, setResponse] = useState<ServiceResponse | undefined>(
+    undefined,
+  );
 
-  const handleSubmit = (values: ServiceResponse) => {
+  const handleSubmit = (values: ServiceResponse | undefined) => {
     setResponse(values);
     scrollIntoResponseSection();
   };

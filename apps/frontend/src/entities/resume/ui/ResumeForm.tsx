@@ -21,7 +21,7 @@ import { ResumeFormSkills } from "./ResumeFormSkills";
 
 export type ResumeFormProps = {
   initialValues?: ResumeFormValues;
-  onSubmit?: (values: ServiceResponse) => void;
+  onSubmit?: (values: ServiceResponse | undefined) => void;
 };
 
 export const ResumeForm: React.FC<ResumeFormProps> = ({
@@ -39,7 +39,9 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
     validateInputOnChange: true,
   });
 
-  const [response, setResponse] = useState<ServiceResponse | null>(null);
+  const [response, setResponse] = useState<ServiceResponse | undefined>(
+    undefined,
+  );
 
   const submit = form.onSubmit(async (values) => {
     const response = await loadResume(values);
