@@ -1,17 +1,15 @@
 import {
+  Box,
   Button,
-  Card,
-  Flex,
+  Combobox,
   Group,
   Pill,
-  Stack,
-  Text,
-  TextInput,
+  PillsInput,
+  useCombobox,
 } from "@mantine/core";
 import type { UseFormReturnType } from "@mantine/form";
-import { notifications } from "@mantine/notifications";
-import { useRef, useState } from "react";
-import { LuPlus, LuX } from "react-icons/lu";
+import { useEffect, useState } from "react";
+import { LuPlus } from "react-icons/lu";
 
 import { POPULAR_SKILLS, RESUME_SKILLS_MAX_COUNT } from "../config/skills";
 import type { ResumeFormValues } from "../model/resume";
@@ -20,116 +18,138 @@ export type ResumeFormSkillsProps = {
   form: UseFormReturnType<ResumeFormValues>;
 };
 
-export const ResumeFormSkills = ({ form }: ResumeFormSkillsProps) => {
-  const [newSkillInputValue, setNewSkillInputValue] = useState("");
-  const newSkillInputRef = useRef<HTMLInputElement | null>(null);
+export const ResumeFormSkills: React.FC<ResumeFormSkillsProps> = ({ form }) => {
+  const combobox = useCombobox({
+    onDropdownClose: () => combobox.resetSelectedOption(),
+    onDropdownOpen: () => combobox.updateSelectedOptionIndex("active"),
+  });
 
-  const uniqueSkills = new Set(
-    form.values.skills.map((skill) => skill.toLocaleLowerCase()),
+  const [data, setData] = useState(POPULAR_SKILLS);
+  const [search, setSearch] = useState("");
+
+  const exactOptionMatch = data.some(
+    (item) => item.toLocaleLowerCase() === search.toLocaleLowerCase(),
   );
-  const hasSkills = !!form.values.skills.length;
-  const skillsLimitExeeded =
-    form.values.skills.length >= RESUME_SKILLS_MAX_COUNT;
 
-  const addSkill = (skill: string) => {
-    if (!skill) {
-      return;
+  const filteredOptions = data
+    .filter(
+      (item) =>
+        !form.values.skills.includes(item) &&
+        item.toLowerCase().includes(search.trim().toLowerCase()),
+    )
+    .slice(0, 3);
+
+  const handleValueSelect = (value: string) => {
+    setSearch("");
+
+    if (value === "$create") {
+      setData((current) => [...current, search]);
+      form.insertListItem("skills", search.trim());
+    } else {
+      form.insertListItem("skills", value.trim());
     }
 
-    if (uniqueSkills.has(skill.toLocaleLowerCase())) {
-      notifications.show({
-        icon: <LuX size={20} />,
-        color: "red",
-        message: "Такой навык уже добавлен!",
-      });
-      return;
-    }
-
-    form.insertListItem("skills", skill.trim());
     form.validateField("skills");
-    setNewSkillInputValue("");
+
+    requestAnimationFrame(() => {
+      combobox.selectFirstOption();
+    });
   };
 
-  const filteredSkills = POPULAR_SKILLS.filter(
-    (popularSkill) =>
-      popularSkill
-        .toLocaleLowerCase()
-        .includes(newSkillInputValue.toLocaleLowerCase()) &&
-      !uniqueSkills.has(popularSkill.toLocaleLowerCase()),
-  );
+  const handleValueRemove = (index: number) => {
+    form.removeListItem("skills", index);
+    form.validateField("skills");
+  };
+
+  useEffect(() => {
+    combobox.selectFirstOption();
+  }, [search]);
 
   return (
-    <Stack gap={0}>
-      <Text fw={500} size="md" mb={4}>
-        Навыки{" "}
-        {hasSkills &&
-          `(${form.values.skills.length}/${RESUME_SKILLS_MAX_COUNT})`}
-        <Text span c="var(--mantine-color-error)">
-          {" "}
-          *
-        </Text>
-      </Text>
+    <Box>
+      <Combobox
+        size="md"
+        store={combobox}
+        onOptionSubmit={handleValueSelect}
+        withinPortal={false}
+      >
+        <Combobox.DropdownTarget>
+          <PillsInput
+            size="md"
+            label={`Навыки${
+              form.values.skills.length > 0
+                ? ` (${form.values.skills.length}/${RESUME_SKILLS_MAX_COUNT})`
+                : ""
+            }`}
+            description="Введите навыки выше или выберите из предложенных:"
+            error={form.errors.skills}
+            onClick={() => combobox.openDropdown()}
+            withAsterisk
+          >
+            <Pill.Group>
+              {form.values.skills.map((item, index) => (
+                <Pill
+                  key={item}
+                  withRemoveButton
+                  onRemove={() => handleValueRemove(index)}
+                >
+                  {item}
+                </Pill>
+              ))}
 
-      {hasSkills && (
-        <Card p="sm" mb="xs" shadow="none">
-          <Flex gap="xs" wrap="wrap">
-            {form.values.skills.map((skill, index) => (
-              <Pill
-                key={skill}
-                size="lg"
-                onRemove={() => {
-                  form.removeListItem("skills", index);
-                  form.validateField("skills");
-                }}
-                withRemoveButton
-              >
-                {skill}
-              </Pill>
+              <Combobox.EventsTarget>
+                <PillsInput.Field
+                  placeholder="React"
+                  value={search}
+                  readOnly={form.submitting}
+                  onBlur={() => combobox.closeDropdown()}
+                  onFocus={() => combobox.openDropdown()}
+                  onChange={(event) => {
+                    combobox.updateSelectedOptionIndex();
+                    setSearch(event.currentTarget.value);
+                  }}
+                  onKeyDown={(event) => {
+                    if (
+                      event.key === "Backspace" &&
+                      search.length === 0 &&
+                      form.values.skills.length > 0
+                    ) {
+                      event.preventDefault();
+                      handleValueRemove(form.values.skills.length - 1);
+                    }
+                  }}
+                />
+              </Combobox.EventsTarget>
+            </Pill.Group>
+          </PillsInput>
+        </Combobox.DropdownTarget>
+
+        <Combobox.Dropdown>
+          <Combobox.Options>
+            {filteredOptions.map((item) => (
+              <Combobox.Option key={item} value={item}>
+                <Group gap="sm">
+                  <span>{item}</span>
+                </Group>
+              </Combobox.Option>
             ))}
-          </Flex>
-        </Card>
-      )}
 
-      <Group gap="xs">
-        <TextInput
-          ref={newSkillInputRef}
-          flex={1}
-          size="md"
-          error={form.errors.skills}
-          value={newSkillInputValue}
-          disabled={skillsLimitExeeded}
-          readOnly={form.submitting}
-          onChange={(event) => setNewSkillInputValue(event.currentTarget.value)}
-          placeholder="React"
-          description="Введите навык в поле выше и нажмите «Добавить», чтобы он появился в вашем резюме. Вы также можете выбрать из популярных навыков:"
-          onKeyDown={(event) => {
-            if (event.code === "Enter") {
-              event.preventDefault();
-              addSkill(newSkillInputValue);
-            }
-          }}
-          rightSection={
-            <Button
-              px="sm"
-              bg={
-                !newSkillInputValue || skillsLimitExeeded
-                  ? "transparent"
-                  : undefined
-              }
-              variant="subtle"
-              onClick={() => {
-                addSkill(newSkillInputValue);
-                newSkillInputRef.current?.focus();
-              }}
-              disabled={!newSkillInputValue || skillsLimitExeeded}
-            >
-              Добавить
-            </Button>
-          }
-          rightSectionWidth={99}
-        />
-      </Group>
+            {!exactOptionMatch && search.trim().length > 0 && (
+              <Combobox.Option value="$create">
+                Создать «{search}»
+              </Combobox.Option>
+            )}
 
+            {exactOptionMatch &&
+              search.trim().length > 0 &&
+              filteredOptions.length === 0 && (
+                <Combobox.Empty>Навыки не найдены</Combobox.Empty>
+              )}
+          </Combobox.Options>
+        </Combobox.Dropdown>
+      </Combobox>
+
+      {/* TODO: recommend based on role */}
       <Group
         py="xs"
         gap="xs"
@@ -143,26 +163,28 @@ export const ResumeFormSkills = ({ form }: ResumeFormSkillsProps) => {
           },
         }}
       >
-        {filteredSkills.slice(0, 7).map((skill) => (
-          <Button
-            key={skill}
-            size="compact-sm"
-            variant="default"
-            onClick={() => {
-              addSkill(skill);
-            }}
-            radius="xl"
-            styles={{
-              section: { marginInlineEnd: 4 },
-              root: { flexShrink: 0 },
-            }}
-            disabled={skillsLimitExeeded}
-            leftSection={<LuPlus size={16} />}
-          >
-            {skill}
-          </Button>
-        ))}
+        {POPULAR_SKILLS.filter((skill) => !form.values.skills.includes(skill))
+          .slice(0, 7)
+          .map((skill) => (
+            <Button
+              key={skill}
+              size="compact-sm"
+              radius="xl"
+              variant="default"
+              styles={{
+                section: { marginInlineEnd: 4 },
+                root: { flexShrink: 0 },
+              }}
+              leftSection={<LuPlus size={16} />}
+              onClick={() => {
+                form.insertListItem("skills", skill.trim());
+                form.validateField("skills");
+              }}
+            >
+              {skill}
+            </Button>
+          ))}
       </Group>
-    </Stack>
+    </Box>
   );
 };

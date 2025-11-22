@@ -31,6 +31,7 @@ export type ResumeFormProps = {
   ref?: Ref<HTMLFormElement>;
   initialValues?: ResumeFormValues;
   onSubmit?: (values: ServiceResponse | undefined) => void;
+  onLoadingChange?: (loading: boolean) => void;
 };
 
 export const ResumeForm: React.FC<ResumeFormProps> = ({
@@ -42,6 +43,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
     skills: [],
   },
   onSubmit,
+  onLoadingChange,
 }) => {
   const form = useForm<ResumeFormValues>({
     initialValues,
@@ -56,9 +58,15 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
   const isMobile = useIsMobile();
 
   const submit = form.onSubmit(async (values) => {
-    const response = await loadResume(values);
-    setResponse(response);
-    onSubmit?.(response);
+    onLoadingChange?.(true);
+    try {
+      const response = await loadResume(values);
+      setResponse(response);
+      onSubmit?.(response);
+    } catch {
+    } finally {
+      onLoadingChange?.(false);
+    }
   });
 
   const [pdfLoading, setPdfLoading] = useState<boolean>(false);

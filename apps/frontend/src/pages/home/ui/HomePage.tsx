@@ -10,6 +10,7 @@ import {
 import type { ServiceResponse } from "@/shared/api";
 
 import { HomePageLanding } from "./HomePageLanding";
+import { HomePageLoading } from "./HomePageLoading";
 import { HomePageResponseEmpty } from "./HomePageResponseEmpty";
 
 export const HomePage: React.FC = () => {
@@ -18,6 +19,7 @@ export const HomePage: React.FC = () => {
   const [response, setResponse] = useState<ServiceResponse | undefined>(
     undefined,
   );
+  const [loading, setLoading] = useState<boolean>(false);
   const previousResponse = usePrevious(response);
 
   const handleSubmit = (values: ServiceResponse | undefined) => {
@@ -49,14 +51,20 @@ export const HomePage: React.FC = () => {
     <Stack gap="xl">
       <HomePageLanding onScrollIntoForm={scrollIntoResumeForm} />
 
-      <ResumeForm ref={resumeFormRef} onSubmit={handleSubmit} />
+      <ResumeForm
+        ref={resumeFormRef}
+        onSubmit={handleSubmit}
+        onLoadingChange={setLoading}
+      />
 
       <Stack ref={responseSectionRef} style={{ scrollMarginTop: rem(64) }}>
         <Title size="h3" order={4}>
           Оценка от ИИ
         </Title>
 
-        {response ? (
+        {loading ? (
+          <HomePageLoading />
+        ) : response ? (
           <>
             <ResumeSalaryForkCard
               salary={response.salary}
