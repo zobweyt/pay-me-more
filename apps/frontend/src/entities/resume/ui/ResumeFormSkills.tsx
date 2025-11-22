@@ -77,7 +77,10 @@ export const ResumeFormSkills = ({ form }: ResumeFormSkillsProps) => {
               <Pill
                 key={skill}
                 size="lg"
-                onRemove={() => form.removeListItem("skills", index)}
+                onRemove={() => {
+                  form.removeListItem("skills", index);
+                  form.validateField("skills");
+                }}
                 withRemoveButton
               >
                 {skill}
@@ -153,6 +156,7 @@ export const ResumeFormSkills = ({ form }: ResumeFormSkillsProps) => {
               section: { marginInlineEnd: 4 },
               root: { flexShrink: 0 },
             }}
+            disabled={skillsLimitExeeded}
             leftSection={<LuPlus size={16} />}
           >
             {skill}
