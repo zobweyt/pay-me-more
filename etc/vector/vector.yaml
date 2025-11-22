@@ -22,11 +22,37 @@ transforms:
       }
 
       # 2) Проставляем @timestamp, только если его ещё нет
+      # Попробуем несколько полей и форматов — docker_logs иногда использует
+      # "time" или "timestamp", и формат может отличаться от ожидаемого.
       if !exists(."@timestamp") {
-        ts, terr = parse_timestamp(.time, format: "%F %H:%M:%S%.6f%:z")
+        # 2.1 Попробовать .time с авто-распознаванием формата
+        ts, terr = parse_timestamp(.time)
         if terr == null {
           ."@timestamp" = ts
         }
+      }
+
+      if !exists(."@timestamp") {
+        # 2.2 Попробовать .timestamp (часто встречается в событиях)
+        ts2, terr2 = parse_timestamp(.timestamp)
+        if terr2 == null {
+          ."@timestamp" = ts2
+        }
+      }
+
+      if !exists(."@timestamp") {
+        # 2.3 Если есть объект .docker и в нём timestamp как строка
+        if is_object(.docker) && is_string(.docker.timestamp) {
+          ts3, terr3 = parse_timestamp(.docker.timestamp)
+          if terr3 == null {
+            ."@timestamp" = ts3
+          }
+        }
+      }
+
+      if !exists(."@timestamp") {
+        # 2.4 Последний резерв: поставить текущее время
+        ."@timestamp" = now()
       }
 
       # 3) system = имя образа без реестра/тега (только если это строка)
