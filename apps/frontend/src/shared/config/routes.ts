@@ -30,21 +30,6 @@ export const routes = route({
         settings: route({
           path: "settings",
         }),
-        user: route({
-          path: "users/:username",
-          params: {
-            username: string(),
-          },
-          searchParams: {
-            back: string(),
-          },
-        }),
-        users: route({
-          path: "users",
-          searchParams: {
-            q: string(),
-          },
-        }),
       },
     }),
   },
