@@ -23,3 +23,7 @@ export const ResumeFormSchema = z.object({
 });
 
 export type ResumeFormValues = z.infer<typeof ResumeFormSchema>;
+
+export const PartialResumeFormSchema = ResumeFormSchema.partial();
+
+export type PartialResumeFormValues = z.infer<typeof PartialResumeFormSchema>;

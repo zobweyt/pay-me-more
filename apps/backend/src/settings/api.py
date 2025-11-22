@@ -18,3 +18,6 @@ class ApiSettings(BaseModel):
     password_min_length: NonNegativeInt
     password_max_length: PositiveInt
     password_pattern: Pattern[str]
+
+    resume_max_pdf_size: PositiveInt
+    resume_skills_max_count: PositiveInt
