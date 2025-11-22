@@ -1,10 +1,14 @@
 from typing import List
+from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
-from pydantic import BaseModel
+
+from src.api.recommendations.schemas import RecommendationDTO
+from src.api.salary_fork.schemas import SalaryDTO
 
 
-class Resumes(BaseModel):
+class ResumeDTO(BaseModel):
+    request_id: UUID | None
     role: str
     skills: list[str]
     experience: int
@@ -17,12 +21,6 @@ class Experience(BaseModel):
     model_config = ConfigDict(populate_by_name=True, from_attributes=True)
 
 
-class Salary(BaseModel):
-    from_: int = Field(..., alias="from")
-    to: int
-    model_config = ConfigDict(populate_by_name=True, from_attributes=True)
-
-
 class Vacancies(BaseModel):
     id: str
     company_name: str
@@ -30,29 +28,24 @@ class Vacancies(BaseModel):
     experience: Experience
     schedule: str  # пример: "5 на 2", "гибкий", "фиксированный"
     work_hours: int
-    salary: Salary
+    salary: SalaryDTO
     location: str
     description: str
     skills: List[str]
 
 
-class Recommendation(BaseModel):
-    title: str
-    subtitle: str
-    result: str
-
-
 class ServiceResponse(BaseModel):
-    salary: Salary
+    salary: SalaryDTO
     recommend_vacancies: list[Vacancies] | None
-    recommendations: list[Recommendation]
+    recommendations: list[RecommendationDTO]
 
 
-class ResumeAnalyzed(BaseModel):
+class ResumeAnalyzedResponse(BaseModel):
+    request_id: UUID | None = None
     role: str
     experience: int
     location: str
     skills: list[str]
 
-    salary: Salary
-    recommendations: list[Recommendation]
+    salary: SalaryDTO | None = None
+    recommendations: list[RecommendationDTO] = None

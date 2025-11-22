@@ -21,7 +21,7 @@ class Resume(Base, AuditMixin):
     __tablename__ = "resume"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-
+    request_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), unique=True, nullable=True)
     user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("user.id"), nullable=False)
     role: Mapped[str] = mapped_column(String(100))
     skills: Mapped[list["Skill"]] = relationship(secondary=resume_skill_table, backref="resumes")

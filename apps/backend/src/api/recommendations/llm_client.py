@@ -4,8 +4,8 @@ from typing import Annotated, Any, Dict, List
 import aiohttp
 from fastapi import Depends, HTTPException
 
-from src.api.recommendations.schemas import LLMResponse, Recommendation
-from src.api.resumes.schemas import Resumes
+from src.api.recommendations.schemas import LLMResponse, RecommendationDTO
+from src.api.resumes.schemas import ResumeDTO
 from src.settings import settings
 
 
@@ -58,7 +58,7 @@ class LLMClient:
             "extra_body": {"reasoning": {"enabled": True}},
         }
 
-    async def get_recommendations(self, resume: Resumes) -> LLMResponse:
+    async def get_recommendations(self, resume: ResumeDTO) -> LLMResponse:
         url = "https://openrouter.ai/api/v1/chat/completions"
         token = settings.openrouter.token
 
@@ -78,7 +78,7 @@ class LLMClient:
 
             return LLMResponse(
                 recommendations=[
-                    Recommendation(title=i["title"], subtitle=i["subtitle"], result=i["result"])
+                    RecommendationDTO(title=i["title"], subtitle=i["subtitle"], result=i["result"])
                     for i in content["recommendations"]
                 ],
                 quality=content["quality"],
