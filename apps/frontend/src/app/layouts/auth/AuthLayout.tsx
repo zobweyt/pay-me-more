@@ -20,7 +20,8 @@ import { routes } from "@/shared/config/routes";
 import { ColorSchemeSegmentedControl } from "@/shared/ui/ColorSchemeSegmentedControl";
 
 const authSegmentedControlItems = [
-  { label: "Вход", value: "login" },
+  { label: "Быстрый вход", value: "fastlogin" },
+  { label: "Логин", value: "login" },
   { label: "Регистрация", value: "register" },
 ] as const satisfies SegmentedControlItem[];
 

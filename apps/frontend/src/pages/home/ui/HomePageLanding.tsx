@@ -1,59 +1,94 @@
-import { Badge, Group, SimpleGrid, Text, Title } from "@mantine/core";
-import { LuRabbit, LuSparkles, LuTarget, LuZap } from "react-icons/lu";
+import {
+  Badge,
+  Button,
+  Group,
+  SimpleGrid,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
+import {
+  LuArrowDown,
+  LuRabbit,
+  LuSparkles,
+  LuTarget,
+  LuZap,
+} from "react-icons/lu";
 
 import { HomePageLandingFeatureCard } from "./HomePageLandingFeatureCard";
 
-export const HomePageLanding: React.FC = () => {
-  return (
-    <Group justify="center">
-      <Badge
-        tt="none"
-        fw={500}
-        fz={{ base: "sm", sm: "md" }}
-        h={{ base: 36, sm: 44 }}
-        px="md"
-        color="orange"
-        variant="light"
-        leftSection={<LuZap />}
-      >
-        Узнайте свою стоимость за 2 минуты
-      </Badge>
+export type HomePageLandingProps = {
+  onScrollIntoForm?: VoidFunction;
+};
 
-      <Group
-        component="hgroup"
-        mt={{ base: "sm", sm: "lg" }}
-        mb={{ base: "md", sm: "xl" }}
-        justify="center"
-      >
-        <Title
-          fz={{ base: 36, xs: 48, sm: 60 }}
-          lh={0.75}
-          ta="center"
-          style={{ textWrap: "balance" }}
+export const HomePageLanding: React.FC<HomePageLandingProps> = ({
+  onScrollIntoForm,
+}) => {
+  return (
+    <Stack>
+      <Group justify="center">
+        <Badge
+          tt="none"
+          fw={500}
+          fz={{ base: "sm", sm: "md" }}
+          h={{ base: 36, sm: 44 }}
+          px="md"
+          color="orange"
+          variant="light"
+          leftSection={<LuZap />}
         >
-          Сколько ты{" "}
-          <Text
-            span
+          Узнайте свою стоимость за минуту
+        </Badge>
+
+        <Group
+          component="hgroup"
+          mt={{ base: "sm", sm: "lg" }}
+          mb={{ base: "xs", sm: "sm" }}
+          justify="center"
+        >
+          <Title
+            fz={{ base: 36, xs: 48, sm: 60 }}
+            lh={0.75}
             ta="center"
-            fz="inherit"
-            fw="inherit"
-            variant="gradient"
-            gradient={{ from: "yellow.5", to: "yellow.7" }}
+            style={{ textWrap: "balance" }}
           >
-            зарабатываешь
+            Сколько ты{" "}
+            <Text
+              span
+              ta="center"
+              fz="inherit"
+              fw="inherit"
+              variant="gradient"
+              gradient={{ from: "yellow.5", to: "yellow.7" }}
+            >
+              зарабатываешь
+            </Text>
+            ?
+          </Title>
+          <Text
+            c="dimmed"
+            ta="center"
+            fz={{ base: "md", sm: "xl" }}
+            style={{ textWrap: "balance" }}
+          >
+            Узнайте свою рыночную стоимость и получите рекомендации по улучшению
+            резюме
           </Text>
-          ?
-        </Title>
-        <Text
-          c="dimmed"
-          ta="center"
-          fz={{ base: "md", sm: "xl" }}
-          style={{ textWrap: "balance" }}
-        >
-          Узнайте свою рыночную стоимость и получите рекомендации по улучшению
-          резюме
-        </Text>
+        </Group>
       </Group>
+
+      <Button
+        mx="auto"
+        mb={{ base: "sm", sm: "md" }}
+        size="md"
+        radius={9999}
+        variant="gradient"
+        gradient={{ from: "orange.5", to: "orange.7" }}
+        onClick={onScrollIntoForm}
+        rightSection={<LuArrowDown size={20} />}
+      >
+        Перейти к форме
+      </Button>
 
       <SimpleGrid cols={{ base: 1, sm: 3 }} flex={1}>
         <HomePageLandingFeatureCard
@@ -72,9 +107,9 @@ export const HomePageLanding: React.FC = () => {
           icon={LuRabbit}
           color="orange"
           title="Быстро"
-          description="Результат за минуты"
+          description="Результат за минуту"
         />
       </SimpleGrid>
-    </Group>
+    </Stack>
   );
 };

@@ -7,6 +7,9 @@ export const routes = route({
         redirect: string(),
       },
       children: {
+        fastlogin: route({
+          path: "fastlogin",
+        }),
         login: route({
           path: "login",
         }),
@@ -29,21 +32,6 @@ export const routes = route({
         }),
         settings: route({
           path: "settings",
-        }),
-        user: route({
-          path: "users/:username",
-          params: {
-            username: string(),
-          },
-          searchParams: {
-            back: string(),
-          },
-        }),
-        users: route({
-          path: "users",
-          searchParams: {
-            q: string(),
-          },
         }),
       },
     }),

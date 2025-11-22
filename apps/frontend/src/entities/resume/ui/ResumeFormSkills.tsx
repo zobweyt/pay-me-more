@@ -1,5 +1,5 @@
 import {
-  ActionIcon,
+  Button,
   Card,
   Flex,
   Group,
@@ -13,7 +13,7 @@ import { notifications } from "@mantine/notifications";
 import { useRef, useState } from "react";
 import { LuPlus, LuX } from "react-icons/lu";
 
-import { RESUME_SKILLS_MAX_COUNT } from "../config/skills";
+import { POPULAR_SKILLS, RESUME_SKILLS_MAX_COUNT } from "../config/skills";
 import type { ResumeFormValues } from "../model/resume";
 
 export type ResumeFormSkillsProps = {
@@ -22,9 +22,11 @@ export type ResumeFormSkillsProps = {
 
 export const ResumeFormSkills = ({ form }: ResumeFormSkillsProps) => {
   const [newSkillInputValue, setNewSkillInputValue] = useState("");
-  const newSkillInputRef = useRef<HTMLInputElement>(null);
+  const newSkillInputRef = useRef<HTMLInputElement | null>(null);
 
-  const uniqueSkills = new Set(form.values.skills);
+  const uniqueSkills = new Set(
+    form.values.skills.map((skill) => skill.toLocaleLowerCase()),
+  );
   const hasSkills = !!form.values.skills.length;
   const skillsLimitExeeded =
     form.values.skills.length >= RESUME_SKILLS_MAX_COUNT;
@@ -34,7 +36,7 @@ export const ResumeFormSkills = ({ form }: ResumeFormSkillsProps) => {
       return;
     }
 
-    if (uniqueSkills.has(skill)) {
+    if (uniqueSkills.has(skill.toLocaleLowerCase())) {
       notifications.show({
         icon: <LuX size={20} />,
         color: "red",
@@ -48,9 +50,17 @@ export const ResumeFormSkills = ({ form }: ResumeFormSkillsProps) => {
     setNewSkillInputValue("");
   };
 
+  const filteredSkills = POPULAR_SKILLS.filter(
+    (popularSkill) =>
+      popularSkill
+        .toLocaleLowerCase()
+        .includes(newSkillInputValue.toLocaleLowerCase()) &&
+      !uniqueSkills.has(popularSkill.toLocaleLowerCase()),
+  );
+
   return (
     <Stack gap={0}>
-      <Text fw={500} size="sm" mb={4}>
+      <Text fw={500} size="md" mb={4}>
         Навыки{" "}
         {hasSkills &&
           `(${form.values.skills.length}/${RESUME_SKILLS_MAX_COUNT})`}
@@ -66,8 +76,11 @@ export const ResumeFormSkills = ({ form }: ResumeFormSkillsProps) => {
             {form.values.skills.map((skill, index) => (
               <Pill
                 key={skill}
-                size="md"
-                onRemove={() => form.removeListItem("skills", index)}
+                size="lg"
+                onRemove={() => {
+                  form.removeListItem("skills", index);
+                  form.validateField("skills");
+                }}
                 withRemoveButton
               >
                 {skill}
@@ -81,12 +94,14 @@ export const ResumeFormSkills = ({ form }: ResumeFormSkillsProps) => {
         <TextInput
           ref={newSkillInputRef}
           flex={1}
+          size="md"
           error={form.errors.skills}
           value={newSkillInputValue}
           disabled={skillsLimitExeeded}
+          readOnly={form.submitting}
           onChange={(event) => setNewSkillInputValue(event.currentTarget.value)}
           placeholder="React"
-          description="Введите навык в поле выше и нажмите на появившийся «+», чтобы добавить его в своё резюме."
+          description="Введите навык в поле выше и нажмите «Добавить», чтобы он появился в вашем резюме. Вы также можете выбрать из популярных навыков:"
           onKeyDown={(event) => {
             if (event.code === "Enter") {
               event.preventDefault();
@@ -94,25 +109,60 @@ export const ResumeFormSkills = ({ form }: ResumeFormSkillsProps) => {
             }
           }}
           rightSection={
-            newSkillInputValue &&
-            !skillsLimitExeeded && (
-              <ActionIcon
-                variant={"subtle"}
-                color="gray"
-                radius="xl"
-                onClick={() => {
-                  addSkill(newSkillInputValue);
-                  newSkillInputRef.current?.focus();
-                }}
-              >
-                <LuPlus size={20} />
-              </ActionIcon>
-            )
+            <Button
+              px="sm"
+              bg={
+                !newSkillInputValue || skillsLimitExeeded
+                  ? "transparent"
+                  : undefined
+              }
+              variant="subtle"
+              onClick={() => {
+                addSkill(newSkillInputValue);
+                newSkillInputRef.current?.focus();
+              }}
+              disabled={!newSkillInputValue || skillsLimitExeeded}
+            >
+              Добавить
+            </Button>
           }
+          rightSectionWidth={99}
         />
       </Group>
 
-      {/* TODO: тут можно добавить предложения навыков */}
+      <Group
+        py="xs"
+        gap="xs"
+        styles={{
+          root: {
+            overflowX: "auto",
+            overflowY: "hidden",
+            whiteSpace: "nowrap",
+            flexWrap: "nowrap",
+            scrollbarWidth: "thin",
+          },
+        }}
+      >
+        {filteredSkills.slice(0, 7).map((skill) => (
+          <Button
+            key={skill}
+            size="compact-sm"
+            variant="default"
+            onClick={() => {
+              addSkill(skill);
+            }}
+            radius="xl"
+            styles={{
+              section: { marginInlineEnd: 4 },
+              root: { flexShrink: 0 },
+            }}
+            disabled={skillsLimitExeeded}
+            leftSection={<LuPlus size={16} />}
+          >
+            {skill}
+          </Button>
+        ))}
+      </Group>
     </Stack>
   );
 };

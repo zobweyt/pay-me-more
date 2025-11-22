@@ -17,3 +17,4 @@ sqladmin[full]==0.21.0
 textcase==0.4.4
 typer==0.16.0
 uvicorn==0.34.2
+aiohttp==3.13.2

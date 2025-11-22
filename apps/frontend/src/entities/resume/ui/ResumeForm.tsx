@@ -1,30 +1,37 @@
 import {
+  Autocomplete,
   Button,
   Card,
   NumberInput,
   Stack,
   Text,
-  TextInput,
   Title,
+  rem,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { zod4Resolver } from "mantine-form-zod-resolver";
-import { useState } from "react";
+import { type Ref, useState } from "react";
 import { LuSparkles } from "react-icons/lu";
 
 import type { ServiceResponse } from "@/shared/api";
+import { useIsMobile } from "@/shared/lib/breakpoints";
 
 import { loadResume } from "../api/loadResume";
+import { POPULAR_RUSSIAN_CITIES } from "../config/cities";
+import { POPULAR_ROLES } from "../config/roles";
 import { getExperienceSuffix } from "../lib/getExperienceSuffix";
 import { ResumeFormSchema, type ResumeFormValues } from "../model/resume";
+import { ResumeFormPdfDropzone } from "./ResumeFormPdfDropzone";
 import { ResumeFormSkills } from "./ResumeFormSkills";
 
 export type ResumeFormProps = {
+  ref?: Ref<HTMLFormElement>;
   initialValues?: ResumeFormValues;
-  onSubmit?: (values: ServiceResponse) => void;
+  onSubmit?: (values: ServiceResponse | undefined) => void;
 };
 
 export const ResumeForm: React.FC<ResumeFormProps> = ({
+  ref,
   initialValues = {
     role: "",
     experience: "" as unknown as number,
@@ -39,7 +46,11 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
     validateInputOnChange: true,
   });
 
-  const [response, setResponse] = useState<ServiceResponse | null>(null);
+  const [response, setResponse] = useState<ServiceResponse | undefined>(
+    undefined,
+  );
+
+  const isMobile = useIsMobile();
 
   const submit = form.onSubmit(async (values) => {
     const response = await loadResume(values);
@@ -48,7 +59,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
   });
 
   return (
-    <form onSubmit={submit}>
+    <form ref={ref} onSubmit={submit} style={{ scrollMarginTop: rem(74) }}>
       <Card>
         <Stack>
           <Stack component="hgroup" gap={4}>
@@ -60,18 +71,31 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
             </Text>
           </Stack>
 
-          <TextInput
+          <ResumeFormPdfDropzone
+            onDrop={(files) => console.log("accepted files", files)}
+            onReject={(files) => console.log("rejected files", files)}
+            loading={form.submitting}
+          />
+
+          <Autocomplete
             {...form.getInputProps("role")}
-            label="Роль"
+            size="md"
+            label="Желаемая должность"
             placeholder="Frontend-разработчик"
             description="Укажите свою профессию или роль (например, «аналитик», «разработчик» или «дизайнер»)."
+            data={POPULAR_ROLES}
+            limit={3}
+            readOnly={form.submitting}
+            selectFirstOptionOnChange={!isMobile}
             withAsterisk
           />
 
           <NumberInput
             {...form.getInputProps("experience")}
+            size="md"
             label="Опыт"
             placeholder="5 лет"
+            readOnly={form.submitting}
             description="Укажите сколько лет опыта вы имеете."
             suffix={` ${getExperienceSuffix(form.values.experience)}`}
             min={0}
@@ -81,11 +105,16 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
             withAsterisk
           />
 
-          <TextInput
+          <Autocomplete
             {...form.getInputProps("location")}
+            size="md"
             label="Город"
+            readOnly={form.submitting}
             placeholder="Москва"
             description="Укажите в каком городе вы рассматриваете вакансии."
+            data={POPULAR_RUSSIAN_CITIES}
+            limit={3}
+            selectFirstOptionOnChange={!isMobile}
             withAsterisk
           />
 
@@ -93,10 +122,11 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
 
           <Button
             type="submit"
+            size="md"
             loading={form.submitting}
             variant="gradient"
             gradient={{ from: "violet.6", to: "grape.6" }}
-            leftSection={<LuSparkles size={16} />}
+            leftSection={<LuSparkles size={20} />}
           >
             {response ? "Пересчитать" : "Оценить резюме"}
           </Button>

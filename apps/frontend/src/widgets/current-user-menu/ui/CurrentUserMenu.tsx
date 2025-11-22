@@ -27,7 +27,7 @@ export const CurrentUserMenu: React.FC<CurrentUserMenuProps> = ({
   const { mutate: logout } = useLogoutMutation();
 
   return (
-    <Menu shadow="md" position="bottom-end">
+    <Menu shadow="md" position="bottom-end" zIndex={10000000}>
       <Menu.Target>
         <Tooltip
           label="Настройки"
