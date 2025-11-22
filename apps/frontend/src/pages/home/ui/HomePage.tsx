@@ -58,6 +58,7 @@ export const HomePage: React.FC = () => {
         {response ? (
           <>
             <ResumeSalaryForkCard salary={response.salary} />
+            {/* todo */}
             <ResumeQualityProgressCard quality="moderate" />
             <ResumeRecommendationsCard
               recommendations={response.recommendations}

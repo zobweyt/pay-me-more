@@ -21,6 +21,7 @@ import { POPULAR_RUSSIAN_CITIES } from "../config/cities";
 import { POPULAR_ROLES } from "../config/roles";
 import { getExperienceSuffix } from "../lib/getExperienceSuffix";
 import { ResumeFormSchema, type ResumeFormValues } from "../model/resume";
+import { ResumeFormPdfDropzone } from "./ResumeFormPdfDropzone";
 import { ResumeFormSkills } from "./ResumeFormSkills";
 
 export type ResumeFormProps = {
@@ -69,6 +70,11 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
               Заполните резюме, чтобы мы могли дать вам рекомендации.
             </Text>
           </Stack>
+
+          <ResumeFormPdfDropzone
+            onDrop={(files) => console.log("accepted files", files)}
+            onReject={(files) => console.log("rejected files", files)}
+          />
 
           <Autocomplete
             {...form.getInputProps("role")}

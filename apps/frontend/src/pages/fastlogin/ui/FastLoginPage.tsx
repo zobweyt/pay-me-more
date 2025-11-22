@@ -62,7 +62,7 @@ export const FastLoginPage: React.FC = () => {
   return (
     <Stack>
       <Text size="sm" style={{ textWrap: "pretty" }}>
-        Чтобы съекономить ваше время, мы сделали тестовых пользователей:
+        Чтобы сэкономить ваше время, мы сделали тестовых пользователей:
       </Text>
       <Stack gap="xs">
         {MOCK_USERS.map((mockUser) => (
