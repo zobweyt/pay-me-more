@@ -1,9 +1,13 @@
+<p align="center">
+  <img src="./docs/assets/favicon.svg" alt="logo" width="96" height="96" />
+</p>
+
 <h1 align="center">
   PayMeMore
 </h1>
 
 <p align="center">
-  Быстрый старт вашего веб-приложения на <a href="https://fastapi.tiangolo.com/">FastAPI</a> и <a href="https://react.dev">React</a>.
+  Сколько вы <strong>зарабатываете</strong>?
 </p>
 
 ## Документация
