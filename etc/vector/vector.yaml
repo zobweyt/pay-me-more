@@ -1,31 +1,89 @@
+data_dir: /var/lib/vector
+
+api:
+  enabled: false
+
 sources:
-  pay-me-more:
+  docker_logs:
     type: docker_logs
-    exclude_containers:
-      - pay-me-more-vector
-    docker_host: /var/run/docker.sock
+  vector_metrics:
+    type: internal_metrics
+    scrape_interval_secs: 10
+
+transforms:
+  sage_format:
+    type: remap
+    inputs: [docker_logs]
+    source: |
+      # 1) Если .message — JSON, мержим его в событие
+      parsed, jerr = parse_json(.message)
+      if jerr == null && is_object(parsed) {
+        ., _ = merge(., parsed)
+      }
+
+      # 2) Проставляем @timestamp, только если его ещё нет
+      if !exists(."@timestamp") {
+        ts, terr = parse_timestamp(.time, format: "%F %H:%M:%S%.6f%:z")
+        if terr == null {
+          ."@timestamp" = ts
+        }
+      }
+
+      # 3) system = имя образа без реестра/тега (только если это строка)
+      if is_string(.image) {
+        m, rerr = parse_regex(.image, r'^(?:.+/)?(?P<image>[^:]+)(?::.+)?')
+        if rerr == null {
+          .system = m.image
+        }
+      }
+
+      # 4) Константы для маршрутизации/идентификации
+      .env   = "prod"
+      .group = "team-36"
+      .inst  = "team-36-alpha-e7g5iw9y.hack.prodcontest.ru"
+
+  sage_format_clean:
+    type: remap
+    inputs: [sage_format]
+    source: |
+      if exists(.label) { del(.label) }
 
 sinks:
-  kafka_logs:
-    bootstrap_servers: sage.prodcontest.com:9093
+  sage:
+    type: kafka
+    inputs: [sage_format_clean]
+    bootstrap_servers: sage.prodcontest.com:9092
+
+    # ВАЖНО: используйте топик, указанный в инструкциях для вашей команды.
+    # При отсутствии специальных указаний можно использовать пер-командный топик вида:
+    # "sage-logs-team-0"
+    topic: sage-logs-team-36 # <------ ПРИ НУЖДЕ ИЗМЕНИТЕ СООТВЕТСТВЕННО
+
+    key_field: group
+    compression: lz4
+
+    healthcheck:
+      enabled: true
+
+    buffer:
+      type: memory
+      max_events: 20000
+      when_full: block
+
     encoding:
       codec: json
-    inputs:
-      - pay-me-more
-    compression: lz4
-    healthcheck: true
-    socket_timeout_ms: 120000
-    buffer:
-      max_events: 20000
-      type: memory
-      when_full: block
+
     librdkafka_options:
-      client.id: mcc-group_logs
-      reconnect.backoff.max.ms: "500"
+      client.id: team-36_logs
+      message.max.bytes: "10000000"
       reconnect.backoff.ms: "50"
+      reconnect.backoff.max.ms: "500"
       request.timeout.ms: "60000"
-      message.max.bytes: "100000"
       queue.buffering.max.ms: "1000"
-      max.in.flight: "100"
-    topic: sage-logs-mcc-group
-    type: kafka
+      max.in.flight: "1000000"
+      socket.timeout.ms: "120000"
+
+  metrics_exporter:
+    type: prometheus_exporter
+    inputs: [vector_metrics]
+    address: 0.0.0.0:9010
