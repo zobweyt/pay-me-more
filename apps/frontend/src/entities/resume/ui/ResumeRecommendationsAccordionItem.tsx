@@ -13,7 +13,6 @@ import {
   LuBrain,
   LuLightbulb,
   LuPercent,
-  LuPlus,
   LuRocket,
   LuTarget,
   LuTrendingUp,
@@ -24,7 +23,6 @@ import type { Recommendation } from "@/shared/api";
 
 const icons: IconType[] = [
   LuLightbulb,
-  LuPlus,
   LuZap,
   LuRocket,
   LuTrendingUp,

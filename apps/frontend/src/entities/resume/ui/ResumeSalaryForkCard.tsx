@@ -7,7 +7,7 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { LuInfo } from "react-icons/lu";
+import { LuInfo, LuTrendingDown, LuTrendingUp } from "react-icons/lu";
 
 import type { Salary } from "@/shared/api";
 
@@ -35,6 +35,8 @@ export const ResumeSalaryForkCard: React.FC<ResumeSalaryForkCardProps> = ({
   const percentage = calculatePercentageIncrease(previousSalary, salary);
 
   const isIncrease = percentage > 0;
+  const Icon =
+    percentage === 0 ? LuInfo : isIncrease ? LuTrendingUp : LuTrendingDown;
 
   return (
     <Card>
@@ -119,7 +121,7 @@ export const ResumeSalaryForkCard: React.FC<ResumeSalaryForkCardProps> = ({
 
         {previousSalary && (
           <Alert
-            icon={<LuInfo size={20} />}
+            icon={<Icon size={20} />}
             color={percentage === 0 ? "blue" : isIncrease ? "green" : "red"}
           >
             {percentage === 0

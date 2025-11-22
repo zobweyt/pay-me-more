@@ -33,8 +33,6 @@ export const HomePageResponseEmpty: React.FC<HomePageResponseEmptyProps> = ({
             mx="auto"
             size="sm"
             radius={9999}
-            variant="gradient"
-            gradient={{ from: "blue.5", to: "blue.7" }}
             onClick={onScrollIntoForm}
             rightSection={<LuArrowUp size={20} />}
           >
