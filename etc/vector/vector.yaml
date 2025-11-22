@@ -23,7 +23,7 @@ transforms:
 
       # 2) Проставляем @timestamp, только если его ещё нет
       if !exists(."@timestamp") {
-        ts, terr = parse_timestamp(.time, format: "%F %H:%M:%S%.6f%:z")
+        ts, terr = parse_timestamp(.timestamp, format: "%F %H:%M:%S%.6f%:z")
         if terr == null {
           ."@timestamp" = ts
         }
