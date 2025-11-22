@@ -7,9 +7,30 @@ import {
   ThemeIcon,
 } from "@mantine/core";
 import type React from "react";
-import { LuLightbulb, LuZap } from "react-icons/lu";
+import type { IconType } from "react-icons/lib";
+import {
+  LuBrain,
+  LuLightbulb,
+  LuPercent,
+  LuPlus,
+  LuRocket,
+  LuTarget,
+  LuTrendingUp,
+  LuZap,
+} from "react-icons/lu";
 
 import type { Recommendation } from "@/shared/api";
+
+const icons: IconType[] = [
+  LuLightbulb,
+  LuPlus,
+  LuZap,
+  LuRocket,
+  LuTrendingUp,
+  LuBrain,
+  LuPercent,
+  LuTarget,
+];
 
 export type ResumeRecommendationsAccordionItemProps = AccordionItemProps & {
   recommendation: Recommendation;
@@ -18,12 +39,14 @@ export type ResumeRecommendationsAccordionItemProps = AccordionItemProps & {
 export const ResumeRecommendationsAccordionItem: React.FC<
   ResumeRecommendationsAccordionItemProps
 > = ({ recommendation, ...props }) => {
+  const Icon = icons[Math.floor(Math.random() * icons.length)] as IconType;
+
   return (
     <Accordion.Item bg="var(--mantine-color-default-hover)" {...props}>
       <Accordion.Control
         icon={
           <ThemeIcon color="orange" radius="xs" variant="light">
-            <LuLightbulb size={20} />
+            <Icon size={20} />
           </ThemeIcon>
         }
       >
