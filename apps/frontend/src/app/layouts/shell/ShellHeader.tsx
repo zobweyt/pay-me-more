@@ -14,7 +14,7 @@ export const ShellHeader: React.FC<ShellHeaderProps> = ({ currentUser }) => {
   const { pathname } = useLocation();
 
   return (
-    <AppShell.Header bg="var(--mantine-color-surface)">
+    <AppShell.Header bg="var(--mantine-color-surface)" zIndex={1000000}>
       <Group
         h="100%"
         mx="auto"

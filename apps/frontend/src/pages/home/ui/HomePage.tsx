@@ -4,7 +4,6 @@ import { useRef, useState } from "react";
 
 import {
   ResumeForm,
-  ResumeQualityProgressCard,
   ResumeRecommendationsCard,
   ResumeSalaryForkCard,
 } from "@/entities/resume";
@@ -63,7 +62,7 @@ export const HomePage: React.FC = () => {
               salary={response.salary}
               previousSalary={previousResponse?.salary}
             />
-            <ResumeQualityProgressCard quality={response.quality} />
+            {/* <ResumeQualityProgressCard quality={response.quality} /> */}
             <ResumeRecommendationsCard
               recommendations={response.recommendations}
             />

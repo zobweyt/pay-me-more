@@ -2,6 +2,7 @@ import {
   Accordion,
   type AccordionItemProps,
   Flex,
+  type MantineColor,
   Stack,
   Text,
   ThemeIcon,
@@ -32,6 +33,20 @@ const icons: IconType[] = [
   LuTarget,
 ];
 
+const colors: MantineColor[] = [
+  "blue",
+  "cyan",
+  "grape",
+  "indigo",
+  "lime",
+  "orange",
+  "pink",
+  "red",
+  "teal",
+  "violet",
+  "yellow",
+];
+
 export type ResumeRecommendationsAccordionItemProps = AccordionItemProps & {
   recommendation: Recommendation;
 };
@@ -40,12 +55,15 @@ export const ResumeRecommendationsAccordionItem: React.FC<
   ResumeRecommendationsAccordionItemProps
 > = ({ recommendation, ...props }) => {
   const Icon = icons[Math.floor(Math.random() * icons.length)] as IconType;
+  const color = colors[
+    Math.floor(Math.random() * colors.length)
+  ] as MantineColor;
 
   return (
     <Accordion.Item bg="var(--mantine-color-default-hover)" {...props}>
       <Accordion.Control
         icon={
-          <ThemeIcon color="orange" radius="xs" variant="light">
+          <ThemeIcon color={color} radius="xs" variant="light">
             <Icon size={20} />
           </ThemeIcon>
         }
