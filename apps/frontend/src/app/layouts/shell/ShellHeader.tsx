@@ -80,6 +80,7 @@ export const ShellHeader: React.FC<ShellHeaderProps> = ({ currentUser }) => {
             h={36}
             px="md"
             radius="xl"
+            variant="subtle"
           >
             Войти
           </Button>
