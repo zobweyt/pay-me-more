@@ -1,6 +1,6 @@
 from typing import List
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class Resumes(BaseModel):
@@ -13,11 +13,13 @@ class Resumes(BaseModel):
 class Experience(BaseModel):
     from_: int = Field(..., alias="from")
     to: int
+    model_config = ConfigDict(populate_by_name=True, from_attributes=True)
 
 
 class Salary(BaseModel):
     from_: int = Field(..., alias="from")
     to: int
+    model_config = ConfigDict(populate_by_name=True, from_attributes=True)
 
 
 class Vacancies(BaseModel):
@@ -44,19 +46,7 @@ class ServiceResponse(BaseModel):
     recommend_vacancies: list[Vacancies] | None
     recommendations: list[Recommendation]
 
-
-"""class SalaryCreate(BaseModel):
-    from_: int
-    to: int
-
-class RecommendationCreate(BaseModel):
-    title: str
-    subtitle: str
-    result: str
-"""
-
-
-class ResumeCreateDTO(BaseModel):
+class ResumeAnalyzed(BaseModel):
     role: str
     experience: int
     location: str

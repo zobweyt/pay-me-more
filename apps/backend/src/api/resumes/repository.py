@@ -4,19 +4,22 @@ from uuid import UUID
 
 from fastapi import Depends
 from sqlalchemy import select
-
+from sqlalchemy.orm import joinedload
+from src.api.resumes.schemas import Recommendation as RecommendationDTO
+from src.api.resumes.schemas import Salary as SalaryDTO
 from src.api.recommendations.models import Recommendation
 from src.api.resumes.models import Resume, Skill
-from src.api.resumes.schemas import ResumeCreateDTO
+from src.api.resumes.schemas import ResumeAnalyzed
 from src.api.salary_fork.models import Salary
 from src.db.deps import SessionDepends
+
 
 
 class ResumeRepository:
     def __init__(self, session: SessionDepends):
         self.session = session
 
-    async def create_resume(self, user_id: UUID, data: ResumeCreateDTO):
+    async def create_resume(self, user_id: UUID, data: ResumeAnalyzed) -> Resume:
         # Resume
         resume_id = uuid.uuid4()
         resume = Resume(
@@ -54,6 +57,46 @@ class ResumeRepository:
         await self.session.refresh(resume)
 
         return resume
+
+    async def get_analyzed(self, user_id) -> list[ResumeAnalyzed]:
+        query = (
+            select(Resume)
+            .where(Resume.user_id == user_id)
+            .options(
+                joinedload(Resume.skills),
+                joinedload(Resume.salary),
+                joinedload(Resume.recommendation),
+            )
+            .order_by(Resume.created_at.desc())
+        )
+
+        resumes = (await self.session.execute(query)).unique().scalars().all()
+
+        result = []
+
+        for resume in resumes:
+            result.append(
+                ResumeAnalyzed(
+                    role=resume.role,
+                    experience=resume.experience,
+                    location=resume.location,
+                    skills=[s.name for s in resume.skills],
+                    salary=SalaryDTO(
+                        from_=resume.salary.from_,
+                        to=resume.salary.to,
+                    ),
+                    recommendations=[
+                        RecommendationDTO(
+                            title=r.title,
+                            subtitle=r.subtitle,
+                            result=r.result,
+                        )
+                        for r in resume.recommendation
+                    ]
+                )
+            )
+
+        return result
 
 
 ResumeRepositoryDeps = Annotated[ResumeRepository, Depends(ResumeRepository)]
