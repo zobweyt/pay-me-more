@@ -1,4 +1,4 @@
-<table align="center"><tr><td align="center" width="9999">
+<table align="center" border="0"><tr><td align="center" width="9999">
 
 <p>
   <img src="./docs/assets/favicon.svg" alt="logo" width="96" height="96" />
