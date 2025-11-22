@@ -16,7 +16,7 @@ export const HomePageLanding: React.FC = () => {
         variant="light"
         leftSection={<LuZap />}
       >
-        Узнайте свою стоимость за 2 минуты
+        Узнайте свою стоимость за минуту
       </Badge>
 
       <Group
@@ -72,7 +72,7 @@ export const HomePageLanding: React.FC = () => {
           icon={LuRabbit}
           color="orange"
           title="Быстро"
-          description="Результат за минуты"
+          description="Результат за минуту"
         />
       </SimpleGrid>
     </Group>
