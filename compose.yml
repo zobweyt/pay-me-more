@@ -519,6 +519,19 @@ services:
     profiles:
       - staging-https
 
+  vector:
+    profiles:
+      - none
+    container_name: pay-me-more-vector
+    image: timberio/vector:nightly-alpine
+    restart: unless-stopped
+    command:
+      - -c
+      - /etc/vector/vector.yaml
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./etc/vector/vector.yaml:/etc/vector/vector.yaml
+
 volumes:
   node-exporter-data:
     name: pay-me-more-node-exporter-data

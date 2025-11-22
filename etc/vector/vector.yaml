@@ -1,0 +1,31 @@
+sources:
+  pay-me-more:
+    type: docker_logs
+    exclude_containers:
+      - pay-me-more-vector
+    docker_host: /var/run/docker.sock
+
+sinks:
+  kafka_logs:
+    bootstrap_servers: sage.prodcontest.com:9093
+    encoding:
+      codec: json
+    inputs:
+      - pay-me-more
+    compression: lz4
+    healthcheck: true
+    socket_timeout_ms: 120000
+    buffer:
+      max_events: 20000
+      type: memory
+      when_full: block
+    librdkafka_options:
+      client.id: mcc-group_logs
+      reconnect.backoff.max.ms: "500"
+      reconnect.backoff.ms: "50"
+      request.timeout.ms: "60000"
+      message.max.bytes: "100000"
+      queue.buffering.max.ms: "1000"
+      max.in.flight: "100"
+    topic: sage-logs-mcc-group
+    type: kafka
