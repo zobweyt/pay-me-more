@@ -1,9 +1,8 @@
 from uuid import UUID
 
+from src.api.resumes.models import Resume
 from src.api.resumes.repository import ResumeRepositoryDeps
 from src.api.resumes.schemas import ResumeAnalyzed
-
-from src.api.resumes.models import Resume
 
 
 class ResumeService:

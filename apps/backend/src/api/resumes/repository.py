@@ -5,14 +5,14 @@ from uuid import UUID
 from fastapi import Depends
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
-from src.api.resumes.schemas import Recommendation as RecommendationDTO
-from src.api.resumes.schemas import Salary as SalaryDTO
+
 from src.api.recommendations.models import Recommendation
 from src.api.resumes.models import Resume, Skill
+from src.api.resumes.schemas import Recommendation as RecommendationDTO
 from src.api.resumes.schemas import ResumeAnalyzed
+from src.api.resumes.schemas import Salary as SalaryDTO
 from src.api.salary_fork.models import Salary
 from src.db.deps import SessionDepends
-
 
 
 class ResumeRepository:
@@ -35,21 +35,13 @@ class ResumeRepository:
         self.session.add_all(resume.skills)
 
         # Salary
-        salary = Salary(
-            resume_id=resume_id,
-            from_=data.salary.from_,
-            to=data.salary.to
-        )
+        salary = Salary(resume_id=resume_id, from_=data.salary.from_, to=data.salary.to)
         self.session.add(salary)
 
         # Recommendations
         recommendations = [
-            Recommendation(
-                resume_id=resume_id,
-                title=rec.title,
-                subtitle=rec.subtitle,
-                result=rec.result
-            ) for rec in data.recommendations
+            Recommendation(resume_id=resume_id, title=rec.title, subtitle=rec.subtitle, result=rec.result)
+            for rec in data.recommendations
         ]
         self.session.add_all(recommendations)
 
@@ -92,7 +84,7 @@ class ResumeRepository:
                             result=r.result,
                         )
                         for r in resume.recommendation
-                    ]
+                    ],
                 )
             )
 

@@ -5,8 +5,7 @@ from src.api.resumes.deps import ResumeServiceDeps
 from src.api.resumes.schemas import ResumeAnalyzed, Resumes, ServiceResponse
 from src.api.salary_fork.deps import SalaryForkServiceDepends
 from src.api.tags import Tag
-from src.api.users.me.deps import CurrentUserOrNoneDepends, CurrentUserDepends
-
+from src.api.users.me.deps import CurrentUserDepends, CurrentUserOrNoneDepends
 
 router = APIRouter(prefix="/resumes", tags=[Tag.RESUMES])
 
@@ -36,6 +35,7 @@ async def load_resume(
         )
         await resumes_service.create_resume(current_user.id, resume_to_create)
     return ServiceResponse(salary=salary, recommendations=recommendations, recommend_vacancies=None)
+
 
 @router.get(
     "",

@@ -1,6 +1,6 @@
 from typing import List
 
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Resumes(BaseModel):
@@ -45,6 +45,7 @@ class ServiceResponse(BaseModel):
     salary: Salary
     recommend_vacancies: list[Vacancies] | None
     recommendations: list[Recommendation]
+
 
 class ResumeAnalyzed(BaseModel):
     role: str
