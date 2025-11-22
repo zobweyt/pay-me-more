@@ -83,7 +83,17 @@ transforms:
           if rerr == null {
             ts, terr = parse_timestamp(m.ts, format: "%F %H:%M:%S%.f %Z")
             if terr == null { ."@timestamp" = ts } else { ."@timestamp" = now() }
-            .level = m.lvl
+            # Нормализация уровня для postgres: LOG/NOTICE/INFO -> INFO, WARNING/WARN -> WARN,
+            # ERROR/FATAL/PANIC -> ERROR, прочие остаются как есть
+            if m.lvl == "LOG" || m.lvl == "NOTICE" || m.lvl == "INFO" {
+              .level = "INFO"
+            } else if m.lvl == "WARNING" || m.lvl == "WARN" {
+              .level = "WARN"
+            } else if m.lvl == "ERROR" || m.lvl == "FATAL" || m.lvl == "PANIC" {
+              .level = "ERROR"
+            } else {
+              .level = m.lvl
+            }
             .message = m.msg
           } else {
             # возможны пустые строки или произвольный текст
