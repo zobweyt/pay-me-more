@@ -17,11 +17,13 @@ import type { ResumeFormValues } from "../model/resume";
 export type ResumeFormSkillsProps = {
   form: UseFormReturnType<ResumeFormValues>;
   pdfLoading: boolean;
+  salaryForkLoading: boolean;
 };
 
 export const ResumeFormSkills: React.FC<ResumeFormSkillsProps> = ({
   form,
   pdfLoading,
+  salaryForkLoading,
 }) => {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -105,7 +107,7 @@ export const ResumeFormSkills: React.FC<ResumeFormSkillsProps> = ({
                 <PillsInput.Field
                   placeholder="React"
                   value={search}
-                  readOnly={pdfLoading || form.submitting}
+                  readOnly={pdfLoading || salaryForkLoading}
                   onBlur={() => combobox.closeDropdown()}
                   onFocus={() => combobox.openDropdown()}
                   onChange={(event) => {
@@ -179,6 +181,7 @@ export const ResumeFormSkills: React.FC<ResumeFormSkillsProps> = ({
                 section: { marginInlineEnd: 4 },
                 root: { flexShrink: 0 },
               }}
+              disabled={pdfLoading}
               leftSection={<LuPlus size={16} />}
               onClick={() => {
                 form.insertListItem("skills", skill.trim());

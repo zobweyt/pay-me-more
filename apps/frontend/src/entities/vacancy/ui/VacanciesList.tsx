@@ -1,16 +1,9 @@
-import { Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
-import { LuTarget } from "react-icons/lu";
+import { Stack } from "@mantine/core";
 
-import type { Vacancies } from "@/shared/api";
-
-import { VacancyCard } from "./VacancyCard";
-
-export type VacanciesListProps = { vacancies: Vacancies[] };
-
-export const VacanciesList: React.FC<VacanciesListProps> = ({ vacancies }) => {
+export const VacanciesList: React.FC = () => {
   return (
     <Stack>
-      <Group>
+      {/* <Group>
         <ThemeIcon size="xl" variant="light" color="orange.5">
           <LuTarget size={24} />
         </ThemeIcon>
@@ -23,7 +16,7 @@ export const VacanciesList: React.FC<VacanciesListProps> = ({ vacancies }) => {
       </Group>
       {vacancies.map((vacancy) => (
         <VacancyCard key={vacancy.id} vacancy={vacancy} />
-      ))}
+      ))} */}
     </Stack>
   );
 };

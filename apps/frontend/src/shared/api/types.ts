@@ -123,17 +123,17 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/resumes/analyze": {
+  "/resumes": {
     parameters: {
       query?: never;
       header?: never;
       path?: never;
       cookie?: never;
     };
-    get?: never;
-    put?: never;
     /** Load Resume */
-    post: operations["load_resume_resumes_analyze_post"];
+    get: operations["load_resume_resumes_get"];
+    put?: never;
+    post?: never;
     delete?: never;
     options?: never;
     head?: never;
@@ -151,6 +151,40 @@ export interface paths {
     put?: never;
     /** Parse Resume From Pdf */
     post: operations["parse_resume_from_pdf_resumes_parse_pdf_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/resumes/analyze/recommendations": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Get Recommendations */
+    post: operations["get_recommendations_resumes_analyze_recommendations_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/resumes/analyze/salary_fork": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Get Salary Fork */
+    post: operations["get_salary_fork_resumes_analyze_salary_fork_post"];
     delete?: never;
     options?: never;
     head?: never;
@@ -231,17 +265,20 @@ export interface components {
        */
       updated_at: string;
     };
-    /** Experience */
-    Experience: {
-      /** From */
-      from: number;
-      /** To */
-      to: number;
-    };
     /** HTTPValidationError */
     HTTPValidationError: {
       /** Detail */
       detail?: components["schemas"]["ValidationError"][];
+    };
+    /** LLMResponse */
+    LLMResponse: {
+      /** Recommendations */
+      recommendations: components["schemas"]["Recommendation"][];
+      /**
+       * Quality
+       * @enum {string}
+       */
+      quality: "poor" | "moderate" | "good";
     };
     /** OptionalResumes */
     OptionalResumes: {
@@ -299,19 +336,6 @@ export interface components {
       from: number;
       /** To */
       to: number;
-    };
-    /** ServiceResponse */
-    ServiceResponse: {
-      salary: components["schemas"]["Salary"];
-      /** Recommend Vacancies */
-      recommend_vacancies: components["schemas"]["Vacancies"][] | null;
-      /**
-       * Quality
-       * @enum {string}
-       */
-      quality: "poor" | "moderate" | "good";
-      /** Recommendations */
-      recommendations: components["schemas"]["Recommendation"][];
     };
     /**
      * UserRegistrationRequest
@@ -391,27 +415,6 @@ export interface components {
       users: components["schemas"]["UserResponse"][];
       pagination: components["schemas"]["PaginationResponse"];
     };
-    /** Vacancies */
-    Vacancies: {
-      /** Id */
-      id: string;
-      /** Company Name */
-      company_name: string;
-      /** Vacancy Name */
-      vacancy_name: string;
-      experience: components["schemas"]["Experience"];
-      /** Schedule */
-      schedule: string;
-      /** Work Hours */
-      work_hours: number;
-      salary: components["schemas"]["Salary"];
-      /** Location */
-      location: string;
-      /** Description */
-      description: string;
-      /** Skills */
-      skills: string[];
-    };
     /** ValidationError */
     ValidationError: {
       /** Location */
@@ -434,14 +437,13 @@ export type BodyLoginAuthLoginPost =
 export type BodyParseResumeFromPdfResumesParsePdfPost =
   components["schemas"]["Body_parse_resume_from_pdf_resumes_parse_pdf_post"];
 export type CurrentUserResponse = components["schemas"]["CurrentUserResponse"];
-export type Experience = components["schemas"]["Experience"];
 export type HttpValidationError = components["schemas"]["HTTPValidationError"];
+export type LlmResponse = components["schemas"]["LLMResponse"];
 export type OptionalResumes = components["schemas"]["OptionalResumes"];
 export type PaginationResponse = components["schemas"]["PaginationResponse"];
 export type Recommendation = components["schemas"]["Recommendation"];
 export type Resumes = components["schemas"]["Resumes"];
 export type Salary = components["schemas"]["Salary"];
-export type ServiceResponse = components["schemas"]["ServiceResponse"];
 export type UserRegistrationRequest =
   components["schemas"]["UserRegistrationRequest"];
 export type UserResponse = components["schemas"]["UserResponse"];
@@ -450,7 +452,6 @@ export type UserUpdatePasswordRequest =
 export type UserUsernameRequest = components["schemas"]["UserUsernameRequest"];
 export type UsersPaginationResponse =
   components["schemas"]["UsersPaginationResponse"];
-export type Vacancies = components["schemas"]["Vacancies"];
 export type ValidationError = components["schemas"]["ValidationError"];
 export type $defs = Record<string, never>;
 export interface operations {
@@ -745,18 +746,14 @@ export interface operations {
       };
     };
   };
-  load_resume_resumes_analyze_post: {
+  load_resume_resumes_get: {
     parameters: {
       query?: never;
       header?: never;
       path?: never;
       cookie?: never;
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Resumes"];
-      };
-    };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
@@ -764,16 +761,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["ServiceResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
+          "application/json": unknown;
         };
       };
     };
@@ -820,6 +808,72 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_recommendations_resumes_analyze_recommendations_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Resumes"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["LLMResponse"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_salary_fork_resumes_analyze_salary_fork_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Resumes"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Salary"];
+        };
       };
       /** @description Validation Error */
       422: {

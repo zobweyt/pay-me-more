@@ -10,15 +10,19 @@ import {
 } from "@mantine/core";
 import type { FileWithPath } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
+import { useCounter } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { zod4Resolver } from "mantine-form-zod-resolver";
 import { type Ref, useCallback, useState } from "react";
 import { LuSparkles, LuX } from "react-icons/lu";
 
-import type { ServiceResponse } from "@/shared/api";
+import type { LlmResponse, Salary } from "@/shared/api";
 import { useIsMobile } from "@/shared/lib/breakpoints";
 
-import { loadResume } from "../api/loadResume";
+import {
+  loadResumeRecommendations,
+  loadResumeSalaryFork,
+} from "../api/loadResume";
 import { uploadPdf } from "../api/uploadPdf";
 import { POPULAR_RUSSIAN_CITIES } from "../config/cities";
 import { POPULAR_ROLES } from "../config/roles";
@@ -30,8 +34,10 @@ import { ResumeFormSkills } from "./ResumeFormSkills";
 export type ResumeFormProps = {
   ref?: Ref<HTMLFormElement>;
   initialValues?: ResumeFormValues;
-  onSubmit?: (values: ServiceResponse | undefined) => void;
-  onLoadingChange?: (loading: boolean) => void;
+  onSalaryForkLoaded?: (values: Salary | undefined) => void;
+  onSalaryForkLoadingChange?: (loading: boolean) => void;
+  onRecommendationsLoaded?: (values: LlmResponse | undefined) => void;
+  onRecommendationsLoadingChange?: (loading: boolean) => void;
 };
 
 export const ResumeForm: React.FC<ResumeFormProps> = ({
@@ -42,8 +48,10 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
     location: "",
     skills: [],
   },
-  onSubmit,
-  onLoadingChange,
+  onSalaryForkLoaded,
+  onSalaryForkLoadingChange,
+  onRecommendationsLoaded,
+  onRecommendationsLoadingChange,
 }) => {
   const form = useForm<ResumeFormValues>({
     initialValues,
@@ -51,22 +59,49 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
     validateInputOnChange: true,
   });
 
-  const [response, setResponse] = useState<ServiceResponse | undefined>(
-    undefined,
-  );
+  const [recommendationsAbortController, setRecommendationsAbortController] =
+    useState(new AbortController());
+  const [salaryForkLoading, setSalaryForkLoading] = useState<boolean>(false);
+
+  const [submitCount, { increment: incrementSubmitCount }] = useCounter(0);
 
   const isMobile = useIsMobile();
-
   const submit = form.onSubmit(async (values) => {
-    onLoadingChange?.(true);
+    onSalaryForkLoadingChange?.(true);
+    setSalaryForkLoading(true);
+
+    if (recommendationsAbortController) {
+      recommendationsAbortController.abort();
+    }
+
+    const newAbortController = new AbortController();
+    setRecommendationsAbortController(newAbortController);
+
     try {
-      const response = await loadResume(values);
-      setResponse(response);
-      onSubmit?.(response);
+      const newSalaryFork = await loadResumeSalaryFork(values);
+      onSalaryForkLoaded?.(newSalaryFork);
     } catch {
     } finally {
-      onLoadingChange?.(false);
+      onSalaryForkLoadingChange?.(false);
+      setSalaryForkLoading(false);
     }
+
+    onRecommendationsLoadingChange?.(true);
+    try {
+      const newRecommendations = await loadResumeRecommendations(
+        values,
+        newAbortController.signal,
+      );
+      onRecommendationsLoaded?.(newRecommendations);
+    } catch (error) {
+      if ((error as { name: string }).name !== "AbortError") {
+        // Process if the error is not due to the abort
+      }
+    } finally {
+      onRecommendationsLoadingChange?.(false);
+    }
+
+    incrementSubmitCount();
   });
 
   const [pdfLoading, setPdfLoading] = useState<boolean>(false);
@@ -114,7 +149,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
             description="Укажите свою профессию или роль (например, «аналитик», «разработчик» или «дизайнер»)."
             data={POPULAR_ROLES}
             limit={3}
-            readOnly={pdfLoading || form.submitting}
+            readOnly={pdfLoading || salaryForkLoading}
             selectFirstOptionOnChange={!isMobile}
             withAsterisk
           />
@@ -124,7 +159,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
             size="md"
             label="Опыт"
             placeholder="5 лет"
-            readOnly={pdfLoading || form.submitting}
+            readOnly={pdfLoading || salaryForkLoading}
             description="Укажите сколько лет опыта вы имеете."
             suffix={` ${getExperienceSuffix(form.values.experience)}`}
             min={0}
@@ -138,7 +173,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
             {...form.getInputProps("location")}
             size="md"
             label="Город"
-            readOnly={pdfLoading || form.submitting}
+            readOnly={pdfLoading || salaryForkLoading}
             placeholder="Москва"
             description="Укажите в каком городе вы рассматриваете вакансии."
             data={POPULAR_RUSSIAN_CITIES}
@@ -147,18 +182,22 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
             withAsterisk
           />
 
-          <ResumeFormSkills form={form} pdfLoading={pdfLoading} />
+          <ResumeFormSkills
+            form={form}
+            pdfLoading={pdfLoading}
+            salaryForkLoading={salaryForkLoading}
+          />
 
           <Button
             type="submit"
             size="md"
-            loading={form.submitting}
+            loading={salaryForkLoading}
             disabled={pdfLoading}
             variant="gradient"
             gradient={{ from: "violet.6", to: "grape.6" }}
             leftSection={<LuSparkles size={20} />}
           >
-            {response ? "Пересчитать" : "Оценить резюме"}
+            {submitCount > 0 ? "Пересчитать" : "Оценить резюме"}
           </Button>
         </Stack>
       </Card>
