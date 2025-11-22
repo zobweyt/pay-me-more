@@ -98,6 +98,7 @@ export const AuthLayout: React.FC = () => {
               }),
             );
           }}
+          withItemsBorders={false}
         />
 
         <Outlet />

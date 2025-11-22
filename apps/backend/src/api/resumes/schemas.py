@@ -15,6 +15,13 @@ class ResumeDTO(BaseModel):
     location: str
 
 
+class OptionalResumes(BaseModel):
+    role: Optional[str]
+    skills: list[str]
+    experience: Optional[int]
+    location: Optional[str]
+
+
 class Experience(BaseModel):
     from_: int = Field(..., alias="from")
     to: int

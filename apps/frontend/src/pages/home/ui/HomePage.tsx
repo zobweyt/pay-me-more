@@ -1,5 +1,4 @@
-import { Stack, Title, rem } from "@mantine/core";
-import { usePrevious } from "@mantine/hooks";
+import { Skeleton, Stack, Title, rem } from "@mantine/core";
 import { useRef, useState } from "react";
 
 import {
@@ -7,21 +6,34 @@ import {
   ResumeRecommendationsCard,
   ResumeSalaryForkCard,
 } from "@/entities/resume";
-import type { ServiceResponse } from "@/shared/api";
+import type { LlmResponse, Salary } from "@/shared/api";
 
 import { HomePageLanding } from "./HomePageLanding";
+import { HomePageLoadingRecommendations } from "./HomePageLoadingRecommendations";
 import { HomePageResponseEmpty } from "./HomePageResponseEmpty";
 
 export const HomePage: React.FC = () => {
   const resumeFormRef = useRef<HTMLFormElement | null>(null);
   const responseSectionRef = useRef<HTMLDivElement | null>(null);
-  const [response, setResponse] = useState<ServiceResponse | undefined>(
-    undefined,
-  );
-  const previousResponse = usePrevious(response);
+  const [recommendations, setRecommendations] = useState<
+    LlmResponse | undefined
+  >(undefined);
+  const [salaryFork, setSalaryFork] = useState<Salary | undefined>(undefined);
 
-  const handleSubmit = (values: ServiceResponse | undefined) => {
-    setResponse(values);
+  const [salaryForkLoading, setSalaryForkLoading] = useState<boolean>(false);
+  const [recommendationsLoading, setRecommendationsLoading] =
+    useState<boolean>(false);
+  const [previousSalaryFork, setPreviousSalaryFork] = useState<
+    Salary | undefined
+  >(undefined);
+
+  const handleRecommendationsLoaded = (values: LlmResponse | undefined) => {
+    setRecommendations(values);
+  };
+
+  const handleSalaryForkLoaded = (values: Salary | undefined) => {
+    setPreviousSalaryFork(salaryFork);
+    setSalaryFork(values);
     scrollIntoResponseSection();
   };
 
@@ -49,28 +61,44 @@ export const HomePage: React.FC = () => {
     <Stack gap="xl">
       <HomePageLanding onScrollIntoForm={scrollIntoResumeForm} />
 
-      <ResumeForm ref={resumeFormRef} onSubmit={handleSubmit} />
+      <ResumeForm
+        ref={resumeFormRef}
+        onSalaryForkLoaded={handleSalaryForkLoaded}
+        onSalaryForkLoadingChange={setSalaryForkLoading}
+        onRecommendationsLoaded={handleRecommendationsLoaded}
+        onRecommendationsLoadingChange={setRecommendationsLoading}
+      />
 
       <Stack ref={responseSectionRef} style={{ scrollMarginTop: rem(64) }}>
         <Title size="h3" order={4}>
           Оценка от ИИ
         </Title>
 
-        {response ? (
-          <>
-            <ResumeSalaryForkCard
-              salary={response.salary}
-              previousSalary={previousResponse?.salary}
-            />
-            {/* <ResumeQualityProgressCard quality={response.quality} /> */}
-            <ResumeRecommendationsCard
-              recommendations={response.recommendations}
-            />
-          </>
+        {salaryForkLoading ? (
+          <Skeleton h={341} />
         ) : (
+          salaryFork && (
+            <ResumeSalaryForkCard
+              salary={salaryFork}
+              previousSalary={previousSalaryFork}
+            />
+          )
+        )}
+        {recommendationsLoading ? (
+          <HomePageLoadingRecommendations />
+        ) : (
+          recommendations && (
+            <ResumeRecommendationsCard
+              recommendations={recommendations.recommendations}
+            />
+          )
+        )}
+
+        {!salaryFork && !recommendations && (
           <HomePageResponseEmpty onScrollIntoForm={scrollIntoResumeForm} />
         )}
 
+        {/* <ResumeQualityProgressCard quality={response.quality} /> */}
         {/* <VacanciesList vacancies={response.recommend_vacancies} /> */}
       </Stack>
     </Stack>

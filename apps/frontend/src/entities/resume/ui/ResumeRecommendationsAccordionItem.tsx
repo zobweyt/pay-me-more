@@ -1,6 +1,7 @@
 import {
   Accordion,
   type AccordionItemProps,
+  Box,
   Flex,
   type MantineColor,
   Stack,
@@ -13,7 +14,6 @@ import {
   LuBrain,
   LuLightbulb,
   LuPercent,
-  LuPlus,
   LuRocket,
   LuTarget,
   LuTrendingUp,
@@ -24,7 +24,6 @@ import type { Recommendation } from "@/shared/api";
 
 const icons: IconType[] = [
   LuLightbulb,
-  LuPlus,
   LuZap,
   LuRocket,
   LuTrendingUp,
@@ -78,7 +77,9 @@ export const ResumeRecommendationsAccordionItem: React.FC<
             {recommendation.subtitle}
           </Text>
           <Flex c="orange" gap="xs" align="center">
-            <LuZap size={16} style={{ flexShrink: 0 }} />
+            <Box visibleFrom="xs">
+              <LuZap size={16} style={{ flexShrink: 0 }} />
+            </Box>
             <Text fw={500} size="sm">
               {recommendation.result}
             </Text>

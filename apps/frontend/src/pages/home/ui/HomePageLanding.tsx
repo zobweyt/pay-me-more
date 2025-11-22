@@ -82,8 +82,6 @@ export const HomePageLanding: React.FC<HomePageLandingProps> = ({
         mb={{ base: "sm", sm: "md" }}
         size="md"
         radius={9999}
-        variant="gradient"
-        gradient={{ from: "orange.5", to: "orange.7" }}
         onClick={onScrollIntoForm}
         rightSection={<LuArrowDown size={20} />}
       >

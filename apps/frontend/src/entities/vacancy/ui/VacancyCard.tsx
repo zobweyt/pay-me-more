@@ -1,28 +1,9 @@
-import {
-  Badge,
-  Button,
-  Card,
-  Flex,
-  Group,
-  NumberFormatter,
-  Pill,
-  Stack,
-  Text,
-  ThemeIcon,
-} from "@mantine/core";
-import {
-  LuBriefcase,
-  LuCalendarRange,
-  LuExternalLink,
-  LuMapPin,
-} from "react-icons/lu";
+import { Card } from "@mantine/core";
 
-import type { Vacancies } from "@/shared/api";
-
-export const VacancyCard: React.FC<{ vacancy: Vacancies }> = ({ vacancy }) => {
+export const VacancyCard: React.FC = () => {
   return (
     <Card>
-      <Stack>
+      {/* <Stack>
         <Flex direction={{ base: "column", xs: "row" }} justify="space-between">
           <Group>
             <ThemeIcon size="xl" variant="light" color="lime">
@@ -91,7 +72,7 @@ export const VacancyCard: React.FC<{ vacancy: Vacancies }> = ({ vacancy }) => {
         <Button w="fit-content" rightSection={<LuExternalLink size={16} />}>
           Подробнее
         </Button>
-      </Stack>
+      </Stack> */}
     </Card>
   );
 };

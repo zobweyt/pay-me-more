@@ -87,7 +87,7 @@ export const theme = createTheme({
     }),
     Notifications: Notifications.extend({
       defaultProps: {
-        limit: 3,
+        limit: 2,
         position: "bottom-center",
       },
     }),

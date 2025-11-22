@@ -7,7 +7,7 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { LuInfo } from "react-icons/lu";
+import { LuInfo, LuTrendingDown, LuTrendingUp } from "react-icons/lu";
 
 import type { Salary } from "@/shared/api";
 
@@ -35,6 +35,8 @@ export const ResumeSalaryForkCard: React.FC<ResumeSalaryForkCardProps> = ({
   const percentage = calculatePercentageIncrease(previousSalary, salary);
 
   const isIncrease = percentage > 0;
+  const Icon =
+    percentage === 0 ? LuInfo : isIncrease ? LuTrendingUp : LuTrendingDown;
 
   return (
     <Card>
@@ -49,7 +51,7 @@ export const ResumeSalaryForkCard: React.FC<ResumeSalaryForkCardProps> = ({
         </Stack>
 
         <Stack align="center" mt={{ base: "sm", xs: "lg" }}>
-          <Group fz="xl" gap="sm">
+          <Group fz="xl" gap={8}>
             <Stack align="center" gap={0}>
               {previousSalary && (
                 <Text td="line-through" size="lg" inline opacity={0.5}>
@@ -66,7 +68,8 @@ export const ResumeSalaryForkCard: React.FC<ResumeSalaryForkCardProps> = ({
                 gradient={{ from: "violet.6", to: "grape.6" }}
                 fw={600}
                 lh="xs"
-                fz={{ base: "h2", xs: "h1" }}
+                ms={-18}
+                fz={{ base: "h3", xs: "h2", sm: "h1" }}
               >
                 <NumberFormatter
                   suffix="₽"
@@ -98,7 +101,8 @@ export const ResumeSalaryForkCard: React.FC<ResumeSalaryForkCardProps> = ({
                 gradient={{ from: "grape.6", to: "violet.6" }}
                 fw={600}
                 lh="xs"
-                fz={{ base: "h2", xs: "h1" }}
+                me={-18}
+                fz={{ base: "h3", xs: "h2", sm: "h1" }}
               >
                 <NumberFormatter
                   suffix="₽"
@@ -119,12 +123,12 @@ export const ResumeSalaryForkCard: React.FC<ResumeSalaryForkCardProps> = ({
 
         {previousSalary && (
           <Alert
-            icon={<LuInfo size={20} />}
+            icon={<Icon size={20} />}
             color={percentage === 0 ? "blue" : isIncrease ? "green" : "red"}
           >
             {percentage === 0
-              ? "Ваша вилка не изменилась"
-              : `Ваша вилка ${isIncrease ? "выросла" : "уменьшилась"} на ${percentage}%`}
+              ? "Ваша вилка зарплаты не изменилась"
+              : `Ваша вилка зарплаты ${isIncrease ? "выросла" : "уменьшилась"} на ${percentage}%`}
           </Alert>
         )}
       </Stack>

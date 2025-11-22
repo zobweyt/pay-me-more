@@ -56,5 +56,4 @@ docker exec -it pay-me-more-backend python -m cli superuser create
 - `SSH_USER`
 - `SSH_PRIVATE_KEY`
 - `IMAGE_NAME` – имя образа, например `pay-me-more`
-- `DOCKER_USERNAME`
 - `DOCKER_PASSWORD`

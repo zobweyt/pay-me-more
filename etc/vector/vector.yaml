@@ -1,31 +1,195 @@
+data_dir: /var/lib/vector
+
+api:
+  enabled: false
+
 sources:
-  pay-me-more:
+  docker_logs:
     type: docker_logs
-    exclude_containers:
-      - pay-me-more-vector
-    docker_host: /var/run/docker.sock
+  vector_metrics:
+    type: internal_metrics
+    scrape_interval_secs: 10
+
+transforms:
+  sage_format:
+    type: remap
+    inputs: [docker_logs]
+    source: |
+      # 1) Если .message — JSON, мержим его в событие
+      parsed, jerr = parse_json(.message)
+      if jerr == null && is_object(parsed) {
+        ., _ = merge(., parsed)
+      }
+
+      # 2) Проставляем @timestamp, только если его ещё нет
+      if !exists(."@timestamp") {
+        ts, terr = parse_timestamp(.timestamp, format: "%F %H:%M:%S%.6f%:z")
+        if terr == null {
+          ."@timestamp" = ts
+        }
+      }
+
+      # 3) system = имя образа без реестра/тега (только если это строка)
+      if is_string(.image) {
+        m, rerr = parse_regex(.image, r'^(?:.+/)?(?P<image>[^:]+)(?::.+)?')
+        if rerr == null {
+          .system = m.image
+        }
+      }
+
+      # 4) парсим логи отдельно для каждой системы
+      # Подход: для известных значений .system пытаемся распарсить @timestamp, level и message
+      # В случае неудачи используем значения по-умолчанию: level=INFO, @timestamp=now(), message=оригинал
+      if is_string(.system) {
+        # backend: формат "INFO:     172.18.0.4:49702 - \"GET /metrics HTTP/1.1\" 200 OK"
+        if .system == "backend" {
+          m, rerr = parse_regex(.message, r'^(?P<level>[A-Z]+):\s*(?P<msg>.+)$')
+          if rerr == null {
+            if exists(m.level) { .level = m.level } else { .level = "INFO" }
+            .message = m.msg
+          } else {
+            .level = "INFO"
+            .message = .message
+          }
+          ."@timestamp" = now()
+
+        # frontend: два формата
+        } else if .system == "frontend" {
+          # формат 1: "2025/11/22 16:02:00 [notice] 1#1: start worker process 10"
+          m1, e1 = parse_regex(.message, r'^(?P<ts>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}) \[(?P<lvl>[^\]]+)\].*?: (?P<msg>.+)$')
+          if e1 == null {
+            ts, terr = parse_timestamp(m1.ts, format: "%Y/%m/%d %H:%M:%S")
+            if terr == null { ."@timestamp" = ts } else { ."@timestamp" = now() }
+            if m1.lvl == "notice" { .level = "INFO" } else { .level = m1.lvl }
+            .message = m1.msg
+          } else {
+            # формат 2: access log с [22/Nov/2025:16:04:28 +0000]
+            m2, e2 = parse_regex(.message, r'.*\[(?P<ts2>\d{2}/[A-Za-z]{3}/\d{4}:\d{2}:\d{2}:\d{2} [+\-]\d{4})\].*')
+            if e2 == null {
+              ts2, terr2 = parse_timestamp(m2.ts2, format: "%d/%b/%Y:%H:%M:%S %z")
+              if terr2 == null { ."@timestamp" = ts2 } else { ."@timestamp" = now() }
+              .level = "INFO"
+              .message = .message
+            } else {
+              ."@timestamp" = now()
+              .level = "INFO"
+              .message = .message
+            }
+          }
+
+        # postgres: "2025-11-22 16:01:54.682 UTC [1] LOG:  listening on..."
+        } else if .system == "postgres" {
+          m, rerr = parse_regex(.message, r'^(?P<ts>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+ [A-Z]+) .*?(?P<lvl>[A-Z]+):\s*(?P<msg>.+)$')
+          if rerr == null {
+            ts, terr = parse_timestamp(m.ts, format: "%F %H:%M:%S%.f %Z")
+            if terr == null { ."@timestamp" = ts } else { ."@timestamp" = now() }
+            # Нормализация уровня для postgres: LOG/NOTICE/INFO -> INFO, WARNING/WARN -> WARN,
+            # ERROR/FATAL/PANIC -> ERROR, прочие остаются как есть
+            if m.lvl == "LOG" || m.lvl == "NOTICE" || m.lvl == "INFO" {
+              .level = "INFO"
+            } else if m.lvl == "WARNING" || m.lvl == "WARN" {
+              .level = "WARN"
+            } else if m.lvl == "ERROR" || m.lvl == "FATAL" || m.lvl == "PANIC" {
+              .level = "ERROR"
+            } else {
+              .level = m.lvl
+            }
+            .message = m.msg
+          } else {
+            # возможны пустые строки или произвольный текст
+            ."@timestamp" = now()
+            .level = "INFO"
+            .message = .message
+          }
+
+        # node-exporter / prometheus / alertmanager: key=value style
+        } else if .system == "node-exporter" || .system == "prometheus" || .system == "alertmanager" {
+          m, rerr = parse_regex(.message, r'time=(?P<ts>[^ ]+) level=(?P<lvl>[^ ]+) .* msg="(?P<msg>[^"]+)"')
+          if rerr == null {
+            ts, terr = parse_timestamp(m.ts, format: "%Y-%m-%dT%H:%M:%S%.fZ")
+            if terr == null { ."@timestamp" = ts } else { ."@timestamp" = now() }
+            if m.lvl == "notice" { .level = "INFO" } else { .level = m.lvl }
+            .message = m.msg
+          } else {
+            ."@timestamp" = now()
+            .level = "INFO"
+            .message = .message
+          }
+
+        # nginx (access log)
+        } else if .system == "nginx" {
+          m, rerr = parse_regex(.message, r'.*\[(?P<ts>\d{2}/[A-Za-z]{3}/\d{4}:\d{2}:\d{2}:\d{2} [+\-]\d{4})\].*')
+          if rerr == null {
+            ts, terr = parse_timestamp(m.ts, format: "%d/%b/%Y:%H:%M:%S %z")
+            if terr == null { ."@timestamp" = now() } else { ."@timestamp" = ts }
+            .level = "INFO"
+            .message = .message
+          } else {
+            ."@timestamp" = now()
+            .level = "INFO"
+            .message = .message
+          }
+
+        # неизвестная system — значения по-умолчанию
+        } else {
+          ."@timestamp" = now()
+          .level = "INFO"
+          .message = .message
+        }
+      } else {
+        # system не задан — значения по-умолчанию
+        ."@timestamp" = now()
+        .level = "INFO"
+        .message = .message
+      }
+
+      # 5) Константы для маршрутизации/идентификации
+      .env   = "prod"
+      .group = "team-36"
+      .inst  = "team-36-alpha-e7g5iw9y.hack.prodcontest.ru"
+
+  sage_format_clean:
+    type: remap
+    inputs: [sage_format]
+    source: |
+      if exists(.label) { del(.label) }
 
 sinks:
-  kafka_logs:
-    bootstrap_servers: sage.prodcontest.com:9093
+  sage:
+    type: kafka
+    inputs: [sage_format_clean]
+    bootstrap_servers: sage.prodcontest.com:9092
+
+    # ВАЖНО: используйте топик, указанный в инструкциях для вашей команды.
+    # При отсутствии специальных указаний можно использовать пер-командный топик вида:
+    # "sage-logs-team-0"
+    topic: sage-logs-team-36 # <------ ПРИ НУЖДЕ ИЗМЕНИТЕ СООТВЕТСТВЕННО
+
+    key_field: group
+    compression: lz4
+
+    healthcheck:
+      enabled: true
+
+    buffer:
+      type: memory
+      max_events: 20000
+      when_full: block
+
     encoding:
       codec: json
-    inputs:
-      - pay-me-more
-    compression: lz4
-    healthcheck: true
-    socket_timeout_ms: 120000
-    buffer:
-      max_events: 20000
-      type: memory
-      when_full: block
+
     librdkafka_options:
-      client.id: mcc-group_logs
-      reconnect.backoff.max.ms: "500"
+      client.id: team-36_logs
+      message.max.bytes: "10000000"
       reconnect.backoff.ms: "50"
+      reconnect.backoff.max.ms: "500"
       request.timeout.ms: "60000"
-      message.max.bytes: "100000"
       queue.buffering.max.ms: "1000"
-      max.in.flight: "100"
-    topic: sage-logs-mcc-group
-    type: kafka
+      max.in.flight: "1000000"
+      socket.timeout.ms: "120000"
+
+  metrics_exporter:
+    type: prometheus_exporter
+    inputs: [vector_metrics]
+    address: 0.0.0.0:9010
