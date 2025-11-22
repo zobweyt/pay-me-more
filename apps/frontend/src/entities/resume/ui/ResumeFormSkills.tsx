@@ -16,9 +16,13 @@ import type { ResumeFormValues } from "../model/resume";
 
 export type ResumeFormSkillsProps = {
   form: UseFormReturnType<ResumeFormValues>;
+  pdfLoading: boolean;
 };
 
-export const ResumeFormSkills: React.FC<ResumeFormSkillsProps> = ({ form }) => {
+export const ResumeFormSkills: React.FC<ResumeFormSkillsProps> = ({
+  form,
+  pdfLoading,
+}) => {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
     onDropdownOpen: () => combobox.updateSelectedOptionIndex("active"),
@@ -101,7 +105,7 @@ export const ResumeFormSkills: React.FC<ResumeFormSkillsProps> = ({ form }) => {
                 <PillsInput.Field
                   placeholder="React"
                   value={search}
-                  readOnly={form.submitting}
+                  readOnly={pdfLoading || form.submitting}
                   onBlur={() => combobox.closeDropdown()}
                   onFocus={() => combobox.openDropdown()}
                   onChange={(event) => {

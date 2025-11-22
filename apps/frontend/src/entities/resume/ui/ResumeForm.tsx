@@ -114,7 +114,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
             description="Укажите свою профессию или роль (например, «аналитик», «разработчик» или «дизайнер»)."
             data={POPULAR_ROLES}
             limit={3}
-            readOnly={form.submitting}
+            readOnly={pdfLoading || form.submitting}
             selectFirstOptionOnChange={!isMobile}
             withAsterisk
           />
@@ -124,7 +124,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
             size="md"
             label="Опыт"
             placeholder="5 лет"
-            readOnly={form.submitting}
+            readOnly={pdfLoading || form.submitting}
             description="Укажите сколько лет опыта вы имеете."
             suffix={` ${getExperienceSuffix(form.values.experience)}`}
             min={0}
@@ -138,7 +138,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
             {...form.getInputProps("location")}
             size="md"
             label="Город"
-            readOnly={form.submitting}
+            readOnly={pdfLoading || form.submitting}
             placeholder="Москва"
             description="Укажите в каком городе вы рассматриваете вакансии."
             data={POPULAR_RUSSIAN_CITIES}
@@ -147,12 +147,13 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
             withAsterisk
           />
 
-          <ResumeFormSkills form={form} />
+          <ResumeFormSkills form={form} pdfLoading={pdfLoading} />
 
           <Button
             type="submit"
             size="md"
             loading={form.submitting}
+            disabled={pdfLoading}
             variant="gradient"
             gradient={{ from: "violet.6", to: "grape.6" }}
             leftSection={<LuSparkles size={20} />}
