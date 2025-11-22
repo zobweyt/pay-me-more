@@ -232,11 +232,7 @@ services:
       - staging-https
       - prod
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "pg_isready -U ${BACKEND_POSTGRES_USERNAME} -d ${BACKEND_POSTGRES_PATH}",
-        ]
+      test: [ "CMD-SHELL", "pg_isready -U ${BACKEND_POSTGRES_USERNAME} -d ${BACKEND_POSTGRES_PATH}" ]
       interval: 5s
       timeout: 3s
       retries: 5
@@ -267,11 +263,7 @@ services:
       - test-e2e
       - test-unit
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "pg_isready -U ${BACKEND_POSTGRES_TEST_USERNAME} -d ${BACKEND_POSTGRES_TEST_PATH}",
-        ]
+      test: [ "CMD-SHELL", "pg_isready -U ${BACKEND_POSTGRES_TEST_USERNAME} -d ${BACKEND_POSTGRES_TEST_PATH}" ]
       interval: 5s
       timeout: 3s
       retries: 5
@@ -305,7 +297,7 @@ services:
     ports:
       - 127.0.0.1:9090:9090
     healthcheck:
-      test: ["CMD", "wget", "-O", "-", "http://localhost:9090/-/healthy"]
+      test: [ "CMD", "wget", "-O", "-", "http://localhost:9090/-/healthy" ]
       interval: 1m30s
       timeout: 5s
       start_period: 5s
@@ -352,7 +344,7 @@ services:
     image: grafana/grafana:11.6.1
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "-O", "-", "http://localhost:3000/api/health"]
+      test: [ "CMD", "wget", "-O", "-", "http://localhost:3000/api/health" ]
       interval: 1m30s
       timeout: 5s
       start_period: 5s
@@ -518,19 +510,6 @@ services:
         condition: service_started
     profiles:
       - staging-https
-
-  vector:
-    profiles:
-      - none
-    container_name: pay-me-more-vector
-    image: timberio/vector:nightly-alpine
-    restart: unless-stopped
-    command:
-      - -c
-      - /etc/vector/vector.yaml
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./etc/vector/vector.yaml:/etc/vector/vector.yaml
 
 volumes:
   node-exporter-data:
