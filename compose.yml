@@ -310,6 +310,11 @@ services:
       - type: bind
         source: ./etc/prometheus/alert.rules.yml
         target: /etc/prometheus/alert.rules.yml
+      - type: volume
+        source: prometheus-data
+        target: /prometheus
+        volume:
+          nocopy: true
     networks:
       - pay-me-more-network
     configs:
@@ -522,6 +527,8 @@ volumes:
     name: pay-me-more-postgres-test-data
   cloudpub-data:
     name: pay-me-more-cloudpub-data
+  prometheus-data:
+    name: pay-me-more-prometheus-data
 
 networks:
   pay-me-more-network:
