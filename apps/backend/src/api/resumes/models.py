@@ -5,7 +5,6 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.api.recommendations.models import Recommendation
-from src.api.users.models import User
 from src.db.mixins import AuditMixin
 from src.db.models import Base
 

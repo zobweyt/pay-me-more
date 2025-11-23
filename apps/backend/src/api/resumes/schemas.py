@@ -1,4 +1,4 @@
-from typing import List, Literal
+from typing import List, Literal, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -55,5 +55,5 @@ class ResumeAnalyzedResponse(BaseModel):
     skills: list[str]
 
     salary: SalaryDTO | None = None
-    quality: Literal["poor", "moderate", "good"]
+    quality: Literal["poor", "moderate", "good"] | None = None
     recommendations: list[RecommendationDTO] | None = None

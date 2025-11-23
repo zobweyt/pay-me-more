@@ -5,7 +5,6 @@ from src.api.users.models import User
 from src.api.users.repository import UserRepositoryDepends
 from src.api.users.schemas import UserRegistrationRequest
 from src.pagination import PaginationSearchParams
-from src.security import get_password_hash
 
 
 class UserService:
@@ -22,6 +21,7 @@ class UserService:
         return await self.repository.get_all(search_params)
 
     async def create_user(self, args: UserRegistrationRequest) -> User:
+        from src.security import get_password_hash
         hashed_password = await get_password_hash(args.password)
 
         user = User(
