@@ -70,11 +70,11 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
 
   const [submitCount, { increment: incrementSubmitCount }] = useCounter(0);
 
-  useEffect(() => {
-    if (form.values.skills.length !== 0) {
-      form.setFieldValue("skills", []);
-    }
-  }, [form.values.role]);
+  // useEffect(() => {
+  //   if (form.values.skills.length !== 0) {
+  //     form.setFieldValue("skills", []);
+  //   }
+  // }, [form.values.role]);
 
   const isMobile = useIsMobile();
   const submit = form.onSubmit(async (values) => {
