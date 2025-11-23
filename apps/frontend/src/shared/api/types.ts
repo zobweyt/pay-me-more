@@ -191,7 +191,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/resumes{ResumeID}": {
+  "/resumes/{RequestID}": {
     parameters: {
       query?: never;
       header?: never;
@@ -199,7 +199,7 @@ export interface paths {
       cookie?: never;
     };
     /** Load Resume */
-    get: operations["load_resume_resumes_ResumeID__get"];
+    get: operations["load_resume_resumes__RequestID__get"];
     put?: never;
     post?: never;
     delete?: never;
@@ -951,12 +951,12 @@ export interface operations {
       };
     };
   };
-  load_resume_resumes_ResumeID__get: {
+  load_resume_resumes__RequestID__get: {
     parameters: {
       query?: never;
       header?: never;
       path: {
-        ResumeID: string;
+        RequestID: string;
       };
       cookie?: never;
     };
