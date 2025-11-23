@@ -3,7 +3,7 @@ from uuid import UUID
 from src.api.resumes.models import Resume, Skill
 from src.api.resumes.repository import ResumeRepositoryDeps
 from src.api.resumes.role_to_skills.client import RoleToSkillsClientDepends
-from src.api.resumes.schemas import ResumeDTO as ResumeDTO
+from src.api.resumes.schemas import ResumeDTO as ResumeDTO, ResumeAnalyzedResponse
 
 
 class ResumeService:
@@ -25,5 +25,5 @@ class ResumeService:
     async def get_skills_by_role(self, role: str) -> list[str]:
         return self.role_to_skills_client.get_skills(role)
 
-    async def get_by_request_id(self, request_id: UUID) -> Resume | None:
+    async def get_by_request_id(self, request_id: UUID) -> ResumeAnalyzedResponse | None:
         return await self.repo.get_by_request_id(request_id)
