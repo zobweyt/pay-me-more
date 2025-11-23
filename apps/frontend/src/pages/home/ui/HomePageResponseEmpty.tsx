@@ -24,7 +24,7 @@ export const HomePageResponseEmpty: React.FC<HomePageResponseEmptyProps> = ({
             size="sm"
             style={{ textWrap: "balance" }}
           >
-            Заполните форму выше и нажмите «Оценить резюме» и наш ИИ предложит
+            Заполните форму выше и нажмите «Оценить резюме», и наш ИИ предложит
             вам рекомендации.
           </Text>
 
