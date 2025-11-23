@@ -29,7 +29,7 @@ scrape_configs:
     metrics_path: "/grafana/metrics"
     static_configs:
       - targets:
-          - "nginx:80"
+          - "grafana:3000"
 
 alerting:
   alertmanagers:
