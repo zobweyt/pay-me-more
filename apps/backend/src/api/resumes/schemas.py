@@ -56,3 +56,8 @@ class ServiceResponse(BaseModel):
     recommend_vacancies: list[Vacancies] | None
     quality: Literal["poor", "moderate", "good"]
     recommendations: list[Recommendation]
+
+
+class ResumeSkillsResponse(BaseModel):
+    role: str
+    skills: list[str]
