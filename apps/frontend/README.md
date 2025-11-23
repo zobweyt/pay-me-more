@@ -103,11 +103,15 @@
 [![Mantine](https://img.shields.io/badge/Mantine-339AF0?logo=mantine&labelColor=gray)](https://mantine.dev)
 [![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&labelColor=gray)](https://docker.com)
 
+Mantine даёт очень много готовых компонентов, хуков и расширений, что делает разработку сфокусированной на функциональность и бизнес требования.
+
 ### Инструменты разработки
 
 [![Node.js](https://img.shields.io/badge/Node.js-32752F?logo=nodedotjs&labelColor=gray)](https://nodejs.org)
 [![Rsbuild](https://img.shields.io/badge/Rsbuild-FF8B00?logo=rust&labelColor=gray)](https://rsbuild.rs)
 [![Biome](https://img.shields.io/badge/Biome-60A5FA?logo=biome&labelColor=gray)](https://biomejs.dev)
+
+Rsbuild выбран так как он быстрее Vite. Biome аналогично быстрее Eslint + Prettier. Node.js является стандартным рантаймом, что снижает порог онбординга новых разработчиков в команду.
 
 ## 🏗️ Архитектура
 
