@@ -24,6 +24,7 @@ import { ShellLayout } from "./layouts/shell/ShellLayout";
 import "./styles/index.css";
 
 import { FastLoginPage } from "@/pages/fastlogin";
+import { HistoryItemPage } from "@/pages/history-item";
 
 const rootElement = document.getElementById("root");
 
@@ -57,6 +58,10 @@ root.render(
                 <Route
                   element={<HistoryPage />}
                   path={routes.shell.history.$path()}
+                />
+                <Route
+                  element={<HistoryItemPage />}
+                  path={routes.shell.historyItem.$path()}
                 />
                 <Route
                   element={<FavoritesPage />}

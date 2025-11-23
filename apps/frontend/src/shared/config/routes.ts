@@ -27,6 +27,9 @@ export const routes = route({
         history: route({
           path: "history",
         }),
+        historyItem: route({
+          path: "history/:historyItemId",
+        }),
         favorites: route({
           path: "favorites",
         }),
