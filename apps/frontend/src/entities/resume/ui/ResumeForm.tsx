@@ -14,7 +14,7 @@ import { useCounter, useDebouncedValue } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useQuery } from "@tanstack/react-query";
 import { zod4Resolver } from "mantine-form-zod-resolver";
-import { type Ref, useCallback, useState } from "react";
+import { type Ref, useCallback, useEffect, useState } from "react";
 import { LuSparkles, LuX } from "react-icons/lu";
 
 import { type LlmResponse, type Salary, client } from "@/shared/api";
@@ -39,6 +39,7 @@ export type ResumeFormProps = {
   onSalaryForkLoadingChange?: (loading: boolean) => void;
   onRecommendationsLoaded?: (values: LlmResponse | undefined) => void;
   onRecommendationsLoadingChange?: (loading: boolean) => void;
+  onSubmitCountChange?: (submitCount: number) => void;
 };
 
 export const ResumeForm: React.FC<ResumeFormProps> = ({
@@ -53,6 +54,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
   onSalaryForkLoadingChange,
   onRecommendationsLoaded,
   onRecommendationsLoadingChange,
+  onSubmitCountChange,
 }) => {
   const form = useForm<ResumeFormValues>({
     initialValues,
@@ -129,6 +131,10 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
 
     incrementSubmitCount();
   });
+
+  useEffect(() => {
+    onSubmitCountChange?.(submitCount);
+  }, [submitCount]);
 
   const [pdfLoading, setPdfLoading] = useState<boolean>(false);
 

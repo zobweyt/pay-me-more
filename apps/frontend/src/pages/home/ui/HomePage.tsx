@@ -1,5 +1,5 @@
 import { Skeleton, Stack, Title, rem } from "@mantine/core";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 import {
   ResumeForm,
@@ -15,7 +15,12 @@ import { HomePageResponseEmpty } from "./HomePageResponseEmpty";
 
 export const HomePage: React.FC = () => {
   const resumeFormRef = useRef<HTMLFormElement | null>(null);
+  const randomNumberForRating = useMemo(
+    () => Math.floor(Math.random() * 3) + 1,
+    [],
+  );
   const responseSectionRef = useRef<HTMLDivElement | null>(null);
+  const [submitCount, setSubmitCount] = useState(0);
   const [recommendations, setRecommendations] = useState<
     LlmResponse | undefined
   >(undefined);
@@ -68,6 +73,7 @@ export const HomePage: React.FC = () => {
         onSalaryForkLoadingChange={setSalaryForkLoading}
         onRecommendationsLoaded={handleRecommendationsLoaded}
         onRecommendationsLoadingChange={setRecommendationsLoading}
+        onSubmitCountChange={setSubmitCount}
       />
 
       <Stack ref={responseSectionRef} style={{ scrollMarginTop: rem(64) }}>
@@ -96,9 +102,10 @@ export const HomePage: React.FC = () => {
         )}
 
         {!!salaryFork &&
-          !!recommendations &&
-          !recommendationsLoading &&
-          !salaryForkLoading && <RateResumeRecommendationsForm />}
+          !salaryForkLoading &&
+          randomNumberForRating === submitCount && (
+            <RateResumeRecommendationsForm submitCount={submitCount} />
+          )}
 
         {!salaryFork && !recommendations && (
           <HomePageResponseEmpty onScrollIntoForm={scrollIntoResumeForm} />
