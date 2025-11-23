@@ -5,17 +5,13 @@ import { client, serializeFormData } from "@/shared/api";
 import type { PartialResumeFormValues } from "../model/resume";
 
 export const uploadPdf = async (
-  inputFile: FileWithPath,
+  inputFile: FileWithPath | File,
 ): Promise<PartialResumeFormValues> => {
-  const jsFile = await inputFile.handle?.getFile();
-  console.log(inputFile);
-  console.log(inputFile.handle);
-  console.log(jsFile);
   const {
     data,
     response: { status },
   } = await client.POST("/resumes/parse/pdf", {
-    body: { file: jsFile as unknown as string },
+    body: { file: inputFile as unknown as string },
     bodySerializer: serializeFormData,
   });
   if (status !== 200 || !data) {
