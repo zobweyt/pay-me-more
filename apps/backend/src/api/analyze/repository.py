@@ -48,6 +48,7 @@ class AnalyzerRepository:
                 ]
             result.append(
                 ResumeAnalyzedResponse(
+                    id=resume.id,
                     request_id=resume.request_id,
                     role=resume.role,
                     experience=resume.experience,
