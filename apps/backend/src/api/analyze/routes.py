@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter, status
 
 from src.api.analyze.deps import AnalyzeServiceDeps
