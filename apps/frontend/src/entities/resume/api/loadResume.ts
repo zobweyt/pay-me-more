@@ -1,7 +1,7 @@
-import { type Resumes, client } from "@/shared/api";
+import { type ResumeDto, client } from "@/shared/api";
 
 export const loadResumeRecommendations = async (
-  resume: Resumes,
+  resume: ResumeDto,
   signal: AbortSignal | undefined,
 ) => {
   const { data, response } = await client.POST(
@@ -14,7 +14,7 @@ export const loadResumeRecommendations = async (
   return { data, status: response.status };
 };
 
-export const loadResumeSalaryFork = async (resume: Resumes) => {
+export const loadResumeSalaryFork = async (resume: ResumeDto) => {
   const { data, response } = await client.POST("/resumes/analyze/salary_fork", {
     body: resume,
   });

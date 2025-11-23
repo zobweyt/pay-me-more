@@ -1,13 +1,13 @@
 import { Card, Stack, Text, Title } from "@mantine/core";
 import type React from "react";
 
-import type { Recommendation } from "@/shared/api";
+import type { RecommendationDto } from "@/shared/api";
 
 import { getRecommendationsSuffix } from "../lib/getRecommendationsSuffix";
 import { ResumeRecommendationsAccordion } from "./ResumeRecommendationsAccordion";
 
 export type ResumeRecommendationsCardProps = {
-  recommendations: Recommendation[];
+  recommendations: RecommendationDto[];
 };
 
 export const ResumeRecommendationsCard: React.FC<

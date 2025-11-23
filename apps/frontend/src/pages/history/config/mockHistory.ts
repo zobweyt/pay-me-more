@@ -1,4 +1,4 @@
-import type { Recommendation, Salary } from "@/shared/api";
+import type { RecommendationDto, SalaryDto } from "@/shared/api";
 
 export const mockHistory: {
   id: string;
@@ -6,8 +6,8 @@ export const mockHistory: {
   experience: number;
   location: string;
   skills: string[];
-  salary: Salary;
-  recommendations: Recommendation[];
+  salary: SalaryDto;
+  recommendations: RecommendationDto[];
 }[] = [
   {
     id: "1",

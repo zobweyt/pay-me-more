@@ -17,7 +17,7 @@ import { zod4Resolver } from "mantine-form-zod-resolver";
 import { type Ref, useCallback, useEffect, useState } from "react";
 import { LuSparkles, LuX } from "react-icons/lu";
 
-import { type LlmResponse, type Salary, client } from "@/shared/api";
+import { type LlmResponse, type SalaryDto, client } from "@/shared/api";
 import { useIsMobile } from "@/shared/lib/breakpoints";
 
 import {
@@ -34,8 +34,9 @@ import { ResumeFormSkills } from "./ResumeFormSkills";
 
 export type ResumeFormProps = {
   ref?: Ref<HTMLFormElement>;
+  requestId: string;
   initialValues?: ResumeFormValues;
-  onSalaryForkLoaded?: (values: Salary | undefined) => void;
+  onSalaryForkLoaded?: (values: SalaryDto | undefined) => void;
   onSalaryForkLoadingChange?: (loading: boolean) => void;
   onRecommendationsLoaded?: (values: LlmResponse | undefined) => void;
   onRecommendationsLoadingChange?: (loading: boolean) => void;
@@ -44,6 +45,7 @@ export type ResumeFormProps = {
 
 export const ResumeForm: React.FC<ResumeFormProps> = ({
   ref,
+  requestId,
   initialValues = {
     role: "",
     experience: "" as unknown as number,
@@ -83,8 +85,10 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
     setRecommendationsAbortController(newAbortController);
 
     try {
-      const { data: newSalaryFork, status } =
-        await loadResumeSalaryFork(values);
+      const { data: newSalaryFork, status } = await loadResumeSalaryFork({
+        ...values,
+        request_id: requestId,
+      });
       if (status === 422) {
         notifications.show({
           icon: <LuX size={20} />,
@@ -106,7 +110,10 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
 
     try {
       const { data: newRecommendations, status } =
-        await loadResumeRecommendations(values, newAbortController.signal);
+        await loadResumeRecommendations(
+          { ...values, request_id: requestId },
+          newAbortController.signal,
+        );
       if (status === 422) {
         notifications.show({
           icon: <LuX size={20} />,

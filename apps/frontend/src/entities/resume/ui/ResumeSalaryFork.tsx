@@ -1,10 +1,10 @@
 import { Group, NumberFormatter, Stack, Text } from "@mantine/core";
 
-import type { Salary } from "@/shared/api";
+import type { SalaryDto } from "@/shared/api";
 
 export type ResumeSalaryForkProps = {
-  salary: Salary;
-  previousSalary?: Salary | undefined;
+  salary: SalaryDto;
+  previousSalary?: SalaryDto | undefined;
 };
 
 export const ResumeSalaryFork: React.FC<ResumeSalaryForkProps> = ({

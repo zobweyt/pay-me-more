@@ -10,7 +10,7 @@ export const uploadPdf = async (
   const {
     data,
     response: { status },
-  } = await client.POST("/resumes/parse/pdf", {
+  } = await client.POST("/parse/pdf", {
     body: { file: inputFile as unknown as string },
     bodySerializer: serializeFormData,
   });

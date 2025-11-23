@@ -1,18 +1,18 @@
 import { Alert, Card, Stack, Text, Title } from "@mantine/core";
 import { LuInfo, LuTrendingDown, LuTrendingUp } from "react-icons/lu";
 
-import type { Salary } from "@/shared/api";
+import type { SalaryDto } from "@/shared/api";
 
 import { ResumeSalaryFork } from "./ResumeSalaryFork";
 
 export type ResumeSalaryForkCardProps = {
-  salary: Salary;
-  previousSalary?: Salary | undefined;
+  salary: SalaryDto;
+  previousSalary?: SalaryDto | undefined;
 };
 
 const calculatePercentageIncrease = (
-  previous: Salary | undefined,
-  current: Salary,
+  previous: SalaryDto | undefined,
+  current: SalaryDto,
 ) => {
   if (!previous || !previous.from || !previous.to) return 0;
   const previousAverage = (previous.from + previous.to) / 2;

@@ -1,5 +1,6 @@
 import { Skeleton, Stack, Title, rem } from "@mantine/core";
 import { useMemo, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 import {
   ResumeForm,
@@ -7,7 +8,7 @@ import {
   ResumeSalaryForkCard,
 } from "@/entities/resume";
 import { RateResumeRecommendationsForm } from "@/features/rate-resume-recommendations";
-import type { LlmResponse, Salary } from "@/shared/api";
+import type { LlmResponse, SalaryDto } from "@/shared/api";
 
 import { HomePageLanding } from "./HomePageLanding";
 import { HomePageLoadingRecommendations } from "./HomePageLoadingRecommendations";
@@ -24,20 +25,23 @@ export const HomePage: React.FC = () => {
   const [recommendations, setRecommendations] = useState<
     LlmResponse | undefined
   >(undefined);
-  const [salaryFork, setSalaryFork] = useState<Salary | undefined>(undefined);
+  const [salaryFork, setSalaryFork] = useState<SalaryDto | undefined>(
+    undefined,
+  );
+  const requestId = useMemo(() => uuidv4(), []);
 
   const [salaryForkLoading, setSalaryForkLoading] = useState<boolean>(false);
   const [recommendationsLoading, setRecommendationsLoading] =
     useState<boolean>(false);
   const [previousSalaryFork, setPreviousSalaryFork] = useState<
-    Salary | undefined
+    SalaryDto | undefined
   >(undefined);
 
   const handleRecommendationsLoaded = (values: LlmResponse | undefined) => {
     setRecommendations(values);
   };
 
-  const handleSalaryForkLoaded = (values: Salary | undefined) => {
+  const handleSalaryForkLoaded = (values: SalaryDto | undefined) => {
     setPreviousSalaryFork(salaryFork);
     setSalaryFork(values);
     scrollIntoResponseSection();
@@ -69,6 +73,7 @@ export const HomePage: React.FC = () => {
 
       <ResumeForm
         ref={resumeFormRef}
+        requestId={requestId}
         onSalaryForkLoaded={handleSalaryForkLoaded}
         onSalaryForkLoadingChange={setSalaryForkLoading}
         onRecommendationsLoaded={handleRecommendationsLoaded}

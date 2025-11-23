@@ -140,24 +140,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/resumes/skills": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** Get Skills By Role */
-    get: operations["get_skills_by_role_resumes_skills_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/resumes/parse/pdf": {
+  "/resumes/analyze/salary_fork": {
     parameters: {
       query?: never;
       header?: never;
@@ -166,8 +149,8 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    /** Parse Resume From Pdf */
-    post: operations["parse_resume_from_pdf_resumes_parse_pdf_post"];
+    /** Get Salary Fork */
+    post: operations["get_salary_fork_resumes_analyze_salary_fork_post"];
     delete?: never;
     options?: never;
     head?: never;
@@ -191,7 +174,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/resumes/analyze/salary_fork": {
+  "/parse/pdf": {
     parameters: {
       query?: never;
       header?: never;
@@ -200,8 +183,8 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    /** Get Salary Fork */
-    post: operations["get_salary_fork_resumes_analyze_salary_fork_post"];
+    /** Parse Resume From Pdf */
+    post: operations["parse_resume_from_pdf_parse_pdf_post"];
     delete?: never;
     options?: never;
     head?: never;
@@ -248,8 +231,8 @@ export interface components {
       /** Client Secret */
       client_secret?: string | null;
     };
-    /** Body_parse_resume_from_pdf_resumes_parse_pdf_post */
-    Body_parse_resume_from_pdf_resumes_parse_pdf_post: {
+    /** Body_parse_resume_from_pdf_parse_pdf_post */
+    Body_parse_resume_from_pdf_parse_pdf_post: {
       /**
        * File
        * Format: binary
@@ -290,7 +273,7 @@ export interface components {
     /** LLMResponse */
     LLMResponse: {
       /** Recommendations */
-      recommendations: components["schemas"]["Recommendation"][];
+      recommendations: components["schemas"]["RecommendationDTO"][];
       /**
        * Quality
        * @enum {string}
@@ -327,8 +310,8 @@ export interface components {
       /** Prev Page */
       prev_page: number | null;
     };
-    /** Recommendation */
-    Recommendation: {
+    /** RecommendationDTO */
+    RecommendationDTO: {
       /** Title */
       title: string;
       /** Subtitle */
@@ -336,15 +319,28 @@ export interface components {
       /** Result */
       result: string;
     };
-    /** ResumeSkillsResponse */
-    ResumeSkillsResponse: {
+    /** ResumeAnalyzedResponse */
+    ResumeAnalyzedResponse: {
+      /** Request Id */
+      request_id?: string | null;
       /** Role */
       role: string;
+      /** Experience */
+      experience: number;
+      /** Location */
+      location: string;
       /** Skills */
       skills: string[];
+      salary?: components["schemas"]["SalaryDTO"] | null;
+      /** Quality */
+      quality?: ("poor" | "moderate" | "good") | null;
+      /** Recommendations */
+      recommendations?: components["schemas"]["RecommendationDTO"][] | null;
     };
-    /** Resumes */
-    Resumes: {
+    /** ResumeDTO */
+    ResumeDTO: {
+      /** Request Id */
+      request_id: string | null;
       /** Role */
       role: string;
       /** Skills */
@@ -354,8 +350,8 @@ export interface components {
       /** Location */
       location: string;
     };
-    /** Salary */
-    Salary: {
+    /** SalaryDTO */
+    SalaryDTO: {
       /** From */
       from: number;
       /** To */
@@ -458,18 +454,18 @@ export interface components {
 export type AccessTokenResponse = components["schemas"]["AccessTokenResponse"];
 export type BodyLoginAuthLoginPost =
   components["schemas"]["Body_login_auth_login_post"];
-export type BodyParseResumeFromPdfResumesParsePdfPost =
-  components["schemas"]["Body_parse_resume_from_pdf_resumes_parse_pdf_post"];
+export type BodyParseResumeFromPdfParsePdfPost =
+  components["schemas"]["Body_parse_resume_from_pdf_parse_pdf_post"];
 export type CurrentUserResponse = components["schemas"]["CurrentUserResponse"];
 export type HttpValidationError = components["schemas"]["HTTPValidationError"];
 export type LlmResponse = components["schemas"]["LLMResponse"];
 export type OptionalResumes = components["schemas"]["OptionalResumes"];
 export type PaginationResponse = components["schemas"]["PaginationResponse"];
-export type Recommendation = components["schemas"]["Recommendation"];
-export type ResumeSkillsResponse =
-  components["schemas"]["ResumeSkillsResponse"];
-export type Resumes = components["schemas"]["Resumes"];
-export type Salary = components["schemas"]["Salary"];
+export type RecommendationDto = components["schemas"]["RecommendationDTO"];
+export type ResumeAnalyzedResponse =
+  components["schemas"]["ResumeAnalyzedResponse"];
+export type ResumeDto = components["schemas"]["ResumeDTO"];
+export type SalaryDto = components["schemas"]["SalaryDTO"];
 export type UserRegistrationRequest =
   components["schemas"]["UserRegistrationRequest"];
 export type UserResponse = components["schemas"]["UserResponse"];
@@ -787,21 +783,23 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": unknown;
+          "application/json": components["schemas"]["ResumeAnalyzedResponse"][];
         };
       };
     };
   };
-  get_skills_by_role_resumes_skills_get: {
+  get_salary_fork_resumes_analyze_salary_fork_post: {
     parameters: {
-      query: {
-        role: string;
-      };
+      query?: never;
       header?: never;
       path?: never;
       cookie?: never;
     };
-    requestBody?: never;
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ResumeDTO"];
+      };
+    };
     responses: {
       /** @description Successful Response */
       200: {
@@ -809,7 +807,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["ResumeSkillsResponse"];
+          "application/json": components["schemas"]["SalaryDTO"];
         };
       };
       /** @description Validation Error */
@@ -823,7 +821,7 @@ export interface operations {
       };
     };
   };
-  parse_resume_from_pdf_resumes_parse_pdf_post: {
+  get_recommendations_resumes_analyze_recommendations_post: {
     parameters: {
       query?: never;
       header?: never;
@@ -832,7 +830,40 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "multipart/form-data": components["schemas"]["Body_parse_resume_from_pdf_resumes_parse_pdf_post"];
+        "application/json": components["schemas"]["ResumeDTO"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["LLMResponse"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  parse_resume_from_pdf_parse_pdf_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["Body_parse_resume_from_pdf_parse_pdf_post"];
       };
     };
     responses: {
@@ -865,72 +896,6 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  get_recommendations_resumes_analyze_recommendations_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Resumes"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["LLMResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  get_salary_fork_resumes_analyze_salary_fork_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Resumes"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Salary"];
-        };
       };
       /** @description Validation Error */
       422: {
