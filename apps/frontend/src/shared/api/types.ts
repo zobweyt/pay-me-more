@@ -355,6 +355,11 @@ export interface components {
     };
     /** ResumeAnalyzedResponse */
     ResumeAnalyzedResponse: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
       /** Request Id */
       request_id?: string | null;
       /** Role */
@@ -970,6 +975,13 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["ResumeAnalyzedResponse"];
         };
+      };
+      /** @description Resume not found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
       /** @description Validation Error */
       422: {
