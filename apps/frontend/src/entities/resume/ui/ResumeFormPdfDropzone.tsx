@@ -1,19 +1,18 @@
 import { Box, Button, Stack, Text } from "@mantine/core";
 import { Dropzone, type DropzoneProps, PDF_MIME_TYPE } from "@mantine/dropzone";
-import { useRef } from "react";
 import { LuFileText, LuUpload, LuX } from "react-icons/lu";
+
+import classes from "./ResumeFormPdfDropzone.module.css";
 
 export const ResumeFormPdfDropzone: React.FC<DropzoneProps> = ({
   ...props
 }) => {
-  const openRef = useRef<() => void>(null);
-
   return (
     <Dropzone
-      openRef={openRef}
       maxSize={50 * 1024 ** 2}
       maxFiles={1}
       accept={PDF_MIME_TYPE}
+      classNames={{ root: props.disabled ? classes.loading : undefined }}
       {...props}
     >
       <Stack
@@ -66,7 +65,6 @@ export const ResumeFormPdfDropzone: React.FC<DropzoneProps> = ({
           w="fit-content"
           mx="auto"
           radius="xl"
-          onClick={() => openRef.current?.()}
           style={{ pointerEvents: "all" }}
         >
           Выбрать файл

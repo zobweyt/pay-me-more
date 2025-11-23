@@ -80,7 +80,15 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
     setRecommendationsAbortController(newAbortController);
 
     try {
-      const newSalaryFork = await loadResumeSalaryFork(values);
+      const { data: newSalaryFork, status } =
+        await loadResumeSalaryFork(values);
+      if (status === 422) {
+        notifications.show({
+          icon: <LuX size={20} />,
+          color: "red",
+          message: "Не удалось распарсить резюме.",
+        });
+      }
       onSalaryForkLoaded?.(newSalaryFork);
     } catch {
       notifications.show({
@@ -94,10 +102,15 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
     }
 
     try {
-      const newRecommendations = await loadResumeRecommendations(
-        values,
-        newAbortController.signal,
-      );
+      const { data: newRecommendations, status } =
+        await loadResumeRecommendations(values, newAbortController.signal);
+      if (status === 422) {
+        notifications.show({
+          icon: <LuX size={20} />,
+          color: "red",
+          message: "Не удалось распарсить резюме.",
+        });
+      }
       onRecommendationsLoaded?.(newRecommendations);
     } catch (error) {
       if ((error as { name: string }).name !== "AbortError") {
@@ -150,7 +163,8 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
 
           <ResumeFormPdfDropzone
             onDrop={parsePdf}
-            loading={form.submitting || pdfLoading}
+            disabled={salaryForkLoading}
+            loading={pdfLoading}
           />
 
           <Autocomplete
