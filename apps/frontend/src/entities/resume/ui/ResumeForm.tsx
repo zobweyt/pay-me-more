@@ -172,16 +172,19 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
   const { data: recommendedSkills } = useQuery({
     queryKey: ["skills", debouncedRole],
     queryFn: async () => {
+      if (!debouncedRole.trim()) {
+        return null;
+      }
       const { data, response } = await client.GET("/resumes/skills", {
         params: { query: { role: debouncedRole } },
       });
 
       if (response.status !== 200) {
-        notifications.show({
-          icon: <LuX size={20} />,
-          color: "red",
-          message: "Не удалось получить рекомендованные навыки к должности.",
-        });
+        // notifications.show({
+        //   icon: <LuX size={20} />,
+        //   color: "red",
+        //   message: "Не удалось получить рекомендованные навыки к должности.",
+        // });
         return null;
       }
 
