@@ -1,7 +1,6 @@
 import typing
 import uuid
-from uuid import UUID
-
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.db.mixins import AuditMixin
