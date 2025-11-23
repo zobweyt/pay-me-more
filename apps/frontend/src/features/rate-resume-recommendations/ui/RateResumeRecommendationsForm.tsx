@@ -3,11 +3,14 @@ import { notifications } from "@mantine/notifications";
 import { useState } from "react";
 import { LuCheck } from "react-icons/lu";
 
-export const RateResumeRecommendationsForm: React.FC = () => {
+export const RateResumeRecommendationsForm: React.FC<{
+  submitCount: number;
+}> = ({ submitCount }) => {
   const [rated, setRated] = useState(false);
 
-  const handleRatingChange = (_rating: number) => {
+  const handleRatingChange = (rating: number) => {
     setRated(true);
+    console.log(`Оцнека ${rating} на ${submitCount} пересчёт.`);
     notifications.show({
       icon: <LuCheck size={20} />,
       color: "green",
