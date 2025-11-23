@@ -24,7 +24,7 @@ async def load_resume(
     current_user: CurrentUserDepends,
     analyze_service: AnalyzeServiceDeps,
 ) -> list[ResumeAnalyzedResponse]:
-    return await analyze_service.get_resume_analyzed(current_user.id)
+    return await analyze_service.get_resume_analyzed(current_user.id) # type: ignore
 
 
 @router.post(
@@ -39,9 +39,9 @@ async def get_salary_fork(
     resume_service: ResumeServiceDeps,
 ) -> SalaryDTO:
     if current_user is not None and resume.request_id is not None:
-        resume_db = await resume_service.get_by_request_id(resume.request_id)
+        resume_db = await resume_service.get_by_request_id(resume.request_id) # type: ignore
         if resume_db is None:
-            resume_db = await resume_service.create_resume(current_user.id, resume)
+            resume_db = await resume_service.create_resume(current_user.id, resume) # type: ignore
         return await salary_fork_service.calculate_salary(resume, resume_id=resume_db.id, save=True)
     return await salary_fork_service.calculate_salary(resume, resume_id=None)
 
@@ -58,8 +58,8 @@ async def get_recommendations(
     resume_service: ResumeServiceDeps,
 ) -> LLMResponse:
     if current_user is not None and resume.request_id is not None:
-        resume_db = await resume_service.get_by_request_id(resume.request_id)
+        resume_db = await resume_service.get_by_request_id(resume.request_id) # type: ignore
         if resume_db is None:
-            resume_db = await resume_service.create_resume(current_user.id, resume)
-        return await recommendations_service.get_recommendations(resume, resume_id=resume_db.id, save=True)
+            resume_db = await resume_service.create_resume(current_user.id, resume) # type: ignore
+        return await recommendations_service.get_recommendations(resume, resume_id=resume_db.id, save=True) # type: ignore
     return await recommendations_service.get_recommendations(resume, resume_id=None)
