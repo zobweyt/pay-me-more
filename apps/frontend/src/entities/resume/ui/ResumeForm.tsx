@@ -10,13 +10,14 @@ import {
 } from "@mantine/core";
 import type { FileWithPath } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
-import { useCounter } from "@mantine/hooks";
+import { useCounter, useDebouncedValue } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
+import { useQuery } from "@tanstack/react-query";
 import { zod4Resolver } from "mantine-form-zod-resolver";
 import { type Ref, useCallback, useState } from "react";
 import { LuSparkles, LuX } from "react-icons/lu";
 
-import type { LlmResponse, Salary } from "@/shared/api";
+import { type LlmResponse, type Salary, client } from "@/shared/api";
 import { useIsMobile } from "@/shared/lib/breakpoints";
 
 import {
@@ -148,6 +149,29 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
     }
   }, []);
 
+  const [debouncedRole] = useDebouncedValue(form.values.role, 300);
+  const { data: recommendedSkills } = useQuery({
+    queryKey: ["skills", debouncedRole],
+    queryFn: async () => {
+      const { data, response } = await client.GET("/resumes/skills", {
+        params: { query: { role: debouncedRole } },
+      });
+
+      if (response.status !== 200) {
+        notifications.show({
+          icon: <LuX size={20} />,
+          color: "red",
+          message: "Не удалось получить рекомендованные навыки к должности.",
+        });
+        return null;
+      }
+
+      return data ?? null;
+    },
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+  });
+
   return (
     <form ref={ref} onSubmit={submit} style={{ scrollMarginTop: rem(74) }}>
       <Card>
@@ -214,6 +238,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
             form={form}
             pdfLoading={pdfLoading}
             salaryForkLoading={salaryForkLoading}
+            recommendedSkills={recommendedSkills?.skills}
           />
 
           <Button

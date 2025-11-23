@@ -18,12 +18,14 @@ export type ResumeFormSkillsProps = {
   form: UseFormReturnType<ResumeFormValues>;
   pdfLoading: boolean;
   salaryForkLoading: boolean;
+  recommendedSkills: string[] | undefined;
 };
 
 export const ResumeFormSkills: React.FC<ResumeFormSkillsProps> = ({
   form,
   pdfLoading,
   salaryForkLoading,
+  recommendedSkills,
 }) => {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -87,7 +89,7 @@ export const ResumeFormSkills: React.FC<ResumeFormSkillsProps> = ({
                 ? ` (${form.values.skills.length}/${RESUME_SKILLS_MAX_COUNT})`
                 : ""
             }`}
-            description="Введите навыки или выберите из предложенных:"
+            description={`Введите навыки${recommendedSkills?.length ? " или выберите из предложенных:" : " в поле выше."}`}
             error={form.errors.skills}
             onClick={() => combobox.openDropdown()}
             withAsterisk
@@ -158,43 +160,45 @@ export const ResumeFormSkills: React.FC<ResumeFormSkillsProps> = ({
         </Combobox.Dropdown>
       </Combobox>
 
-      {/* TODO: recommend based on role */}
-      <Group
-        py="xs"
-        gap="xs"
-        styles={{
-          root: {
-            overflowX: "auto",
-            overflowY: "hidden",
-            whiteSpace: "nowrap",
-            flexWrap: "nowrap",
-            scrollbarWidth: "thin",
-          },
-        }}
-      >
-        {POPULAR_SKILLS.filter((skill) => !form.values.skills.includes(skill))
-          .slice(0, 7)
-          .map((skill) => (
-            <Button
-              key={skill}
-              size="compact-sm"
-              radius="xl"
-              variant="default"
-              styles={{
-                section: { marginInlineEnd: 4 },
-                root: { flexShrink: 0 },
-              }}
-              disabled={pdfLoading}
-              leftSection={<LuPlus size={16} />}
-              onClick={() => {
-                form.insertListItem("skills", skill.trim());
-                form.validateField("skills");
-              }}
-            >
-              {skill}
-            </Button>
-          ))}
-      </Group>
+      {!!recommendedSkills?.length && (
+        <Group
+          py="xs"
+          gap="xs"
+          styles={{
+            root: {
+              overflowX: "auto",
+              overflowY: "hidden",
+              whiteSpace: "nowrap",
+              flexWrap: "nowrap",
+              scrollbarWidth: "thin",
+            },
+          }}
+        >
+          {recommendedSkills
+            .filter((skill) => !form.values.skills.includes(skill))
+            .slice(0, 7)
+            .map((skill) => (
+              <Button
+                key={skill}
+                size="compact-sm"
+                radius="xl"
+                variant="default"
+                styles={{
+                  section: { marginInlineEnd: 4 },
+                  root: { flexShrink: 0 },
+                }}
+                disabled={pdfLoading}
+                leftSection={<LuPlus size={16} />}
+                onClick={() => {
+                  form.insertListItem("skills", skill.trim());
+                  form.validateField("skills");
+                }}
+              >
+                {skill}
+              </Button>
+            ))}
+        </Group>
+      )}
     </Box>
   );
 };

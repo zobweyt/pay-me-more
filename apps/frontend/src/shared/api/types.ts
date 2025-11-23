@@ -140,6 +140,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/resumes/skills": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Skills By Role */
+    get: operations["get_skills_by_role_resumes_skills_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/resumes/parse/pdf": {
     parameters: {
       query?: never;
@@ -319,6 +336,13 @@ export interface components {
       /** Result */
       result: string;
     };
+    /** ResumeSkillsResponse */
+    ResumeSkillsResponse: {
+      /** Role */
+      role: string;
+      /** Skills */
+      skills: string[];
+    };
     /** Resumes */
     Resumes: {
       /** Role */
@@ -442,6 +466,8 @@ export type LlmResponse = components["schemas"]["LLMResponse"];
 export type OptionalResumes = components["schemas"]["OptionalResumes"];
 export type PaginationResponse = components["schemas"]["PaginationResponse"];
 export type Recommendation = components["schemas"]["Recommendation"];
+export type ResumeSkillsResponse =
+  components["schemas"]["ResumeSkillsResponse"];
 export type Resumes = components["schemas"]["Resumes"];
 export type Salary = components["schemas"]["Salary"];
 export type UserRegistrationRequest =
@@ -762,6 +788,37 @@ export interface operations {
         };
         content: {
           "application/json": unknown;
+        };
+      };
+    };
+  };
+  get_skills_by_role_resumes_skills_get: {
+    parameters: {
+      query: {
+        role: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ResumeSkillsResponse"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
