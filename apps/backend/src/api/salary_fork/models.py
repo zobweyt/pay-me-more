@@ -10,8 +10,6 @@ from src.db.models import Base
 
 
 class Salary(Base, AuditMixin):
-    __tablename__ = "salary"
-
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     resume_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("resume.id"), unique=True)
 

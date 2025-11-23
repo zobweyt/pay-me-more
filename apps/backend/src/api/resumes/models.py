@@ -17,8 +17,6 @@ resume_skill_table = Table(
 
 
 class Resume(Base, AuditMixin):
-    __tablename__ = "resume"
-
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     request_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), unique=True, nullable=True)
     user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("user.id"), nullable=False)
@@ -34,8 +32,6 @@ class Resume(Base, AuditMixin):
 
 
 class Skill(Base, AuditMixin):
-    __tablename__ = "skill"
-
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name: Mapped[str] = mapped_column()
 

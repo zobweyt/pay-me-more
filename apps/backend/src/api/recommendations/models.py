@@ -9,8 +9,6 @@ from src.db.models import Base
 
 
 class Recommendation(Base, AuditMixin):
-    __tablename__ = "recommendation"
-
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     resume_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("resume.id"))
 
