@@ -6,6 +6,7 @@ import {
   ResumeRecommendationsCard,
   ResumeSalaryForkCard,
 } from "@/entities/resume";
+import { RateResumeRecommendationsForm } from "@/features/rate-resume-recommendations";
 import type { LlmResponse, Salary } from "@/shared/api";
 
 import { HomePageLanding } from "./HomePageLanding";
@@ -93,6 +94,11 @@ export const HomePage: React.FC = () => {
             />
           )
         )}
+
+        {!!salaryFork &&
+          !!recommendations &&
+          !recommendationsLoading &&
+          !salaryForkLoading && <RateResumeRecommendationsForm />}
 
         {!salaryFork && !recommendations && (
           <HomePageResponseEmpty onScrollIntoForm={scrollIntoResumeForm} />
