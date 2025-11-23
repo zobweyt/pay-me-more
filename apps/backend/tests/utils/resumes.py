@@ -1,6 +1,6 @@
 from typing import Any
 
-from src.api.resumes.schemas import Resumes
+from src.api.resumes.schemas import ResumeDTO
 
 
 def resume_payload(**overrides: Any) -> dict[str, Any]:
@@ -14,5 +14,5 @@ def resume_payload(**overrides: Any) -> dict[str, Any]:
     return payload
 
 
-def resume_schema(**overrides: Any) -> Resumes:
-    return Resumes(**resume_payload(**overrides))
+def resume_schema(**overrides: Any) -> ResumeDTO:
+    return ResumeDTO(**resume_payload(**overrides))
