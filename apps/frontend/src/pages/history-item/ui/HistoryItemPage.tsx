@@ -17,8 +17,8 @@ export const HistoryItemPage = () => {
   const { data: historyItem, isLoading } = useQuery({
     queryKey: ["history-item", historyItemId],
     queryFn: async () => {
-      const { data } = await client.GET("/resumes{ResumeID}", {
-        params: { path: { ResumeID: historyItemId } },
+      const { data } = await client.GET("/resumes/{RequestID}", {
+        params: { path: { RequestID: historyItemId } },
       });
       return data ?? null;
     },
