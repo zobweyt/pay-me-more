@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import APIRouter, status
 
 from src.api.resumes.deps import ResumeServiceDeps
@@ -9,7 +11,7 @@ router = APIRouter(prefix="/resumes", tags=[Tag.RESUMES])
 
 
 @router.get("/{RequestID}", status_code=status.HTTP_200_OK, response_model=ResumeAnalyzedResponse)
-async def load_resume(RequestID: str, service: ResumeServiceDeps) -> ResumeAnalyzedResponse:
+async def load_resume(RequestID: UUID, service: ResumeServiceDeps) -> ResumeAnalyzedResponse | None:
     return await service.get_by_request_id(RequestID)
 
 

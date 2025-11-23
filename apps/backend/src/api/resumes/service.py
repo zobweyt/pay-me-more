@@ -3,7 +3,8 @@ from uuid import UUID
 from src.api.resumes.models import Resume, Skill
 from src.api.resumes.repository import ResumeRepositoryDeps
 from src.api.resumes.role_to_skills.client import RoleToSkillsClientDepends
-from src.api.resumes.schemas import ResumeDTO as ResumeDTO, ResumeAnalyzedResponse
+from src.api.resumes.schemas import ResumeAnalyzedResponse
+from src.api.resumes.schemas import ResumeDTO as ResumeDTO
 
 
 class ResumeService:

@@ -4,6 +4,7 @@ from src.api.analyze.deps import AnalyzeServiceDeps
 from src.api.recommendations.deps import RecommendationsServiceDepends
 from src.api.recommendations.schemas import LLMResponse
 from src.api.resumes.deps import ResumeServiceDeps
+from src.api.resumes.models import Resume
 from src.api.resumes.schemas import ResumeAnalyzedResponse, ResumeDTO
 from src.api.salary_fork.deps import SalaryForkServiceDepends
 from src.api.salary_fork.schemas import SalaryDTO
@@ -22,7 +23,7 @@ async def load_resume(
     current_user: CurrentUserDepends,
     analyze_service: AnalyzeServiceDeps,
 ) -> list[ResumeAnalyzedResponse]:
-    return await analyze_service.get_resume_analyzed(current_user.id)  # type: ignore
+    return await analyze_service.get_resume_analyzed(current_user.id)
 
 
 @router.post(
@@ -37,9 +38,9 @@ async def get_salary_fork(
     resume_service: ResumeServiceDeps,
 ) -> SalaryDTO:
     if current_user is not None and resume.request_id is not None:
-        resume_db = await resume_service.get_by_request_id(resume.request_id)
+        resume_db: Resume | ResumeAnalyzedResponse | None = await resume_service.get_by_request_id(resume.request_id)
         if resume_db is None:
-            resume_db = await resume_service.create_resume(current_user.id, resume)  # type: ignore
+            resume_db = await resume_service.create_resume(current_user.id, resume)
         return await salary_fork_service.calculate_salary(resume, resume_id=resume_db.id, save=True)
     return await salary_fork_service.calculate_salary(resume, resume_id=None)
 
@@ -56,8 +57,8 @@ async def get_recommendations(
     resume_service: ResumeServiceDeps,
 ) -> LLMResponse:
     if current_user is not None and resume.request_id is not None:
-        resume_db = await resume_service.get_by_request_id(resume.request_id)
+        resume_db: Resume | ResumeAnalyzedResponse | None = await resume_service.get_by_request_id(resume.request_id)
         if resume_db is None:
-            resume_db = await resume_service.create_resume(current_user.id, resume)  # type: ignore
+            resume_db = await resume_service.create_resume(current_user.id, resume)
         return await recommendations_service.get_recommendations(resume, resume_id=resume_db.id, save=True)
     return await recommendations_service.get_recommendations(resume, resume_id=None)
