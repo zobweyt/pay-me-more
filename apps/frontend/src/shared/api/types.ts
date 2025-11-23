@@ -225,6 +225,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/feedback/rate": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Rate */
+    post: operations["rate_feedback_rate_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -343,6 +360,13 @@ export interface components {
       next_page: number | null;
       /** Prev Page */
       prev_page: number | null;
+    };
+    /** Rating */
+    Rating: {
+      /** Value */
+      value: number;
+      /** Time */
+      time: number;
     };
     /** RecommendationDTO */
     RecommendationDTO: {
@@ -507,6 +531,7 @@ export type HttpValidationError = components["schemas"]["HTTPValidationError"];
 export type LlmResponse = components["schemas"]["LLMResponse"];
 export type OptionalResumes = components["schemas"]["OptionalResumes"];
 export type PaginationResponse = components["schemas"]["PaginationResponse"];
+export type Rating = components["schemas"]["Rating"];
 export type RecommendationDto = components["schemas"]["RecommendationDTO"];
 export type ResumeAnalyzedResponse =
   components["schemas"]["ResumeAnalyzedResponse"];
@@ -1012,6 +1037,39 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["ResumeSkillsResponse"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  rate_feedback_rate_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Rating"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
         };
       };
       /** @description Validation Error */
