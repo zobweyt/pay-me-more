@@ -39,7 +39,7 @@ async def get_salary_fork(
     resume_service: ResumeServiceDeps,
 ) -> SalaryDTO:
     if current_user is not None and resume.request_id is not None:
-        resume_db = await resume_service.get_by_request_id(resume.request_id) # type: ignore
+        resume_db = await resume_service.get_by_request_id(resume.request_id)
         if resume_db is None:
             resume_db = await resume_service.create_resume(current_user.id, resume) # type: ignore
         return await salary_fork_service.calculate_salary(resume, resume_id=resume_db.id, save=True)
@@ -58,8 +58,8 @@ async def get_recommendations(
     resume_service: ResumeServiceDeps,
 ) -> LLMResponse:
     if current_user is not None and resume.request_id is not None:
-        resume_db = await resume_service.get_by_request_id(resume.request_id) # type: ignore
+        resume_db = await resume_service.get_by_request_id(resume.request_id)
         if resume_db is None:
-            resume_db = await resume_service.create_resume(current_user.id, resume) # type: ignore
+            resume_db = await resume_service.create_resume(current_user.id, resume)
         return await recommendations_service.get_recommendations(resume, resume_id=resume_db.id, save=True) # type: ignore
     return await recommendations_service.get_recommendations(resume, resume_id=None)
