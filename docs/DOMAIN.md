@@ -179,12 +179,3 @@ class JWT(BaseModel):
 ### GET - /resumes - История поиска и расчетов пользователя
 ### POST - /auth/register - Регистрация
 ### POST - /auth/login - Логин
-# 5. Пример слоя сервиса – расчет зарплаты:
-
-```python
-class SalaryService:
-    def calculate(resume: Resume) -> tuple[int, int]:
-        # Логика обработки навыков, опыта, региона
-        # Запросы к БД/статистике/AI
-        return (min_salary, max_salary)
-```
