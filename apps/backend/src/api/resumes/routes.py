@@ -2,14 +2,14 @@ from fastapi import APIRouter, status
 
 from src.api.resumes.deps import ResumeServiceDeps
 from src.api.resumes.queries import ResumeQuerySkillsParamsDepends
-from src.api.resumes.schemas import ResumeSkillsResponse
+from src.api.resumes.schemas import ResumeSkillsResponse, ResumeAnalyzedResponse
 from src.api.tags import Tag
 
 router = APIRouter(prefix="/resumes", tags=[Tag.RESUMES])
 
 
-@router.get("", status_code=status.HTTP_200_OK)
-async def load_resume() -> None:
+@router.get("{ResumeID}", status_code=status.HTTP_200_OK)
+async def load_resume(ResumeID: str) -> ResumeAnalyzedResponse:
     raise NotImplementedError
 
 
