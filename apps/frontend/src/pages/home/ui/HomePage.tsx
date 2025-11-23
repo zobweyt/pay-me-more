@@ -118,7 +118,6 @@ export const HomePage: React.FC = () => {
         )}
 
         {/* <ResumeQualityProgressCard quality={response.quality} /> */}
-        {/* <VacanciesList vacancies={response.recommend_vacancies} /> */}
       </Stack>
     </Stack>
   );
