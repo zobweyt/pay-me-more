@@ -8,7 +8,7 @@ import {
   ResumeRecommendationsCard,
   ResumeSalaryForkCard,
 } from "@/entities/resume";
-import { mockHistory } from "@/pages/history/config/mockHistory";
+import { client } from "@/shared/api";
 import { routes } from "@/shared/config/routes";
 
 export const HistoryItemPage = () => {
@@ -17,11 +17,10 @@ export const HistoryItemPage = () => {
   const { data: historyItem, isLoading } = useQuery({
     queryKey: ["history-item", historyItemId],
     queryFn: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      return (
-        mockHistory.find((historyItem) => historyItem.id === historyItemId) ??
-        null
-      );
+      const { data } = await client.GET("/resumes{ResumeID}", {
+        params: { path: { ResumeID: historyItemId } },
+      });
+      return data ?? null;
     },
     staleTime: 0,
     placeholderData: keepPreviousData,
@@ -76,8 +75,11 @@ export const HistoryItemPage = () => {
               </Pill.Group>
             </Stack>
           </Card>
-          <ResumeSalaryForkCard salary={historyItem.salary} />
-          {!!historyItem.recommendations.length && (
+
+          {!!historyItem.salary && (
+            <ResumeSalaryForkCard salary={historyItem.salary} />
+          )}
+          {!!historyItem.recommendations?.length && (
             <ResumeRecommendationsCard
               recommendations={historyItem.recommendations}
             />

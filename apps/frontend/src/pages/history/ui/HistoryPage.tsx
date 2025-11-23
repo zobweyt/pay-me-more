@@ -1,15 +1,16 @@
 import { Loader, Stack, Title } from "@mantine/core";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
-import { mockHistory } from "../config/mockHistory";
+import { client } from "@/shared/api";
+
 import { HistoryPageItem } from "./HistoryPageItem";
 
 export const HistoryPage: React.FC = () => {
   const { data: history, isLoading } = useQuery({
     queryKey: ["history"],
     queryFn: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      return mockHistory ?? null;
+      const { data: resumes } = await client.GET("/resumes");
+      return resumes ?? null;
     },
     placeholderData: keepPreviousData,
     staleTime: 0,
@@ -30,9 +31,17 @@ export const HistoryPage: React.FC = () => {
         </Stack>
       ) : (
         <Stack>
-          {history.map((historyItem, index) => (
-            <HistoryPageItem key={index} historyItem={historyItem} />
-          ))}
+          {history === null ? (
+            <Stack>
+              <Title order={2} size="h5" ta="center">
+                Нет истории
+              </Title>
+            </Stack>
+          ) : (
+            history.map((historyItem, index) => (
+              <HistoryPageItem key={index} historyItem={historyItem} />
+            ))
+          )}
         </Stack>
       )}
     </Stack>
