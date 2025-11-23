@@ -8,9 +8,9 @@ from src.api.tags import Tag
 router = APIRouter(prefix="/resumes", tags=[Tag.RESUMES])
 
 
-@router.get("{RequestID}", status_code=status.HTTP_200_OK, response_model=ResumeAnalyzedResponse)
+@router.get("/{RequestID}", status_code=status.HTTP_200_OK, response_model=ResumeAnalyzedResponse)
 async def load_resume(RequestID: str, service: ResumeServiceDeps) -> ResumeAnalyzedResponse:
-    return await service.get_by_request_id(RequestID)
+    return await service.get_by_request_id(RequestID) # type: ignore
 
 
 @router.get("/skills", response_model=ResumeSkillsResponse)
