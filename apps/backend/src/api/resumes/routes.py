@@ -12,7 +12,7 @@ router = APIRouter(prefix="/resumes", tags=[Tag.RESUMES])
 
 @router.get("/skills", response_model=ResumeSkillsResponse)
 async def get_skills_by_role(
-        query_params: ResumeQuerySkillsParamsDepends, service: ResumeServiceDeps
+    query_params: ResumeQuerySkillsParamsDepends, service: ResumeServiceDeps
 ) -> ResumeSkillsResponse:
     return ResumeSkillsResponse(role=query_params.role, skills=await service.get_skills_by_role(query_params.role))
 
