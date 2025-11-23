@@ -15,7 +15,7 @@ async def test_recommendations_service_uses_llm_client() -> None:
     llm_client = AsyncMock()
     llm_client.get_recommendations.return_value = response
 
-    service = RecommendationsService(llm_client=llm_client) # type: ignore
+    service = RecommendationsService(llm_client=llm_client)  # type: ignore
     result = await service.get_recommendations(resume, resume_id=None)
 
     assert result == response

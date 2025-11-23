@@ -14,8 +14,8 @@ async def test_calculate_salary_uses_ml_client() -> None:
     ml_client = AsyncMock()
     ml_client.calculate_salary.return_value = salary
 
-    service = SalaryForkService(client=ml_client) # type: ignore
-    result = await service.calculate_salary(resume) # type: ignore
+    service = SalaryForkService(client=ml_client)  # type: ignore
+    result = await service.calculate_salary(resume)  # type: ignore
 
     assert result == salary
     ml_client.calculate_salary.assert_awaited_once_with(resume)
