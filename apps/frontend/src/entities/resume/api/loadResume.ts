@@ -4,16 +4,19 @@ export const loadResumeRecommendations = async (
   resume: Resumes,
   signal: AbortSignal | undefined,
 ) => {
-  const { data } = await client.POST("/resumes/analyze/recommendations", {
-    body: resume,
-    signal,
-  });
-  return data;
+  const { data, response } = await client.POST(
+    "/resumes/analyze/recommendations",
+    {
+      body: resume,
+      signal,
+    },
+  );
+  return { data, status: response.status };
 };
 
 export const loadResumeSalaryFork = async (resume: Resumes) => {
-  const { data } = await client.POST("/resumes/analyze/salary_fork", {
+  const { data, response } = await client.POST("/resumes/analyze/salary_fork", {
     body: resume,
   });
-  return data;
+  return { data, status: response.status };
 };

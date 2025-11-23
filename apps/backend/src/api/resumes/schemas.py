@@ -57,3 +57,8 @@ class ResumeAnalyzedResponse(BaseModel):
     salary: SalaryDTO | None = None
     quality: Literal["poor", "moderate", "good"] | None = None
     recommendations: list[RecommendationDTO] | None = None
+
+
+class ResumeSkillsResponse(BaseModel):
+    role: str
+    skills: list[str]
