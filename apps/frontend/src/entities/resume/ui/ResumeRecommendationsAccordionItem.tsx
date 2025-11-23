@@ -20,7 +20,7 @@ import {
   LuZap,
 } from "react-icons/lu";
 
-import type { Recommendation } from "@/shared/api";
+import type { RecommendationDto } from "@/shared/api";
 
 const icons: IconType[] = [
   LuLightbulb,
@@ -47,7 +47,7 @@ const colors: MantineColor[] = [
 ];
 
 export type ResumeRecommendationsAccordionItemProps = AccordionItemProps & {
-  recommendation: Recommendation;
+  recommendation: RecommendationDto;
 };
 
 export const ResumeRecommendationsAccordionItem: React.FC<

@@ -1,12 +1,12 @@
 import { Accordion } from "@mantine/core";
 import type React from "react";
 
-import type { Recommendation } from "@/shared/api";
+import type { RecommendationDto } from "@/shared/api";
 
 import { ResumeRecommendationsAccordionItem } from "./ResumeRecommendationsAccordionItem";
 
 export type ResumeRecommendationsAccordionProps = {
-  recommendations: Recommendation[];
+  recommendations: RecommendationDto[];
 };
 
 export const ResumeRecommendationsAccordion: React.FC<
