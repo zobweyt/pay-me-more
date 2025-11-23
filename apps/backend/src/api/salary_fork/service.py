@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from fastapi import HTTPException, status
+
 from src.api.resumes.schemas import ResumeDTO
 from src.api.salary_fork.ml_client import MLClientDepends
 from src.api.salary_fork.models import Salary

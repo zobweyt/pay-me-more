@@ -24,5 +24,4 @@ class SalaryRepository:
             return None
 
 
-
 SalaryRepositoryDeps = Annotated[SalaryRepository, Depends(SalaryRepository)]

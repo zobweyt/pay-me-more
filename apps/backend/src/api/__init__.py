@@ -4,7 +4,7 @@ __all__ = [
 
 from fastapi import APIRouter
 
-from src.api import analyze, auth, users, resumes
+from src.api import analyze, auth, resumes, users
 
 router = APIRouter()
 

@@ -35,7 +35,7 @@ class AnalyzerRepository:
         for resume in resumes:
             salary_dto = None
             if resume.salary is not None:
-                salary_dto = SalaryDTO(from_=resume.salary.from_, to=resume.salary.to) # type: ignore
+                salary_dto = SalaryDTO(from_=resume.salary.from_, to=resume.salary.to)  # type: ignore
             recs_dto = []
             if resume.recommendation is not None:
                 recs_dto = [

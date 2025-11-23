@@ -10,8 +10,8 @@ from src.db.mixins import AuditMixin
 from src.db.models import Base
 
 if typing.TYPE_CHECKING:
-    from src.api.users.models import User
     from src.api.salary_fork.models import Salary
+    from src.api.users.models import User
 
 resume_skill_table = Table(
     "resume_skill",

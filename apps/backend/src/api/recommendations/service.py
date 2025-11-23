@@ -3,7 +3,7 @@ from uuid import UUID
 from src.api.recommendations.llm_client import LLMClientDepends
 from src.api.recommendations.repository import RecommendationsRepositoryDeps
 from src.api.recommendations.schemas import LLMResponse
-from src.api.resumes.models import Recommendation # type: ignore
+from src.api.resumes.models import Recommendation  # type: ignore
 from src.api.resumes.schemas import ResumeDTO
 
 

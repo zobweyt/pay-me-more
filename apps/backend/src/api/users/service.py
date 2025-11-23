@@ -22,6 +22,7 @@ class UserService:
 
     async def create_user(self, args: UserRegistrationRequest) -> User:
         from src.security import get_password_hash
+
         hashed_password = await get_password_hash(args.password)
 
         user = User(

@@ -11,6 +11,7 @@ from src.db.models import Base
 if typing.TYPE_CHECKING:
     from src.api.resumes.models import Resume
 
+
 class Recommendation(Base, AuditMixin):
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     resume_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("resume.id"))
