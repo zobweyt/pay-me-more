@@ -41,3 +41,10 @@ class Skill(Base, AuditMixin):
     name: Mapped[str] = mapped_column()
 
     __repr_attrs__ = ("id", "name")
+
+
+class SkillResume(Base, AuditMixin):
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    name: Mapped[str] = mapped_column()
+
+    __repr_attrs__ = ("id", "name")

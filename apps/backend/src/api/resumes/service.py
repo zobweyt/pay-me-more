@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from src.api.resumes.models import Resume
+from src.api.resumes.models import Resume, Skill
 from src.api.resumes.repository import ResumeRepositoryDeps
 from src.api.resumes.role_to_skills.client import RoleToSkillsClientDepends
 from src.api.resumes.schemas import ResumeDTO as ResumeDTO
@@ -19,7 +19,8 @@ class ResumeService:
             experience=data.experience,
             location=data.location,
         )
-        return await self.repo.create_resume(resume)
+        skills = [Skill(name=skill) for skill in data.skills]
+        return await self.repo.create_resume(resume, skills)
 
     async def get_skills_by_role(self, role: str) -> list[str]:
         return self.role_to_skills_client.get_skills(role)
