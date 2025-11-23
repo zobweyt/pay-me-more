@@ -313,8 +313,6 @@ services:
       - type: volume
         source: prometheus-data
         target: /prometheus
-        volume:
-          nocopy: true
     networks:
       - pay-me-more-network
     configs:
