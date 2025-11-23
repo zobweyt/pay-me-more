@@ -48,6 +48,7 @@ class ServiceResponse(BaseModel):
 
 
 class ResumeAnalyzedResponse(BaseModel):
+    id: UUID
     request_id: UUID | None = None
     role: str
     experience: int
