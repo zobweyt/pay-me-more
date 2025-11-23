@@ -28,7 +28,7 @@ export const HomePage: React.FC = () => {
   const [salaryFork, setSalaryFork] = useState<SalaryDto | undefined>(
     undefined,
   );
-  const requestId = useMemo(() => uuidv4(), []);
+  const [requestId, setRequestId] = useState(uuidv4());
 
   const [salaryForkLoading, setSalaryForkLoading] = useState<boolean>(false);
   const [recommendationsLoading, setRecommendationsLoading] =
@@ -45,6 +45,7 @@ export const HomePage: React.FC = () => {
     setPreviousSalaryFork(salaryFork);
     setSalaryFork(values);
     scrollIntoResponseSection();
+    setRequestId(uuidv4());
   };
 
   const scrollIntoResponseSection = () => {
