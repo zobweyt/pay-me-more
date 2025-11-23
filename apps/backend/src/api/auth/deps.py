@@ -14,6 +14,6 @@ oauth2_bearer = OAuth2PasswordBearer(settings.api.token_url)
 optional_oauth2_bearer = OAuth2PasswordBearer(settings.api.token_url, auto_error=False)
 
 PasswordBearerDepends = Annotated[str, Depends(oauth2_bearer)]
-OptionalPasswordBearerDepends = Annotated[str, Depends(oauth2_bearer)]
+OptionalPasswordBearerDepends = Annotated[str, Depends(optional_oauth2_bearer)]
 
 PasswordRequestFormDepends = Annotated[OAuth2PasswordRequestForm, Depends()]

@@ -2,9 +2,9 @@ import pytest
 from fastapi import status
 from httpx import AsyncClient
 
-from src.api.recommendations.schemas import LLMResponse, Recommendation
+from src.api.recommendations.schemas import LLMResponse, RecommendationDTO
 from src.api.recommendations.service import RecommendationsService
-from src.api.resumes.schemas import Resumes
+from src.api.resumes.schemas import ResumeDTO
 from tests.utils.deps import override_dependency
 from tests.utils.resumes import resume_payload
 
@@ -12,9 +12,9 @@ from tests.utils.resumes import resume_payload
 class StubRecommendationsService:
     def __init__(self, response: LLMResponse) -> None:
         self.response = response
-        self.records: list[Resumes] = []
+        self.records: list[ResumeDTO] = []
 
-    async def get_recommendations(self, resume: Resumes) -> LLMResponse:
+    async def get_recommendations(self, resume: ResumeDTO) -> LLMResponse:
         self.records.append(resume)
         return self.response
 
@@ -22,7 +22,7 @@ class StubRecommendationsService:
 @pytest.mark.anyio
 class TestRecommendationsEndpoint:
     async def test_get_recommendations_success(self, client: AsyncClient) -> None:
-        recommendations = [Recommendation(title="Skills", subtitle="Add FastAPI", result="Improves ATS score")]
+        recommendations = [RecommendationDTO(title="Skills", subtitle="Add FastAPI", result="Improves ATS score")]
         stub = StubRecommendationsService(LLMResponse(recommendations=recommendations, quality="good"))
 
         with override_dependency(RecommendationsService, lambda: stub):
