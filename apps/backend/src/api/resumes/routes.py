@@ -2,7 +2,7 @@ from fastapi import APIRouter, status
 
 from src.api.resumes.deps import ResumeServiceDeps
 from src.api.resumes.queries import ResumeQuerySkillsParamsDepends
-from src.api.resumes.schemas import ResumeSkillsResponse, ResumeAnalyzedResponse
+from src.api.resumes.schemas import ResumeAnalyzedResponse, ResumeSkillsResponse
 from src.api.tags import Tag
 
 router = APIRouter(prefix="/resumes", tags=[Tag.RESUMES])
